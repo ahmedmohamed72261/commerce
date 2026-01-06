@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { X, ChevronRight, ShoppingBag, Heart, User, Settings, Phone, Mail, Instagram, Facebook, Twitter, Globe, Percent } from "lucide-react";
+import { X, ChevronRight, ShoppingBag, Heart, User, Settings, Phone, Mail, Instagram, Facebook, Twitter, Globe, Percent, Moon, Sun } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
+import { useAuthStore } from "@/store/auth";
 
 interface OffcanvasSidebarProps {
   open: boolean;
@@ -13,6 +15,8 @@ interface OffcanvasSidebarProps {
 }
 
 export function OffcanvasSidebar({ open, onClose, version = 1 }: OffcanvasSidebarProps) {
+  const { theme, setTheme } = useTheme();
+  const { user, logout } = useAuthStore();
   
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "unset";
@@ -43,9 +47,13 @@ export function OffcanvasSidebar({ open, onClose, version = 1 }: OffcanvasSideba
   const s = getTheme(version);
 
   const menuItems = [
+    { name: "Home", href: "/", icon: Sparkles },
+    { name: "Shop", href: "/shop", icon: ShoppingBag },
     { name: "New Arrivals", href: "/new", icon: Sparkles, label: "HOT" },
     { name: "Audio Collection", href: "/shop/audio", icon: Headphones },
     { name: "Smart Devices", href: "/shop/tech", icon: Smartphone },
+    { name: "About Us", href: "/about", icon: User },
+    { name: "Contact", href: "/contact", icon: Phone },
     { name: "Flash Sale", href: "/offers", icon: Percent, color: "text-red-600" },
     { name: "Track My Order", href: "/track", icon: Truck },
   ];
@@ -60,7 +68,7 @@ export function OffcanvasSidebar({ open, onClose, version = 1 }: OffcanvasSideba
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/60"
+            className="fixed inset-0 bg-black/30 backdrop-blur-sm"
           />
 
           {/* Sidebar Panel */}
@@ -85,7 +93,7 @@ export function OffcanvasSidebar({ open, onClose, version = 1 }: OffcanvasSideba
               isRtl ? "left-0" : "right-0",
               "shadow-[0_20px_60px_rgba(0,0,0,0.35)]",
               "border-l dark:border-l-0 dark:border-r border-neutral-200/70 dark:border-white/10",
-              "bg-white dark:bg-neutral-900",
+              "bg-white/95 text-neutral-800 dark:bg-neutral-900/90 dark:text-neutral-200 backdrop-blur-xl",
               s.panel
             )}
           >
@@ -95,22 +103,30 @@ export function OffcanvasSidebar({ open, onClose, version = 1 }: OffcanvasSideba
                 <div className="w-9 h-9 bg-gradient-to-br from-[#C40000] to-black rounded-lg flex items-center justify-center text-white font-black shadow-md">DW</div>
                 <span className="font-black tracking-tighter text-xl uppercase italic">Menu</span>
               </div>
-              <button 
-                onClick={onClose}
-                className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors"
-              >
-                <X className="w-6 h-6" />
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                  className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors"
+                >
+                  {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                </button>
+                <button 
+                  onClick={onClose}
+                  className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
             </div>
 
             <div className="flex-1 overflow-y-auto custom-scrollbar overscroll-contain will-change-scroll">
               {/* Promo Banner */}
               <div className="px-6 mt-6">
-                <div className="bg-gradient-to-r from-[#C40000] to-black rounded-2xl p-6 text-white relative overflow-hidden group">
+                <div className="bg-gradient-to-r from-pink-500 to-red-600 dark:from-[#C40000] dark:to-black rounded-2xl p-6 text-white relative overflow-hidden group">
                    <div className="relative z-10">
                       <p className="text-[10px] font-bold uppercase tracking-widest opacity-80">Season Sale</p>
                       <p className="text-2xl font-black italic">UP TO 50% OFF</p>
-                      <button className="mt-4 text-[10px] font-bold uppercase border-b border-white">Shop Now</button>
+                      <button className="mt-4 text-[10px] font-bold uppercase border-b border-white/80">Shop Now</button>
                    </div>
                    <ShoppingBag className="absolute right-[-10px] bottom-[-10px] w-24 h-24 opacity-20 rotate-12 group-hover:rotate-0 transition-transform" />
                 </div>
@@ -129,11 +145,11 @@ export function OffcanvasSidebar({ open, onClose, version = 1 }: OffcanvasSideba
                     >
                       <Link 
                         href={item.href} 
-                        className={cn("flex items-center justify-between p-4 rounded-xl transition-all group bg-white/50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10", s.item)}
+                        className={cn("flex items-center justify-between p-4 rounded-xl transition-all group bg-white hover:bg-neutral-100 dark:bg-white/5 dark:hover:bg-white/10", s.item)}
                       >
                         <div className="flex items-center gap-4">
-                          <item.icon className={cn("w-5 h-5", item.color || "text-neutral-500 dark:text-neutral-400")} />
-                          <span className="font-bold uppercase text-sm tracking-tight group-hover:text-[#C40000] transition-colors">{item.name}</span>
+                          <item.icon className={cn("w-5 h-5", item.color || "text-neutral-600 dark:text-neutral-400")} />
+                          <span className="font-bold uppercase text-sm tracking-tight group-hover:text-red-600 transition-colors">{item.name}</span>
                         </div>
                         {item.label ? (
                           <span className="bg-red-600 text-[8px] font-black text-white px-2 py-0.5 rounded-full shadow-sm">{item.label}</span>

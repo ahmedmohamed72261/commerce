@@ -28,6 +28,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { WhatsAppFloat } from "@/components/ui/whatsapp-float";
 import { ToastRenderer } from "@/components/ui/toast";
+import { AuthGuard } from "@/components/auth/auth-guard";
 
 export default async function RootLayout({
   children,
@@ -47,13 +48,15 @@ export default async function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <I18nProvider locale={locale} messages={messages}>
-            <Header />
-            <main className="min-h-screen pt-20">
-              {children}
-            </main>
-            <Footer />
-            <WhatsAppFloat />
-            <ToastRenderer />
+            <AuthGuard>
+              <Header />
+              <main className="min-h-screen pt-20">
+                {children}
+              </main>
+              <Footer />
+              <WhatsAppFloat />
+              <ToastRenderer />
+            </AuthGuard>
           </I18nProvider>
         </ThemeProvider>
       </body>

@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { useCategoriesStore, type Category } from "@/store/categories";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -18,7 +18,7 @@ function CategoryCard({ cat }: { cat: Category }) {
     <motion.div 
       initial="initial"
       whileHover="hover"
-      className="relative h-[340px] sm:h-[420px] md:h-[560px] w-full overflow-hidden rounded-[3.5rem] cursor-pointer bg-black group"
+      className="relative h-[340px] sm:h-[380px] md:h-[460px] w-full overflow-hidden rounded-[3.5rem] cursor-pointer bg-black group"
     >
       {/* IMAGE LAYER: Fixed 'scale' not working by using motion variants */}
       <motion.img
@@ -86,6 +86,7 @@ function CategoryCard({ cat }: { cat: Category }) {
 
 export function CategoriesSlider() {
   const { categories, fetchCategories, loading } = useCategoriesStore();
+  const t = useTranslations("Home");
   const data = categories;
   const length = data.length;
   const [index, setIndex] = useState(0);
@@ -104,8 +105,8 @@ export function CategoriesSlider() {
         {/* HEADER SECTION */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-10">
           <div className="max-w-2xl">
-            <h2 className="text-6xl md:text-6xl font-black tracking-tighter text-[--color-foreground] leading-none uppercase">
-              Core <span className="text-[--color-primary]">Series.</span>
+            <h2 className="text-6xl md:text-4xl font-black tracking-tighter text-[--color-foreground] leading-none uppercase">
+              {t("categoriesTitle")}
             </h2>
           </div>
 
@@ -150,24 +151,6 @@ export function CategoriesSlider() {
               </SwiperSlide>
             ))}
           </Swiper>
-        </div>
-
-        {/* BOLD PROGRESS FOOTER */}
-        <div className="mt-20 flex items-center justify-between border-t border-[--color-border] pt-12">
-          <div className="flex gap-4">
-            {data.map((_, i) => (
-              <div 
-                key={i}
-                className={cn(
-                  "h-2 transition-all duration-1000 rounded-full",
-                  length && index === i ? "w-32 bg-[--color-primary]" : "w-10 bg-[--color-border]"
-                )}
-              />
-            ))}
-          </div>
-          <span className="text-5xl font-black text-[--color-foreground] opacity-10">
-            {length ? `0${index + 1}` : "00"}
-          </span>
         </div>
       </div>
     </section>

@@ -7,12 +7,14 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { AuthCard } from "@/components/auth/auth-card";
 import { useAuthStore } from "@/store/auth";
 import { addToast } from "@/store/notifications";
+import { useTranslations } from "next-intl";
 
 export default function VerifyCodePage() {
   const router = useRouter();
   const params = useSearchParams();
   const email = params.get("email") || "";
   const auth = useAuthStore();
+  const t = useTranslations("Auth");
   const [digits, setDigits] = useState<string[]>(Array.from({ length: 6 }).map(() => ""));
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -91,10 +93,10 @@ export default function VerifyCodePage() {
 
   return (
     <>
-      <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Verify Code" }]} />
+      <Breadcrumb items={[{ label: t("backTo"), href: "/" }, { label: t("verifyTitle") }]} />
       <AuthCard
-        title="Verify and Reset"
-        description="Enter the 6-digit code and set a new password."
+        title={t("verifyTitle")}
+        description={t("verifyDesc")}
       >
         <form className="space-y-6" onSubmit={onVerify}>
           <div className="grid grid-cols-6 gap-3">
@@ -114,7 +116,7 @@ export default function VerifyCodePage() {
             ))}
           </div>
           <div className="grid gap-2">
-            <label className="text-sm font-medium text-foreground">New Password</label>
+            <label className="text-sm font-medium text-foreground">{t("password")}</label>
             <input
               type="password"
               value={password}
@@ -124,7 +126,7 @@ export default function VerifyCodePage() {
             />
           </div>
           <div className="grid gap-2">
-            <label className="text-sm font-medium text-foreground">Confirm Password</label>
+            <label className="text-sm font-medium text-foreground">{t("confirm")}</label>
             <input
               type="password"
               value={confirm}
@@ -137,15 +139,15 @@ export default function VerifyCodePage() {
             className="w-full h-11 rounded-md bg-red-600 text-white font-semibold hover:bg-red-700 transition disabled:opacity-60 disabled:cursor-not-allowed"
             disabled={loading}
           >
-            {loading ? "Saving..." : "Save Password"}
+            {loading ? t("saving") : t("savePassword")}
           </button>
           {message && (
             <div className="text-center text-sm text-red-600">{message}</div>
           )}
           <p className="text-center text-sm text-muted-foreground">
-            Back to{" "}
+            {t("backTo")}{" "}
             <Link href="../login" className="text-red-600">
-              Login
+              {t("login")}
             </Link>
           </p>
         </form>

@@ -6,10 +6,14 @@ import { useRouter } from "next/navigation";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { AuthCard } from "@/components/auth/auth-card";
 import { useAuthStore } from "@/store/auth";
+import { Input } from "@/components/ui/input";
+import { Mail } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
   const auth = useAuthStore();
+  const t = useTranslations("Auth");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -29,35 +33,34 @@ export default function ForgotPasswordPage() {
 
   return (
     <>
-      <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Forgot Password" }]} />
+      <Breadcrumb items={[{ label: t("backTo"), href: "/" }, { label: t("forgotTitle") }]} />
       <AuthCard
-        title="Reset your password"
-        description="Enter your email to receive a verification code."
+        title={t("forgotTitle")}
+        description={t("forgotDesc")}
       >
-        <form className="space-y-4" onSubmit={onSubmit}>
-          <div className="grid gap-2">
-            <label className="text-sm font-medium text-foreground">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="h-11 rounded-md border border-white/20 bg-white/50 dark:bg-white/5 px-3 text-sm outline-none backdrop-blur focus:ring-2 focus:ring-red-600/20"
-              placeholder="you@example.com"
-            />
-          </div>
+        <form className="space-y-6" onSubmit={onSubmit}>
+          <Input
+            type="email"
+            label={t("email")}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            icon={Mail}
+            placeholder="you@example.com"
+          />
+          
           <button
-            className="w-full h-11 rounded-md bg-red-600 text-white font-semibold hover:bg-red-700 transition disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full h-14 rounded-2xl bg-gradient-to-r from-[#C40000] to-red-900 text-white font-black uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-red-900/20 disabled:opacity-60 disabled:cursor-not-allowed"
             disabled={loading}
           >
-            {loading ? "Sending..." : "Send Code"}
+            {loading ? t("sending") : t("sendCode")}
           </button>
           {message && (
             <div className="text-center text-sm text-red-600">{message}</div>
           )}
           <p className="text-center text-sm text-muted-foreground">
-            Remember the password?{" "}
+            {t("alreadyHaveAccount")}{" "}
             <Link href="../login" className="text-red-600">
-              Login
+              {t("login")}
             </Link>
           </p>
         </form>

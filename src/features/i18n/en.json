@@ -10,13 +10,21 @@
     "shop": "Shop",
     "about": "About",
     "cart": "Cart",
-    "login": "Login"
+    "login": "Login",
+    "pages": "Pages",
+    "elements": "Elements",
+    "news": "News",
+    "contact": "Contact",
+    "search": "Search..."
   },
   "Home": {
     "heroTitle": "The Future of Shopping",
     "heroDesc": "Experience premium quality with our curated collection of futuristic tech and accessories. Designed for the modern lifestyle.",
     "ctaShop": "Shop Now",
     "learnMore": "Learn More",
+    "featuredBrands": "Featured Brands",
+    "brand": "Brand",
+    "categoriesTitle": "Categories",
     "features": {
       "fastDelivery": "Fast Delivery",
       "securePayment": "Secure Payment",
@@ -39,31 +47,66 @@
     "filter": "Filter",
     "price": "Price",
     "filterPrice": "Filter Price",
-    "productTags": "Product Tags"
+    "productTags": "Product Tags",
+    "buyNow": "Buy Now",
+    "viewDetails": "View Details",
+    "connect": "Connect",
+    "select": "Select",
+    "premium": "Premium",
+    "sale": "Sale"
   },
   "Footer": {
-    "aboutTitle": "About Carneshop",
-    "aboutText": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
+    "aboutTitle": "About TechStore",
+    "aboutText": "We provide the best technology products with premium quality and competitive prices. Your one-stop shop for all things tech.",
     "quickLinks": "Quick Links",
-    "services": "Services",
-    "recentNews": "Recent News",
+    "categories": "Categories",
+    "newsletter": "Newsletter",
+    "newsletterDesc": "Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.",
     "links": {
-      "help": "Help & Contact Us",
-      "returns": "Returns & Refunds",
-      "onlineStores": "Online Stores",
-      "payment": "Payment Method",
-      "terms": "Terms & Condition"
+      "home": "Home",
+      "shop": "Shop",
+      "about": "About Us",
+      "contact": "Contact",
+      "faq": "FAQ"
     },
-    "serviceList": {
-      "meat": "Fresh Meat Delivery",
-      "organic": "Organic Produce",
-      "butcher": "Butcher Services",
-      "cuts": "Custom Cuts",
-      "catering": "Event Catering"
+    "categoryList": {
+      "laptops": "Laptops & Computers",
+      "smartphones": "Smartphones",
+      "gaming": "Gaming Gear",
+      "accessories": "Accessories",
+      "cameras": "Cameras & Drones"
     },
-    "news": {
-      "title1": "Designing Ethically Optim Videos And Shining"
-    },
-    "copyright": "Copyright © 2020 Carneshop. All Rights Reserved."
+    "copyright": "© {year} TechStore. All Rights Reserved."
+  },
+  "Auth": {
+    "loginTitle": "Welcome back",
+    "loginDesc": "Sign in to continue your shopping experience.",
+    "phone": "Phone Number",
+    "password": "Password",
+    "forgot": "Forgot password?",
+    "signIn": "Sign In",
+    "signingIn": "Signing In...",
+    "dontHaveAccount": "Don’t have an account?",
+    "signUp": "Sign Up",
+    "signupTitle": "Create your account",
+    "signupDesc": "Just a few details to get started.",
+    "fullName": "Full Name",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "confirmPassword": "Confirm Password",
+    "creatingAccount": "Creating Account...",
+    "alreadyHaveAccount": "Already have an account?",
+    "login": "Login",
+    "forgotTitle": "Reset your password",
+    "forgotDesc": "Enter your email to receive a verification code.",
+    "sending": "Sending...",
+    "sendCode": "Send Code",
+    "verifyTitle": "Verify and Reset",
+    "verifyDesc": "Enter the 6-digit code and set a new password.",
+    "saving": "Saving...",
+    "savePassword": "Save Password",
+    "confirm": "Confirm Password",
+    "backTo": "Back to"
   }
 }

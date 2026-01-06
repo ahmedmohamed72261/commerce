@@ -56,29 +56,29 @@ export function CarneshopNav({ locale }: { locale: string }) {
           <ul className="flex items-center gap-6 text-sm font-bold text-neutral-800 uppercase tracking-wide">
             <li className="group relative">
               <Link href={`/${locale}`} className="py-4 hover:text-red-600 transition flex items-center gap-1">
-                Home <span className="text-red-600 text-xs">+</span>
+                {t("home")} <span className="text-red-600 text-xs">+</span>
               </Link>
             </li>
             <li>
-              <Link href={`/${locale}/about`} className="py-4 hover:text-red-600 transition">About</Link>
+              <Link href={`/${locale}/about`} className="py-4 hover:text-red-600 transition">{t("about")}</Link>
             </li>
             <li className="group relative">
               <Link href={`/${locale}/pages`} className="py-4 hover:text-red-600 transition flex items-center gap-1">
-                Pages <span className="text-red-600 text-xs">+</span>
+                {t("pages")} <span className="text-red-600 text-xs">+</span>
               </Link>
             </li>
             <li className="group relative">
               <Link href={`/${locale}/elements`} className="py-4 hover:text-red-600 transition flex items-center gap-1">
-                Elements <span className="text-red-600 text-xs">+</span>
+                {t("elements")} <span className="text-red-600 text-xs">+</span>
               </Link>
             </li>
             <li className="group relative">
               <Link href={`/${locale}/news`} className="py-4 hover:text-red-600 transition flex items-center gap-1">
-                News <span className="text-red-600 text-xs">+</span>
+                {t("news")} <span className="text-red-600 text-xs">+</span>
               </Link>
             </li>
             <li>
-              <Link href={`/${locale}/contact`} className="py-4 hover:text-red-600 transition">Contact</Link>
+              <Link href={`/${locale}/contact`} className="py-4 hover:text-red-600 transition">{t("contact")}</Link>
             </li>
           </ul>
         </nav>
@@ -107,7 +107,7 @@ export function CarneshopNav({ locale }: { locale: string }) {
               <div className="absolute right-0 top-full mt-4 w-64 bg-white shadow-xl border border-neutral-100 p-4 rounded-md z-50">
                 <input 
                   type="text" 
-                  placeholder="Search..." 
+                  placeholder={t("search")} 
                   className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-red-600"
                 />
               </div>

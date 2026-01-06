@@ -4,10 +4,14 @@ import { useTranslations } from "next-intl";
 import { BannerSlider } from "@/components/hero/banner-slider";
 import { Button } from "@/components/ui/button";
 import { BannerCard } from "@/components/hero/banner-card";
-import { Play, Shield, Globe, Award, MoveRight } from "lucide-react";
+import { Play, Shield, Globe, Award, MoveRight, ArrowLeft, ArrowRight } from "lucide-react";
 import { AboutSectionHero } from "./AboutSectionHero";
 import { useEffect } from "react";
 import { useBrandsStore } from "@/store/brands";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
 
 export function HeroSection() {
   const t = useTranslations("Home");
@@ -66,29 +70,58 @@ export function HeroSection() {
 
       <AboutSectionHero />
 
-      {/* 3. Featured Brands */}
-      <div className="container mx-auto px-4 pt-20">
-        <div className="flex items-center justify-between mb-10">
-           <div>
-             <h2 className="text-3xl font-black uppercase tracking-tighter">Featured Brands</h2>
-             <div className="h-1 w-20 bg-[#C40000] mt-2" />
-           </div>
-           <button className="flex items-center gap-2 text-[#C40000] font-black uppercase text-xs tracking-[0.2em] hover:gap-4 transition-all">
-              See All Products <MoveRight size={16} />
-           </button>
+  {/* 3. Featured Brands */}
+  <div className="container mx-auto px-4 pt-20">
+    <div className="flex items-center justify-between mb-10">
+       <div>
+         <h2 className="text-3xl font-black uppercase tracking-tighter">{t("featuredBrands")}</h2>
+         <div className="h-1 w-20 bg-[#C40000] mt-2" />
+       </div>
+           
+           <div className="flex gap-2">
+            <button className="brands-prev w-10 h-10 rounded-full border border-neutral-200 dark:border-white/10 flex items-center justify-center hover:bg-red-600 hover:text-white hover:border-red-600 transition-all">
+              <ArrowLeft size={20} />
+            </button>
+            <button className="brands-next w-10 h-10 rounded-full border border-neutral-200 dark:border-white/10 flex items-center justify-center hover:bg-red-600 hover:text-white hover:border-red-600 transition-all">
+              <ArrowRight size={20} />
+            </button>
+          </div>
         </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-          {(brands.length ? brands : []).slice(0, 12).map((b) => (
-            <BannerCard
-              key={b._id}
-              variant={15}
-              image={b.image ?? "/images/f.jpg"}
-              title={b.name}
-              count="Brand"
-              href="#"
-            />
-          ))}
+          <div className="relative">
+            <Swiper
+              modules={[Navigation, Autoplay]}
+              spaceBetween={24}
+              slidesPerView={1}
+              loop
+              autoplay={{
+                delay: 3000,
+                disableOnInteraction: false,
+              }}
+              navigation={{
+                prevEl: '.brands-prev',
+                nextEl: '.brands-next',
+              }}
+              breakpoints={{
+                640: { slidesPerView: 2 },
+                768: { slidesPerView: 3 },
+                1024: { slidesPerView: 4 },
+                1280: { slidesPerView: 5 },
+              }}
+              className="px-1 py-4"
+            >
+              {(brands.length ? brands : []).map((b) => (
+                <SwiperSlide key={b._id}>
+                  <BannerCard
+                    variant={15}
+                    image={b.image ?? "/images/f.jpg"}
+                    title={b.name}
+                    count={t("brand")}
+                    href="#"
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
         </div>
     </section>

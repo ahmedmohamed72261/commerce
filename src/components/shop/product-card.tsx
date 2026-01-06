@@ -2,6 +2,7 @@
 import { ShoppingCart, Heart, Eye, ArrowUpRight, Star, Plus, Zap, Shield, Layers,Maximize2, Hash, MoveUpRight, Globe, Share2, Info, Compass, Box, Cpu, Radio } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 type CardVariant = "v1" | "v2" | "v3" | "v4" | "v5" | "v6" | "v7" | "v8" | "v9" | "v10" | "v11" | "v12" | "v13" | "v14" | "v15" | "v16" | "v17" | "v18" | "v19" | "v20" | "v21" | "v22" | "v23" | "v24" | "v25" | "v26" | "v27" | "v28" | "v29" | "v30" | "v31" | "v32" | "v33" | "v34" | "v35" | "v36" | "v37" | "v38" | "v39" | "v40";
 
@@ -15,6 +16,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ variant = "v1", title, price, oldPrice = price * 1.2, image, rating = 4 }: ProductCardProps) {
+  const t = useTranslations("Shop");
   // GLOBAL TRANSITION: 1000ms
   const common = "relative w-full sm:w-[300px] md:w-[340px] h-[400px] sm:h-[500px] overflow-hidden transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group select-none flex flex-col text-foreground rtl:text-right";
 
@@ -284,7 +286,7 @@ export function ProductCard({ variant = "v1", title, price, oldPrice = price * 1
     case "v16":
       return (
         <div className={cn(common, "bg-[--card] border border-[--border] rounded-[3.5rem] p-12 hover:bg-black group-hover:text-white transition-colors")}>
-           <div className="absolute -right-20 -top-20 opacity-10 group-hover:rotate-45 transition-transform"><Layers size={300}/></div>
+           <div className="absolute -right-20 rtl:right-auto rtl:-left-20 -top-20 opacity-10 group-hover:rotate-45 transition-transform"><Layers size={300}/></div>
            <img src={image} className="w-full h-48 object-contain mb-10 z-10 relative"/>
            <h3 className="text-5xl font-black tracking-tighter leading-none z-10 relative">{title}</h3>
            <div className="mt-auto flex justify-between items-center z-10 relative">
