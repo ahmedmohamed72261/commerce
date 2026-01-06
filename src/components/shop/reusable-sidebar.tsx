@@ -38,7 +38,7 @@ export function ReusableSidebar({ filters, onFilterChange, className }: Reusable
 
   const handleCheckboxChange = (groupId: string, value: string) => {
     setActiveFilters((prev) => {
-      const current = prev[groupId] || [];
+      const current = Array.isArray(prev[groupId]) ? (prev[groupId] as string[]) : [];
       const updated = current.includes(value)
         ? current.filter((v: string) => v !== value)
         : [...current, value];
@@ -93,7 +93,7 @@ export function ReusableSidebar({ filters, onFilterChange, className }: Reusable
                         <input
                           type="checkbox"
                           className="peer h-5 w-5 rounded border-border bg-muted checked:bg-red-600 checked:border-red-600 transition-all focus:ring-2 focus:ring-red-600/20"
-                          checked={activeFilters[group.id]?.includes(opt.value) || false}
+                          checked={Array.isArray(activeFilters[group.id]) ? (activeFilters[group.id] as string[]).includes(opt.value) : false}
                           onChange={() => handleCheckboxChange(group.id, opt.value)}
                         />
                       </div>
@@ -112,22 +112,22 @@ export function ReusableSidebar({ filters, onFilterChange, className }: Reusable
 
               {group.type === "range" && (
                 <div className="pt-2">
-                  <div className="flex items-center justify-between mb-4">
-                     <span className="text-sm font-medium text-muted-foreground">${group.min || 0}</span>
-                     <span className="text-sm font-bold text-red-600">
-                       ${activeFilters[group.id] || group.max || 1000}
-                     </span>
-                  </div>
-                  <input 
-                    type="range"
-                    min={group.min || 0}
-                    max={group.max || 1000}
-                    value={activeFilters[group.id] || group.max || 1000}
-                    onChange={(e) => handleRangeChange(group.id, Number(e.target.value))}
-                    className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-red-600 hover:accent-red-500 transition-all"
-                  />
-                </div>
-              )}
+                      <div className="flex items-center justify-between mb-4">
+                         <span className="text-sm font-medium text-muted-foreground">${group.min || 0}</span>
+                         <span className="text-sm font-bold text-red-600">
+                       ${typeof activeFilters[group.id] === "number" ? (activeFilters[group.id] as number) : (group.max || 1000)}
+                         </span>
+                      </div>
+                      <input 
+                        type="range"
+                        min={group.min || 0}
+                        max={group.max || 1000}
+                        value={typeof activeFilters[group.id] === "number" ? (activeFilters[group.id] as number) : (group.max || 1000)}
+                        onChange={(e) => handleRangeChange(group.id, Number(e.target.value))}
+                        className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-red-600 hover:accent-red-500 transition-all"
+                      />
+                    </div>
+                  )}
 
               {group.type === "tags" && (
                 <div className="flex flex-wrap gap-2">
@@ -137,7 +137,7 @@ export function ReusableSidebar({ filters, onFilterChange, className }: Reusable
                       onClick={() => handleCheckboxChange(group.id, opt.value)}
                       className={cn(
                         "px-3 py-1.5 text-xs font-medium rounded-full border transition-all",
-                        activeFilters[group.id]?.includes(opt.value)
+                        Array.isArray(activeFilters[group.id]) && (activeFilters[group.id] as string[]).includes(opt.value)
                           ? "bg-red-600 text-white border-red-600 shadow-md"
                           : "bg-background border-border text-muted-foreground hover:border-red-600 hover:text-red-600"
                       )}
