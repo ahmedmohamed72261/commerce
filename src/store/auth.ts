@@ -14,6 +14,7 @@ import type {
   ForgotPasswordResponse,
   ResetPasswordResponse,
 } from "@/types/auth";
+import type { ErrorPayload } from "@/types/common/api";
 import { addToast } from "@/store/notifications";
 
 type AuthState = {

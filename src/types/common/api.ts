@@ -4,3 +4,9 @@ export type ApiResponse<T> = {
   data?: T;
 };
 
+export type ErrorPayload = {
+  message?: string;
+  errors?: Record<string, string[]>;
+  code?: string | number;
+};
+
