@@ -92,6 +92,7 @@ export function AboutSectionHero({
     };
 
     const s = getStyle(version);
+    const title = data.title || "Ultra-Low Latency Gaming Headset";
 
     return (
         <div className="container mx-auto px-4 relative z-30 -mt-24 group">
@@ -122,7 +123,7 @@ export function AboutSectionHero({
 
                     <img
                         src={data.image}
-                        alt={data.title}
+                        alt={title}
                         className={cn(
                             "w-4/5 h-4/5 object-contain transition-all duration-1000 group-hover:scale-110 group-hover:rotate-6",
                             customStyles.productImg
@@ -147,8 +148,8 @@ export function AboutSectionHero({
                     </div>
 
                     <h1 className="text-3xl sm:text-5xl lg:text-7xl font-black tracking-tighter uppercase mb-6 sm:mb-8 leading-[0.95] sm:leading-[0.85] text-balance rtl:text-right">
-                        {data.title.split(' ').slice(0, -1).join(' ')} <br />
-                        <span className={s.icon}>{data.title.split(' ').pop()}</span>
+                        {title.split(' ').slice(0, -1).join(' ')} <br />
+                        <span className={s.icon}>{title.split(' ').pop()}</span>
                     </h1>
 
                     <div className="flex items-baseline gap-4 sm:gap-5 mb-8 sm:mb-10">
