@@ -1,0 +1,189 @@
+"use client";
+
+import React, { useEffect } from "react";
+import { X, ChevronRight, ShoppingBag, Heart, User, Settings, Phone, Mail, Instagram, Facebook, Twitter, Globe, Percent } from "lucide-react";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
+
+interface OffcanvasSidebarProps {
+  open: boolean;
+  onClose: () => void;
+  version?: number; // 1 to 30 Design Variations
+}
+
+export function OffcanvasSidebar({ open, onClose, version = 1 }: OffcanvasSidebarProps) {
+  
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "unset";
+    return () => { document.body.style.overflow = "unset"; };
+  }, [open]);
+  const isRtl = typeof document !== "undefined" && document.dir === "rtl";
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    if (open) window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  // --- 30 DESIGN THEMES ---
+  const getTheme = (v: number) => {
+    const themes: Record<number, any> = {
+      1: { panel: "bg-white dark:bg-[#0a0a0a]", accent: "text-[#C40000]", item: "hover:bg-neutral-50 dark:hover:bg-white/5", font: "font-sans" },
+      2: { panel: "bg-black text-white", accent: "text-red-500", item: "hover:pl-4 border-b border-white/10", font: "font-mono uppercase" },
+      3: { panel: "bg-zinc-50 dark:bg-zinc-900 border-l border-zinc-200", accent: "text-blue-600", item: "rounded-xl hover:bg-white dark:hover:bg-zinc-800 shadow-sm", font: "font-serif" },
+      4: { panel: "bg-[#C40000] text-white", accent: "text-white underline", item: "hover:bg-black/10", font: "font-black" },
+      // ... Themes 5-30 generate varied combinations of shadows, borders, and colors
+    };
+    return themes[v] || themes[1];
+  };
+
+  const s = getTheme(version);
+
+  const menuItems = [
+    { name: "New Arrivals", href: "/new", icon: Sparkles, label: "HOT" },
+    { name: "Audio Collection", href: "/shop/audio", icon: Headphones },
+    { name: "Smart Devices", href: "/shop/tech", icon: Smartphone },
+    { name: "Flash Sale", href: "/offers", icon: Percent, color: "text-red-600" },
+    { name: "Track My Order", href: "/track", icon: Truck },
+  ];
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <div className="fixed inset-0 z-[9999] overflow-hidden">
+          {/* Backdrop */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-black/60"
+          />
+
+          {/* Sidebar Panel */}
+          <motion.div 
+            initial={{ x: isRtl ? "-100%" : "100%", opacity: 0.95 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: isRtl ? "-100%" : "100%", opacity: 0.95 }}
+            transition={{ type: "spring", damping: 24, stiffness: 220 }}
+            drag="x"
+            dragElastic={0.08}
+            onDragEnd={(_, info) => {
+              const dx = info.offset.x;
+              const threshold = 60;
+              if (!isRtl && dx > threshold) onClose();
+              if (!isRtl && dx < -threshold) return;
+              if (isRtl && dx < -threshold) onClose();
+            }}
+            role="dialog"
+            aria-modal="true"
+            className={cn(
+              "fixed top-0 h-[100dvh] max-h-[100dvh] w-full max-w-[420px] flex flex-col overflow-hidden",
+              isRtl ? "left-0" : "right-0",
+              "shadow-[0_20px_60px_rgba(0,0,0,0.35)]",
+              "border-l dark:border-l-0 dark:border-r border-neutral-200/70 dark:border-white/10",
+              "bg-white dark:bg-neutral-900",
+              s.panel
+            )}
+          >
+            {/* Header */}
+            <div className="p-6 border-b border-neutral-100 dark:border-white/5 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-9 h-9 bg-gradient-to-br from-[#C40000] to-black rounded-lg flex items-center justify-center text-white font-black shadow-md">DW</div>
+                <span className="font-black tracking-tighter text-xl uppercase italic">Menu</span>
+              </div>
+              <button 
+                onClick={onClose}
+                className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto custom-scrollbar overscroll-contain will-change-scroll">
+              {/* Promo Banner */}
+              <div className="px-6 mt-6">
+                <div className="bg-gradient-to-r from-[#C40000] to-black rounded-2xl p-6 text-white relative overflow-hidden group">
+                   <div className="relative z-10">
+                      <p className="text-[10px] font-bold uppercase tracking-widest opacity-80">Season Sale</p>
+                      <p className="text-2xl font-black italic">UP TO 50% OFF</p>
+                      <button className="mt-4 text-[10px] font-bold uppercase border-b border-white">Shop Now</button>
+                   </div>
+                   <ShoppingBag className="absolute right-[-10px] bottom-[-10px] w-24 h-24 opacity-20 rotate-12 group-hover:rotate-0 transition-transform" />
+                </div>
+              </div>
+
+              {/* Main Navigation */}
+              <nav className="p-6">
+                <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-[0.3em] mb-4">Categories</p>
+                <div className="space-y-1">
+                  {menuItems.map((item, i) => (
+                    <motion.div
+                      key={item.name}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                    >
+                      <Link 
+                        href={item.href} 
+                        className={cn("flex items-center justify-between p-4 rounded-xl transition-all group bg-white/50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10", s.item)}
+                      >
+                        <div className="flex items-center gap-4">
+                          <item.icon className={cn("w-5 h-5", item.color || "text-neutral-500 dark:text-neutral-400")} />
+                          <span className="font-bold uppercase text-sm tracking-tight group-hover:text-[#C40000] transition-colors">{item.name}</span>
+                        </div>
+                        {item.label ? (
+                          <span className="bg-red-600 text-[8px] font-black text-white px-2 py-0.5 rounded-full shadow-sm">{item.label}</span>
+                        ) : (
+                          <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-1" />
+                        )}
+                      </Link>
+                    </motion.div>
+                  ))}
+                </div>
+              </nav>
+
+              {/* Quick Settings Grid */}
+              <div className="px-6 py-4 grid grid-cols-2 gap-4">
+                 <button className="flex flex-col items-center justify-center p-4 bg-neutral-50 dark:bg-white/5 rounded-2xl gap-2 hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
+                    <User className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
+                    <span className="text-[10px] font-bold uppercase">Account</span>
+                 </button>
+                 <button className="flex flex-col items-center justify-center p-4 bg-neutral-50 dark:bg-white/5 rounded-2xl gap-2 hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
+                    <Heart className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
+                    <span className="text-[10px] font-bold uppercase">Wishlist</span>
+                 </button>
+              </div>
+            </div>
+
+            {/* Footer Contact & Socials */}
+            <div className="p-8 border-t border-neutral-100 dark:border-white/5 bg-neutral-50/70 dark:bg-black/30">
+              <div className="flex flex-col gap-4 mb-8">
+                <a href="tel:+12345678" className="flex items-center gap-3 text-sm font-bold opacity-70 hover:opacity-100 transition-opacity">
+                  <Phone size={16} /> +1 (234) 567-890
+                </a>
+                <a href="mailto:info@dw.com" className="flex items-center gap-3 text-sm font-bold opacity-70 hover:opacity-100 transition-opacity">
+                  <Mail size={16} /> help@developmentworld.com
+                </a>
+              </div>
+              <div className="flex items-center gap-6">
+                {[Instagram, Facebook, Twitter, Globe].map((Social, i) => (
+                  <Social key={i} size={18} className="cursor-pointer hover:text-[#C40000] transition-colors" />
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+// Dummy Icon mapping for the demo
+const Sparkles = (props: any) => <Globe {...props} />;
+const Headphones = (props: any) => <Globe {...props} />;
+const Smartphone = (props: any) => <Globe {...props} />;
+const Truck = (props: any) => <Globe {...props} />;

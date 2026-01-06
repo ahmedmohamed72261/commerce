@@ -1,0 +1,69 @@
+{
+  "Common": {
+    "welcome": "Welcome to GlassShop",
+    "subscribe": "Subscribe",
+    "learnMore": "Learn More",
+    "viewAll": "View All"
+  },
+  "Nav": {
+    "home": "Home",
+    "shop": "Shop",
+    "about": "About",
+    "cart": "Cart",
+    "login": "Login"
+  },
+  "Home": {
+    "heroTitle": "The Future of Shopping",
+    "heroDesc": "Experience premium quality with our curated collection of futuristic tech and accessories. Designed for the modern lifestyle.",
+    "ctaShop": "Shop Now",
+    "learnMore": "Learn More",
+    "features": {
+      "fastDelivery": "Fast Delivery",
+      "securePayment": "Secure Payment",
+      "support": "24/7 Support",
+      "fastDeliveryDesc": "Global shipping within 2-3 days",
+      "securePaymentDesc": "100% secure payment processing",
+      "supportDesc": "Dedicated support team available"
+    },
+    "featuredProducts": "Featured Products",
+    "viewAll": "View All",
+    "newsletterTitle": "Join Our Community",
+    "newsletterDesc": "Subscribe to our newsletter to get the latest updates, exclusive offers, and early access to new products.",
+    "subscribe": "Subscribe"
+  },
+  "Shop": {
+    "addToCart": "Add to Cart",
+    "quickView": "Quick View",
+    "new": "New",
+    "categories": "Categories",
+    "filter": "Filter",
+    "price": "Price",
+    "filterPrice": "Filter Price",
+    "productTags": "Product Tags"
+  },
+  "Footer": {
+    "aboutTitle": "About Carneshop",
+    "aboutText": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
+    "quickLinks": "Quick Links",
+    "services": "Services",
+    "recentNews": "Recent News",
+    "links": {
+      "help": "Help & Contact Us",
+      "returns": "Returns & Refunds",
+      "onlineStores": "Online Stores",
+      "payment": "Payment Method",
+      "terms": "Terms & Condition"
+    },
+    "serviceList": {
+      "meat": "Fresh Meat Delivery",
+      "organic": "Organic Produce",
+      "butcher": "Butcher Services",
+      "cuts": "Custom Cuts",
+      "catering": "Event Catering"
+    },
+    "news": {
+      "title1": "Designing Ethically Optim Videos And Shining"
+    },
+    "copyright": "Copyright © 2020 Carneshop. All Rights Reserved."
+  }
+}
