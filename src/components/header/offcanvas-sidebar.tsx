@@ -77,15 +77,6 @@ export function OffcanvasSidebar({ open, onClose, version = 1 }: OffcanvasSideba
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: isRtl ? "-100%" : "100%", opacity: 0.95 }}
             transition={{ type: "spring", damping: 24, stiffness: 220 }}
-            drag="x"
-            dragElastic={0.08}
-            onDragEnd={(_, info) => {
-              const dx = info.offset.x;
-              const threshold = 60;
-              if (!isRtl && dx > threshold) onClose();
-              if (!isRtl && dx < -threshold) return;
-              if (isRtl && dx < -threshold) onClose();
-            }}
             role="dialog"
             aria-modal="true"
             className={cn(
@@ -99,9 +90,11 @@ export function OffcanvasSidebar({ open, onClose, version = 1 }: OffcanvasSideba
           >
             {/* Header */}
             <div className="p-6 border-b border-neutral-100 dark:border-white/5 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-9 h-9 bg-gradient-to-br from-[#C40000] to-black rounded-lg flex items-center justify-center text-white font-black shadow-md">DW</div>
-                <span className="font-black tracking-tighter text-xl uppercase italic">Menu</span>
+              <div className="flex items-center gap-3">
+                <div className="relative h-10 w-24 sm:h-12 sm:w-28 md:h-16 md:w-36 rounded overflow-hidden">
+                  <img src="/images/logo-light.png" alt="Logo" className="h-full w-full object-contain" />
+                </div>
+                <span className="font-black tracking-tighter text-lg sm:text-xl uppercase italic">Menu</span>
               </div>
               <div className="flex items-center gap-2">
                 <button
@@ -120,17 +113,6 @@ export function OffcanvasSidebar({ open, onClose, version = 1 }: OffcanvasSideba
             </div>
 
             <div className="flex-1 overflow-y-auto custom-scrollbar overscroll-contain will-change-scroll">
-              {/* Promo Banner */}
-              <div className="px-6 mt-6">
-                <div className="bg-gradient-to-r from-rose-400 to-red-500 dark:from-[#C40000] dark:to-black rounded-2xl p-6 text-white relative overflow-hidden group">
-                   <div className="relative z-10">
-                      <p className="text-[10px] font-bold uppercase tracking-widest opacity-80">Season Sale</p>
-                      <p className="text-2xl font-black italic">UP TO 50% OFF</p>
-                      <button className="mt-4 text-[10px] font-bold uppercase border-b border-white/80">Shop Now</button>
-                   </div>
-                   <ShoppingBag className="absolute right-[-10px] bottom-[-10px] w-24 h-24 opacity-20 rotate-12 group-hover:rotate-0 transition-transform" />
-                </div>
-              </div>
 
               {/* Main Navigation */}
               <nav className="p-6">

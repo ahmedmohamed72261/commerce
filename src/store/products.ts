@@ -10,6 +10,8 @@ export type Product = {
   image?: string;
   rating?: number;
   category?: string;
+  salePrice?: number;
+  stock?: number;
 };
 
 type Pagination = {
@@ -27,6 +29,9 @@ type ProductsState = {
   currentCategory: string | null;
   fetch: (input?: { category?: string; page?: number; pageSize?: number; locale?: "en" | "ar" }) => Promise<void>;
   setPage: (page: number) => Promise<void>;
+  preferred: Product | null;
+  preferredLoading?: boolean;
+  fetchPreferred: (locale?: "en" | "ar") => Promise<Product | null>;
 };
 
 function cleanImage(url: unknown): string | undefined {
@@ -46,16 +51,19 @@ function pickLocaleString(input: unknown, locale: "en" | "ar"): string {
   return "";
 }
 
-function mapRawProduct(p: any, locale: "en" | "ar"): Product {
+function mapRawProduct(p: unknown, locale: "en" | "ar"): Product {
+  const obj = p as Record<string, unknown>;
   const id = String(p?._id ?? p?.id ?? "");
-  const title = pickLocaleString(p?.name, locale) || String(p?.title ?? "");
-  const salePrice = typeof p?.salePrice === "number" ? p.salePrice : undefined;
-  const basePrice = typeof p?.price === "number" ? p.price : undefined;
+  const title = pickLocaleString(obj?.name, locale) || String(obj?.title ?? "");
+  const salePrice = typeof obj?.salePrice === "number" ? (obj.salePrice as number) : undefined;
+  const basePrice = typeof obj?.price === "number" ? (obj.price as number) : undefined;
   const price = (salePrice ?? basePrice ?? 0);
-  const image = Array.isArray(p?.images) ? cleanImage(p.images[0]) : cleanImage(p?.image);
-  const category = pickLocaleString(p?.category?.name, locale);
-  const rating = typeof p?.rating === "number" ? p.rating : undefined;
-  return { id, title, price, image, rating, category };
+  const image = Array.isArray(obj?.images) ? cleanImage((obj.images as unknown[])[0]) : cleanImage(obj?.image);
+  const catObj = (obj?.category as { name?: unknown } | undefined);
+  const category = pickLocaleString(catObj?.name, locale);
+  const rating = typeof obj?.rating === "number" ? (obj.rating as number) : undefined;
+  const stock = typeof obj?.stock === "number" ? (obj.stock as number) : undefined;
+  return { id, title, price, image, rating, category, salePrice, stock };
 }
 
 function normalizeProductsResponse(raw: unknown, locale: "en" | "ar"): { items: Product[]; total?: number } {
@@ -82,6 +90,8 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
   error: null,
   pagination: { page: 1, pageSize: 9, total: 0, totalPages: 0 },
   currentCategory: null,
+  preferred: null,
+  preferredLoading: false,
 
   async fetch(input) {
     const prev = get().pagination;
@@ -114,5 +124,29 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
     const totalPages = Math.max(1, Math.ceil(total / pageSize));
     const next = Math.min(Math.max(1, page), totalPages);
     await get().fetch({ page: next });
+  },
+
+  async fetchPreferred(locale = "en") {
+    try {
+      set({ preferredLoading: true });
+      const token = typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
+      const res = await http.get("/products/preferred", {
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          "Accept-Language": locale,
+        },
+      });
+      const raw = res.data as unknown;
+      const list: unknown[] =
+        Array.isArray((raw as any)?.data) ? ((raw as any).data as unknown[]) :
+        Array.isArray(raw) ? (raw as unknown[]) : [];
+      const first = list[0];
+      const mapped = first ? mapRawProduct(first, locale) : null;
+      set({ preferred: mapped, preferredLoading: false });
+      return mapped;
+    } catch (e) {
+      set({ preferredLoading: false });
+      return null;
+    }
   },
 }));

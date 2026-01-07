@@ -35,7 +35,7 @@ export function BannerCard({
   // --- CASE 1: THE SILK LUXURY ---
   if (variant === 1) return (
     <Wrapper href={href as string} className={cn(common, "rounded-[2.5rem] bg-neutral-900 shadow-2xl")}>
-      <img src={image} className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000" alt={title} />
+      <img src={image} className="absolute inset-0 w-full h-[450px] object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000" alt={title} />
       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/20" />
       <div className="absolute inset-0 p-10 flex flex-col justify-between">
         <div className="flex justify-between items-start">
@@ -54,7 +54,7 @@ export function BannerCard({
   if (variant === 2) return (
     <Wrapper href={href as string} className={cn(common, "rounded-none bg-white border border-neutral-100 p-4")}>
       <div className="relative h-full w-full overflow-hidden">
-        <img src={image} className="absolute inset-0 w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt={title} />
+        <img src={image} className="absolute inset-0 w-full h-[450px] object-cover grayscale hover:grayscale-0 transition-all duration-700" alt={title} />
         <div className="absolute bottom-0 left-0 rtl:left-auto rtl:right-0 w-full bg-white/90 backdrop-blur-xl p-8 translate-y-4 group-hover:translate-y-0 transition-transform">
           <h3 className="text-black text-2xl font-black uppercase tracking-widest mb-2">{title}</h3>
           <div className="flex items-center justify-between text-red-600 font-bold text-[10px] uppercase">
@@ -69,7 +69,7 @@ export function BannerCard({
   // --- CASE 3: THE VOGUE EDITORIAL ---
   if (variant === 3) return (
     <Wrapper href={href as string} className={cn(common, "rounded-full aspect-square border-4 border-neutral-100")}>
-      <img src={image} className="absolute inset-0 w-full h-full object-cover" alt={title} />
+      <img src={image} className="absolute inset-0 w-full h-[450px] object-cover" alt={title} />
       <div className="absolute inset-0 bg-black/40 group-hover:bg-red-600/60 transition-colors duration-500 flex items-center justify-center text-center p-12">
         <div>
           <h3 className="text-white text-3xl font-black uppercase leading-none mb-2">{title}</h3>
@@ -82,7 +82,7 @@ export function BannerCard({
   // --- CASE 4: THE NEON HUD ---
   if (variant === 4) return (
     <Wrapper href={href as string} className={cn(common, "bg-black rounded-xl border border-white/10")}>
-      <img src={image} className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity" alt={title} />
+      <img src={image} className="absolute inset-0 w-full h-[450px] object-cover opacity-40 group-hover:opacity-60 transition-opacity" alt={title} />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-red-600/20 via-transparent to-transparent" />
       <div className="absolute top-6 left-6 rtl:left-auto rtl:right-6 flex items-center gap-4">
         <div className="h-0.5 w-12 bg-red-600" />
@@ -114,7 +114,7 @@ export function BannerCard({
   // --- CASE 6: THE RED SIGNATURE ---
   if (variant === 6) return (
     <Wrapper href={href as string} className={cn(common, "rounded-none bg-[#C40000]")}>
-      <img src={image} className="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-70 group-hover:scale-105 transition-transform" alt={title} />
+      <img src={image} className="absolute inset-0 w-full h-[450px] object-cover mix-blend-multiply opacity-70 group-hover:scale-105 transition-transform" alt={title} />
       <div className="absolute inset-0 flex flex-col items-center justify-center p-10 text-center border-[1px] border-white/20 m-4">
         <Sparkles className="text-white mb-4" />
         <h3 className="text-white text-4xl font-black uppercase tracking-tighter">{title}</h3>
@@ -126,7 +126,7 @@ export function BannerCard({
   // --- CASE 7: THE GALLERY BOX ---
   if (variant === 7) return (
     <Wrapper href={href as string} className={cn(common, "rounded-2xl shadow-xl")}>
-      <img src={image} className="absolute inset-0 w-full h-full object-cover" alt={title} />
+      <img src={image} className="absolute inset-0 w-full h-[450px] object-cover" alt={title} />
       <div className="absolute inset-0 bg-gradient-to-tr from-white to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       <div className="absolute top-0 right-0 p-8">
         <div className="bg-black text-white w-14 h-14 rounded-full flex items-center justify-center group-hover:bg-red-600 transition-colors">
@@ -142,9 +142,9 @@ export function BannerCard({
   // --- CASE 8: THE CRYSTAL TECH (REDESIGNED) ---
   if (variant === 8) return (
     <Wrapper href={href as string} className={cn(common, "rounded-3xl bg-zinc-900 border border-white/10 group-hover:border-red-600/50 shadow-2xl transition-all")}>
-      <div className="absolute top-0 left-0 w-full h-full p-2">
+      <div className="absolute top-0 left-0 w-full h-[450px] p-2">
         <div className="relative h-full w-full rounded-[1.4rem] overflow-hidden">
-          <img src={image} className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-1000" alt={title} />
+          <img src={image} className="absolute inset-0 w-full h-[450px] object-cover opacity-60 group-hover:scale-110 transition-transform duration-1000" alt={title} />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
           <div className="absolute bottom-0 left-0 w-full p-6">
             <div className="flex items-center gap-2 mb-3">
@@ -164,7 +164,7 @@ export function BannerCard({
     <Wrapper href={href as string} className={cn(common, "rounded-none bg-[#f8f8f8]")}>
       <div className="absolute inset-0 p-6">
         <div className="relative h-full w-full bg-white rounded-tr-[120px] shadow-sm overflow-hidden group-hover:rounded-tr-3xl transition-all duration-700">
-          <img src={image} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={title} />
+          <img src={image} className="absolute inset-0 w-full h-[450px] object-cover group-hover:scale-105 transition-transform duration-700" alt={title} />
           <div className="absolute inset-0 bg-black/10 group-hover:bg-black/40 transition-colors" />
           <div className="absolute top-8 left-8">
             <h3 className="text-white text-3xl font-black uppercase tracking-tight leading-tight">{title}</h3>
@@ -183,7 +183,7 @@ export function BannerCard({
   // --- CASE 10: THE BRUTALIST STRIPE ---
   if (variant === 10) return (
     <Wrapper href={href as string} className={cn(common, "bg-white border-4 border-black")}>
-      <img src={image} className="absolute inset-0 w-full h-full object-cover" alt={title} />
+      <img src={image} className="absolute inset-0 w-full h-[450px] object-cover" alt={title} />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-24 bg-red-600 -rotate-12 flex items-center justify-center border-y-4 border-black group-hover:-rotate-0 transition-transform duration-500">
         <h3 className="text-white text-3xl font-black uppercase tracking-tighter italic">{title}</h3>
       </div>
@@ -196,7 +196,7 @@ export function BannerCard({
   // --- CASE 11: THE ZENITH LUXE (REDESIGNED) ---
   if (variant === 11) return (
     <Wrapper href={href as string} className={cn(common, "bg-neutral-950")}>
-      <img src={image} className="absolute inset-0 w-full h-full object-cover opacity-50 transition-opacity group-hover:opacity-30" alt={title} />
+      <img src={image} className="absolute inset-0 w-full h-[450px] object-cover opacity-50 transition-opacity group-hover:opacity-30" alt={title} />
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-12">
         <div className="mb-6 p-4 border border-white/10 rounded-full backdrop-blur-sm">
            <Star className="text-yellow-500 fill-yellow-500" size={18} />
@@ -211,7 +211,7 @@ export function BannerCard({
   // --- CASE 12: THE INFINITY SCAN ---
   if (variant === 12) return (
     <Wrapper href={href as string} className={cn(common, "rounded-xl border border-neutral-100")}>
-      <img src={image} className="absolute inset-0 w-full h-full object-cover grayscale" alt={title} />
+      <img src={image} className="absolute inset-0 w-full h-[450px] object-cover grayscale" alt={title} />
       <div className="absolute top-0 left-0 w-full h-1 bg-red-600 shadow-[0_0_20px_#C40000] animate-[scan_3s_infinite]" />
       <div className="absolute inset-0 flex items-center justify-center">
          <div className="bg-black/90 p-8 border border-white/20">
@@ -225,7 +225,7 @@ export function BannerCard({
   if (variant === 13) return (
     <Wrapper href={href as string} className={cn(common, "rounded-none flex flex-col")}>
       <div className="h-1/2 w-full overflow-hidden">
-        <img src={image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={title} />
+        <img src={image} className="w-full h-[450px] object-cover group-hover:scale-110 transition-transform duration-700" alt={title} />
       </div>
       <div className="h-1/2 w-full bg-black p-8 flex flex-col justify-between">
         <h3 className="text-white text-4xl font-black leading-[0.85]">{title.split(' ').join('\n')}</h3>
@@ -241,7 +241,7 @@ export function BannerCard({
   if (variant === 14) return (
     <Wrapper href={href as string} className={cn(common, "rounded-3xl p-6 bg-white border border-neutral-100 shadow-sm")}>
       <div className="h-full w-full relative rounded-2xl overflow-hidden group-hover:shadow-2xl transition-all duration-500">
-        <img src={image} className="absolute inset-0 w-full h-full object-cover" alt={title} />
+        <img src={image} className="absolute inset-0 w-full h-[450px] object-cover" alt={title} />
         <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-white via-white/80 to-transparent">
           <p className="text-[10px] font-black uppercase text-red-600 mb-1 tracking-widest">{count} Choices</p>
           <h3 className="text-black text-2xl font-bold tracking-tight">{title}</h3>
@@ -274,15 +274,15 @@ export function BannerCard({
         {/* Bottom Section: Clean Info with Offset Action */}
         <div className="flex-1 px-6 pb-6 flex items-end justify-between rtl:flex-row-reverse">
           <div className="space-y-1 rtl:text-right">
-            <h3 className="text-black text-3xl font-black leading-none tracking-tighter uppercase">
+            <h3 className="text-black text-lg sm:text-xl md:text-2xl lg:text-3xl font-black leading-none tracking-tighter uppercase">
               {title}
             </h3>
             <p className="text-neutral-400 text-xs font-medium uppercase tracking-widest">
               Catalog — {count}
             </p>
           </div>
-          <div className="w-14 h-14 bg-red-600 text-white rounded-2xl flex items-center justify-center -rotate-12 group-hover:rotate-0 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-red-600/20">
-            <ArrowUpRight size={24} />
+          <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-red-600 text-white rounded-2xl flex items-center justify-center -rotate-12 group-hover:rotate-0 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-red-600/20">
+            <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
           </div>
         </div>
       </div>
@@ -293,7 +293,7 @@ export function BannerCard({
   if (variant === 16) return (
     <Wrapper href={href as string} className={cn(common, "rounded-none p-4 bg-[#111]")}>
       <div className="relative h-full w-full border border-yellow-500/20 p-2 overflow-hidden">
-        <img src={image} className="absolute inset-0 w-full h-full object-cover scale-125 opacity-40 group-hover:scale-100 transition-transform duration-1000" alt={title} />
+        <img src={image} className="absolute inset-0 w-full h-[450px] object-cover scale-125 opacity-40 group-hover:scale-100 transition-transform duration-1000" alt={title} />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-yellow-900/40" />
         <div className="relative h-full w-full flex flex-col items-center justify-center text-center px-6">
           <div className="w-10 h-[1px] bg-yellow-500 mb-6" />
@@ -310,7 +310,7 @@ export function BannerCard({
     <Wrapper href={href as string} className={cn(common, "rounded-none bg-black border-y-8 border-red-600")}>
       <img 
         src={image} 
-        className="absolute inset-0 w-full h-full object-cover opacity-60 grayscale group-hover:grayscale-0 group-hover:opacity-80 transition-all duration-1000" 
+        className="absolute inset-0 w-full h-[450px] object-cover opacity-60 grayscale group-hover:grayscale-0 group-hover:opacity-80 transition-all duration-1000" 
         alt={title} 
       />
       {/* Heavy Brutalist Typography Overlays */}
@@ -348,7 +348,7 @@ export function BannerCard({
   // --- CASE 18: THE GLOBAL REACH ---
   if (variant === 18) return (
     <Wrapper href={href as string} className={cn(common, "rounded-[4rem] border-2 border-neutral-100")}>
-      <img src={image} className="absolute inset-0 w-full h-full object-cover scale-110 opacity-40 grayscale group-hover:grayscale-0 group-hover:scale-100 transition-all duration-1000" alt={title} />
+      <img src={image} className="absolute inset-0 w-full h-[450px] object-cover scale-110 opacity-40 grayscale group-hover:grayscale-0 group-hover:scale-100 transition-all duration-1000" alt={title} />
       <div className="absolute inset-0 flex flex-col items-center justify-center p-12">
         <Globe className="text-neutral-300 mb-4" />
         <h3 className="text-black text-3xl font-black tracking-tighter text-center uppercase leading-none">{title}</h3>
@@ -365,7 +365,7 @@ export function BannerCard({
     <Wrapper href={href as string} className={cn(common, "rounded-3xl bg-neutral-50")}>
       <div className="absolute inset-0 p-8 flex flex-col">
         <div className="flex-1 rounded-2xl overflow-hidden mb-6 shadow-lg group-hover:-rotate-2 transition-transform duration-500">
-           <img src={image} className="w-full h-full object-cover" alt={title} />
+           <img src={image} className="w-full h-[450px] object-cover" alt={title} />
         </div>
         <div className="flex items-end justify-between">
           <div>
@@ -383,7 +383,7 @@ export function BannerCard({
   // --- CASE 20: THE DARK MATTER ---
   if (variant === 20) return (
     <Wrapper href={href as string} className={cn(common, "bg-black rounded-none")}>
-      <img src={image} className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-40 transition-opacity" alt={title} />
+      <img src={image} className="absolute inset-0 w-full h-[450px] object-cover opacity-20 group-hover:opacity-40 transition-opacity" alt={title} />
       <div className="absolute inset-0 flex items-center justify-center p-12">
         <div className="relative">
           <Fingerprint size={100} className="text-white/5 absolute -top-12 -left-12 rotate-45" />

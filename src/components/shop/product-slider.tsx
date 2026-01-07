@@ -28,18 +28,18 @@ export function ProductSlider({ products, title, className }: ProductSliderProps
       {title && (
         <div className="flex items-end justify-between mb-10 px-4 md:px-0">
           <div>
-            <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tighter italic relative inline-block z-10">
+            <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tighter italic relative inline-block z-10">
               {title}
               <span className="absolute left-0 bottom-1 w-full h-3 bg-red-600/20 -z-10 skew-x-12"></span>
             </h3>
           </div>
           
           <div className="flex gap-3">
-            <button className="slider-prev w-12 h-12 rounded-full border border-neutral-200 dark:border-white/10 flex items-center justify-center hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all active:scale-90 shadow-lg backdrop-blur-sm bg-white/50 dark:bg-black/50">
-              <ArrowLeft size={20} />
+            <button className="slider-prev w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-neutral-200 dark:border-white/10 flex items-center justify-center hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all active:scale-90 shadow-lg backdrop-blur-sm bg-white/50 dark:bg-black/50">
+              <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
-            <button className="slider-next w-12 h-12 rounded-full border border-neutral-200 dark:border-white/10 flex items-center justify-center hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all active:scale-90 shadow-lg backdrop-blur-sm bg-white/50 dark:bg-black/50">
-              <ArrowRight size={20} />
+            <button className="slider-next w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-neutral-200 dark:border-white/10 flex items-center justify-center hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all active:scale-90 shadow-lg backdrop-blur-sm bg-white/50 dark:bg-black/50">
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>
         </div>
@@ -48,7 +48,7 @@ export function ProductSlider({ products, title, className }: ProductSliderProps
       <Swiper
         modules={[Navigation, Autoplay]}
         spaceBetween={20}
-        slidesPerView={1.2}
+        slidesPerView={2}
         centeredSlides={false}
         loop
         autoplay={{
@@ -68,14 +68,18 @@ export function ProductSlider({ products, title, className }: ProductSliderProps
         }}
         className="!overflow-visible"
       >
-        {products.map((p) => (
+        {(products.length ? products : Array.from({ length: 5 }).map((_, i) => ({ id: `s-${i}` })) as any[]).map((p: any) => (
           <SwiperSlide key={p.id} className="h-auto">
-            <ProductCard 
-              title={p.title} 
-              price={p.price} 
-              image={p.image ?? "/images/a.jpg"} 
-              rating={p.rating ?? 4} 
-            />
+            {"title" in p ? (
+              <ProductCard 
+                title={p.title} 
+                price={p.price} 
+                image={p.image ?? "/images/a.jpg"} 
+                rating={p.rating ?? 4} 
+              />
+            ) : (
+              <div className="rounded-[3rem] bg-neutral-100 animate-pulse h-[320px] sm:h-[420px]" />
+            )}
           </SwiperSlide>
         ))}
       </Swiper>

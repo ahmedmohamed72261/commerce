@@ -2,16 +2,19 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { AuthCard } from "@/components/auth/auth-card";
 import { useAuthStore } from "@/store/auth";
 import { Input } from "@/components/ui/input";
 import { Smartphone, Lock } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 
 export default function LoginPage() {
   const router = useRouter();
+  const search = useSearchParams();
+  const locale = useLocale() as "en" | "ar";
   const auth = useAuthStore();
   const t = useTranslations("Auth");
   const [phone, setPhone] = useState("");
@@ -26,7 +29,8 @@ export default function LoginPage() {
     const res = await auth.login({ phone, password });
     setLoading(false);
     if (res.success && res.data?.token) {
-      router.push("/");
+      const to = search?.get("redirect") || `/${locale}`;
+      router.push(to);
     } else {
       setMessage(res.message || "Login failed");
     }

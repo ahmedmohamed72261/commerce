@@ -17,7 +17,7 @@ import "swiper/css/navigation";
 export function HeroSection() {
   const t = useTranslations("Home");
   const brandRed = "#C40000";
-  const { brands, fetchBrands } = useBrandsStore();
+  const { brands, fetchBrands, loading: brandsLoading } = useBrandsStore();
   const locale = useLocale() as "en" | "ar";
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export function HeroSection() {
           images={sliderImages}
           interval={6000}
           className="rounded-none shadow-none"
-          heightClass="h-[600px] lg:h-[850px]"
+          heightClass="h-[360px] md:h-[600px] lg:h-[850px]"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent rtl:bg-gradient-to-l" />
           <div className="absolute inset-y-0 left-0 rtl:left-auto rtl:right-0 flex items-center w-full">
@@ -94,7 +94,7 @@ export function HeroSection() {
             <Swiper
               modules={[Navigation, Autoplay]}
               spaceBetween={24}
-              slidesPerView={1}
+              slidesPerView={2}
               loop
               autoplay={{
                 delay: 3000,
@@ -112,15 +112,19 @@ export function HeroSection() {
               }}
               className="px-1 py-4"
             >
-              {(brands.length ? brands : []).map((b) => (
+              {((brandsLoading ? Array.from({ length: 5 }).map((_, i) => ({ _id: `s-${i}` })) : (brands.length ? brands : []) ) as any[]).map((b) => (
                 <SwiperSlide key={b._id}>
-                  <BannerCard
-                    variant={15}
-                    image={b.image ?? "/images/f.jpg"}
-                    title={b.name}
-                    count={t("brand")}
-                    href="#"
-                  />
+                  {('name' in b) ? (
+                    <BannerCard
+                      variant={15}
+                      image={(b as any).image ?? "/images/f.jpg"}
+                      title={(b as any).name}
+                      count={t("brand")}
+                      href="#"
+                    />
+                  ) : (
+                    <div className="h-[180px] md:h-[220px] rounded-3xl bg-neutral-100 animate-pulse" />
+                  )}
                 </SwiperSlide>
               ))}
             </Swiper>

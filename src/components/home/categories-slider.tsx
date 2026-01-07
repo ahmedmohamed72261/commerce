@@ -18,7 +18,7 @@ function CategoryCard({ cat }: { cat: Category }) {
     <motion.div 
       initial="initial"
       whileHover="hover"
-      className="relative h-[340px] sm:h-[380px] md:h-[460px] w-full overflow-hidden rounded-[3.5rem] cursor-pointer bg-black group"
+      className="relative h-[260px] sm:h-[320px] md:h-[420px] w-full overflow-hidden rounded-[3.5rem] cursor-pointer bg-black group"
     >
       {/* IMAGE LAYER: Fixed 'scale' not working by using motion variants */}
       <motion.img
@@ -51,10 +51,10 @@ function CategoryCard({ cat }: { cat: Category }) {
             }}
             transition={{ duration: 0.5 }}
           >
-            <p className="text-[--color-primary] font-extrabold text-md tracking-[0.5em] uppercase mb-2">
+            <p className="text-[--color-primary] font-extrabold text-xs sm:text-sm md:text-base tracking-[0.35em] uppercase mb-2">
               {cat.tag}
             </p>
-            <h3 className="text-4xl md:text-4xl font-black tracking-tighter text-white leading-[0.9] dark:text-[--color-primary]">
+            <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black tracking-tighter text-white leading-[0.9] dark:text-[--color-primary]">
               {cat.name}
             </h3>
           </motion.div>
@@ -75,7 +75,7 @@ function CategoryCard({ cat }: { cat: Category }) {
       {/* FLOATING PRODUCT COUNT */}
       <div className="absolute top-10 left-10 rtl:left-auto rtl:right-10 z-20">
         <div className="backdrop-blur-2xl bg-white/10 border border-white/20 px-6 py-2 rounded-full">
-          <span className="text-[16px] font-black uppercase tracking-widest text-white/90">
+          <span className="text-xs sm:text-sm md:text-base font-black uppercase tracking-widest text-white/90">
             {cat.count} PIECES
           </span>
         </div>
@@ -105,7 +105,7 @@ export function CategoriesSlider() {
         {/* HEADER SECTION */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-10">
           <div className="max-w-2xl">
-            <h2 className="text-6xl md:text-4xl font-black tracking-tighter text-[--color-foreground] leading-none uppercase">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tighter text-[--color-foreground] leading-none uppercase">
               {t("categoriesTitle")}
             </h2>
           </div>
@@ -113,15 +113,15 @@ export function CategoriesSlider() {
         <div className="flex gap-4">
           <button
             onClick={() => swiperRef.current?.slidePrev()}
-            className="h-20 w-20 rounded-full border border-[--color-border] flex items-center justify-center hover:bg-[--color-foreground] hover:text-[--color-background] transition-all active:scale-90"
+            className="h-12 w-12 sm:h-16 sm:w-16 md:h-20 md:w-20 rounded-full border border-[--color-border] flex items-center justify-center hover:bg-[--color-foreground] hover:text-[--color-background] transition-all active:scale-90"
           >
-            <ChevronLeft size={32} />
+            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8" />
           </button>
           <button
             onClick={() => swiperRef.current?.slideNext()}
-            className="h-20 w-20 rounded-full border border-[--color-border] flex items-center justify-center hover:bg-[--color-foreground] hover:text-[--color-background] transition-all active:scale-90"
+            className="h-12 w-12 sm:h-16 sm:w-16 md:h-20 md:w-20 rounded-full border border-[--color-border] flex items-center justify-center hover:bg-[--color-foreground] hover:text-[--color-background] transition-all active:scale-90"
           >
-            <ChevronRight size={32} />
+            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8" />
           </button>
         </div>
         </div>
@@ -133,7 +133,7 @@ export function CategoriesSlider() {
             onSwiper={(sw) => (swiperRef.current = sw)}
             onSlideChange={(sw) => setIndex(sw.realIndex)}
             spaceBetween={24}
-            slidesPerView={1}
+            slidesPerView={2}
             loop
             speed={700}
             autoplay={{ delay: 5000, disableOnInteraction: false }}
@@ -143,11 +143,15 @@ export function CategoriesSlider() {
               1024: { slidesPerView: 4 },
             }}
           >
-            {data.map((cat) => (
+            {(loading ? Array.from({ length: 4 }).map((_, i) => ({ id: `s-${i}` })) : data).map((cat: any) => (
               <SwiperSlide key={(cat.key ?? cat.id) as React.Key}>
-                <Link href={`/${locale}/categories/${encodeURIComponent((cat as Category).key ?? String(cat.id))}`}>
-                  <CategoryCard cat={cat} />
-                </Link>
+                {loading ? (
+                  <div className="relative h-[260px] sm:h-[320px] md:h-[420px] w-full rounded-[3.5rem] bg-neutral-100 animate-pulse" />
+                ) : (
+                  <Link href={`/${locale}/categories/${encodeURIComponent((cat as Category).key ?? String(cat.id))}`}>
+                    <CategoryCard cat={cat} />
+                  </Link>
+                )}
               </SwiperSlide>
             ))}
           </Swiper>

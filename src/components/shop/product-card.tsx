@@ -18,7 +18,7 @@ interface ProductCardProps {
 export function ProductCard({ variant = "v1", title, price, oldPrice = price * 1.2, image, rating = 4 }: ProductCardProps) {
   const t = useTranslations("Shop");
   // GLOBAL TRANSITION: 1000ms
-  const common = "relative w-full sm:w-[300px] md:w-[340px] h-[400px] sm:h-[500px] overflow-hidden transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group select-none flex flex-col text-foreground rtl:text-right";
+  const common = "relative w-full sm:w-[280px] md:w-[320px] h-[320px] sm:h-[420px] overflow-hidden transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group select-none flex flex-col text-foreground rtl:text-right";
 
   switch (variant) {
     // 01. DEFAULT: GLASSMORPHIC RED (High-End Retail)

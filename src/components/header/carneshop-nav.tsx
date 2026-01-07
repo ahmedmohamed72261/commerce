@@ -110,25 +110,7 @@ export function CarneshopNav({ locale }: { locale: string }) {
             {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
 
-          {/* Search Toggle */}
-          <div className="relative hidden sm:block">
-            <button 
-              onClick={() => setSearchOpen(!searchOpen)}
-              className="text-muted-foreground hover:text-red-600 transition"
-            >
-              {searchOpen ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
-            </button>
-            {/* Simple Search Dropdown */}
-            {searchOpen && (
-              <div className="absolute right-0 top-full mt-4 w-64 bg-white shadow-xl border border-neutral-100 p-4 rounded-md z-50">
-                <input 
-                  type="text" 
-                  placeholder={t("search")} 
-                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-red-600"
-                />
-              </div>
-            )}
-          </div>
+          {/* Search removed for cleaner nav */}
 
           {/* User */}
           {user ? (
@@ -142,7 +124,7 @@ export function CarneshopNav({ locale }: { locale: string }) {
                 <ChevronDown className="w-3 h-3" />
               </button>
               {userMenuOpen && (
-                <div className="absolute right-0 top-full mt-2 w-40 bg-white border shadow-md rounded-md p-2 z-50">
+                <div className="absolute right-0 rtl:left-0 rtl:right-auto top-full mt-2 w-40 bg-white border shadow-md rounded-md p-2 z-50">
                   <Link href={`/${locale}/account`} className="block px-3 py-2 text-sm hover:bg-neutral-100 rounded">Account</Link>
                   <button
                     onClick={() => { logout(); setUserMenuOpen(false); router.push(`/${locale}`); }}

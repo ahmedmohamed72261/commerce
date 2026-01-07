@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
     ShoppingBag, Star, Zap, Shield, ArrowRight,
@@ -8,6 +8,8 @@ import {
     Truck, Box, ZapOff, Smartphone, Headphones
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLocale } from "next-intl";
+import { useProductsStore } from "@/store/products";
 
 interface CustomStyles {
     container?: string;
@@ -42,14 +44,6 @@ type Theme = {
 
 export function AboutSectionHero({
     version = 1,
-    data = {
-        brand: "JOYROOM",
-        title: "Ultra-Low Latency Gaming Headset",
-        price: "$189.00",
-        oldPrice: "$249.00",
-        image: "/images/f.jpg",
-        label: "Limited Edition"
-    },
     customStyles = {}
 }: AboutSectionHero) {
 
@@ -92,7 +86,25 @@ export function AboutSectionHero({
     };
 
     const s = getStyle(version);
-    const title = data.title || "Ultra-Low Latency Gaming Headset";
+    const locale = useLocale() as "en" | "ar";
+
+    const { preferred, fetchPreferred } = useProductsStore();
+    const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        let active = true;
+        (async () => {
+            await fetchPreferred(locale);
+            if (active) setLoading(false);
+        })();
+        return () => { active = false; };
+    }, [fetchPreferred, locale]);
+
+    const title = preferred?.title || "";
+    const image = preferred?.image || "/images/fallback.jpg";
+    const price = preferred?.price;
+    const salePrice = preferred?.salePrice;
+    const stock = preferred?.stock ?? undefined;
 
     return (
         <div className="container mx-auto px-4 relative z-30 -mt-24 group">
@@ -104,109 +116,64 @@ export function AboutSectionHero({
                 version % 2 === 0 && "lg:flex-row-reverse" // Alternating layout
             )}>
 
-                {/* IMAGE SECTION */}
                 <div className={cn(
-                    "lg:w-[45%] relative min-h-[360px] sm:min-h-[420px] lg:min-h-[500px] flex items-center justify-center transition-colors duration-500",
+                    "lg:w-[45%] relative min-h-[300px] sm:min-h-[380px] lg:min-h-[460px] flex items-center justify-center transition-colors duration-500",
                     s.img,
                     customStyles.imageSection
                 )}>
-                    {/* Label Badge */}
-                    <div className={cn(
-                        "absolute top-8 left-8 rtl:left-auto rtl:right-8 px-5 py-2 text-[10px] font-black uppercase tracking-widest z-20",
-                        s.badge,
-                        customStyles.badge
-                    )}>
-                        <div className="flex items-center gap-2">
-                            <Flame size={12} /> {data.label}
-                        </div>
-                    </div>
-
-                    <img
-                        src={data.image}
-                        alt={title}
-                        className={cn(
-                            "w-4/5 h-4/5 object-contain transition-all duration-1000 group-hover:scale-110 group-hover:rotate-6",
-                            customStyles.productImg
-                        )}
-                    />
-
-                    {/* Hidden Action Bar */}
-                    <div className="absolute right-8 rtl:right-auto rtl:left-8 top-1/2 -translate-y-1/2 sm:flex flex-col gap-4 opacity-0 translate-x-10 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500">
-                        {[Heart, Eye, Share2].map((Icon, idx) => (
-                            <button key={idx} className="w-12 h-12 flex items-center justify-center bg-white shadow-2xl rounded-full text-black hover:bg-[#C40000] hover:text-white transition-all transform hover:scale-110">
-                                <Icon size={20} />
-                            </button>
-                        ))}
-                    </div>
+                    {loading ? (
+                        <div className="w-4/5 h-4/5 rounded-[2rem] bg-neutral-100 animate-pulse" />
+                    ) : (
+                        <img
+                            src={image}
+                            alt={title}
+                            className={cn(
+                                "w-4/5 h-4/5 object-contain transition-all duration-1000 group-hover:scale-110 group-hover:rotate-6",
+                                customStyles.productImg
+                            )}
+                        />
+                    )}
                 </div>
 
-                {/* CONTENT SECTION */}
                 <div className={cn("lg:w-[55%] p-6 sm:p-10 lg:p-20 flex flex-col justify-center text-foreground rtl:text-right", customStyles.textSection)}>
-                    <div className="flex items-center gap-3 mb-6">
-                        <Crown className={s.icon} size={18} />
-                        <span className="text-[11px] font-black tracking-[0.5em] uppercase opacity-40">{data.brand}</span>
-                    </div>
-
-                    <h1 className="text-3xl sm:text-5xl lg:text-7xl font-black tracking-tighter uppercase mb-6 sm:mb-8 leading-[0.95] sm:leading-[0.85] text-balance rtl:text-right">
-                        {title.split(' ').slice(0, -1).join(' ')} <br />
-                        <span className={s.icon}>{title.split(' ').pop()}</span>
-                    </h1>
+                    {loading ? (
+                        <div className="h-10 sm:h-12 w-2/3 bg-neutral-100 animate-pulse rounded-lg mb-6 sm:mb-8" />
+                    ) : (
+                        <h1 className="text-3xl sm:text-5xl lg:text-7xl font-black tracking-tighter uppercase mb-6 sm:mb-8 leading-[0.95] sm:leading-[0.85] text-balance rtl:text-right">
+                            {title}
+                        </h1>
+                    )}
 
                     <div className="flex items-baseline gap-4 sm:gap-5 mb-8 sm:mb-10">
-                        <span className={cn("text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter", s.icon, customStyles.priceText)}>{data.price}</span>
-                        <span className="text-lg sm:text-2xl line-through opacity-20 font-bold">{data.oldPrice}</span>
-                        <div className="bg-green-500 text-white px-3 py-1 rounded-sm text-[10px] font-black uppercase tracking-tighter self-center ml-2 rtl:ml-0 rtl:mr-2">
-                            Save 25%
-                        </div>
+                        {loading ? (
+                            <div className="h-9 w-40 bg-neutral-100 animate-pulse rounded mr-4" />
+                        ) : salePrice ? (
+                            <>
+                                <span className={cn("text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter", s.icon, customStyles.priceText)}>
+                                    ${salePrice}
+                                </span>
+                                <span className="text-lg sm:text-2xl line-through opacity-40 font-bold">${price}</span>
+                            </>
+                        ) : (
+                            <span className={cn("text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter", s.icon, customStyles.priceText)}>
+                                ${price}
+                            </span>
+                        )}
+                        {!loading && typeof stock === "number" && (
+                            <span className="text-xs font-bold uppercase tracking-wider opacity-60">
+                                {locale === "ar" ? "المتوفر" : "In Stock"}: {stock}
+                            </span>
+                        )}
                     </div>
 
-                    {/* Dynamic Specs Grid */}
-                    <div className="grid grid-cols-2 gap-8 mb-12 border-y border-neutral-100 dark:border-white/5 py-10">
-                        <div className="flex items-center gap-4">
-                            <div className={cn("w-12 h-12 flex items-center justify-center rounded-xl bg-neutral-100 dark:bg-white/5", s.icon)}>
-                                <Truck size={24} />
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-black uppercase opacity-40">Shipment</p>
-                                <p className="text-sm font-black italic">Free Global</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <div className={cn("w-12 h-12 flex items-center justify-center rounded-xl bg-neutral-100 dark:bg-white/5", s.icon)}>
-                                <Shield size={24} />
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-black uppercase opacity-40">Warranty</p>
-                                <p className="text-sm font-black italic">Life-Time Pro</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Final Actions */}
                     <div className="flex flex-wrap items-center gap-8">
                         <Button className={cn(
                             "px-10 sm:px-14 py-6 sm:py-9 text-base font-black uppercase tracking-[0.2em] shadow-2xl transition-all active:scale-95 group/btn",
                             s.btn,
                             customStyles.mainButton
                         )}>
-                            Grab Now <ShoppingBag className="ml-3 rtl:ml-0 rtl:mr-3 transition-transform group-hover/btn:translate-y-[-2px]" size={22} />
+                            {locale === "ar" ? "اشتري الآن" : "Buy Now"} <ShoppingBag className="ml-3 rtl:ml-0 rtl:mr-3 transition-transform group-hover/btn:translate-y-[-2px]" size={22} />
                         </Button>
-
-                        <div className="flex items-center gap-5 pl-8 rtl:pl-0 rtl:pr-8 border-l-2 rtl:border-l-0 rtl:border-r-2 border-neutral-100 dark:border-white/10">
-                            <div className="flex -space-x-4">
-                                {[1, 2, 3, 4].map(i => (
-                                    <div key={i} className="w-10 h-10 rounded-full border-4 border-white bg-neutral-200 overflow-hidden shadow-sm">
-                                        <img src={`https://i.pravatar.cc/100?u=${i + version}`} alt="user" />
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="leading-none">
-                                <p className="text-[11px] font-black uppercase tracking-tighter mb-1">Top Rated</p>
-                                <div className="flex text-yellow-500 gap-0.5">
-                                    {Array(5).fill(0).map((_, i) => <Star key={i} size={10} fill="currentColor" />)}
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
