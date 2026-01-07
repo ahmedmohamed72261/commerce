@@ -53,7 +53,8 @@ function pickLocaleString(input: unknown, locale: "en" | "ar"): string {
 
 function mapRawProduct(p: unknown, locale: "en" | "ar"): Product {
   const obj = p as Record<string, unknown>;
-  const id = String(p?._id ?? p?.id ?? "");
+  const rawId = obj["_id"] ?? obj["id"];
+  const id = String(typeof rawId === "string" || typeof rawId === "number" ? rawId : "");
   const title = pickLocaleString(obj?.name, locale) || String(obj?.title ?? "");
   const salePrice = typeof obj?.salePrice === "number" ? (obj.salePrice as number) : undefined;
   const basePrice = typeof obj?.price === "number" ? (obj.price as number) : undefined;
