@@ -12,7 +12,7 @@ interface Product {
   id: string | number;
   title: string;
   price: number;
-  image: string;
+  image?: string;
   rating?: number;
 }
 
@@ -73,7 +73,7 @@ export function ProductSlider({ products, title, className }: ProductSliderProps
             <ProductCard 
               title={p.title} 
               price={p.price} 
-              image={p.image} 
+              image={p.image ?? "/images/a.jpg"} 
               rating={p.rating ?? 4} 
             />
           </SwiperSlide>
