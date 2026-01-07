@@ -8,6 +8,7 @@ import { Play, Shield, Globe, Award, MoveRight, ArrowLeft, ArrowRight } from "lu
 import { AboutSectionHero } from "./AboutSectionHero";
 import { useEffect } from "react";
 import { useBrandsStore } from "@/store/brands";
+import { useLocale } from "next-intl";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -17,10 +18,11 @@ export function HeroSection() {
   const t = useTranslations("Home");
   const brandRed = "#C40000";
   const { brands, fetchBrands } = useBrandsStore();
+  const locale = useLocale() as "en" | "ar";
 
   useEffect(() => {
-    fetchBrands();
-  }, [fetchBrands]);
+    fetchBrands(locale);
+  }, [fetchBrands, locale]);
 
   const sliderImages = [
     "/images/banners2/a.jpg",
@@ -34,7 +36,7 @@ export function HeroSection() {
   // Brands are fetched via store and mapped into cards below
 
   return (
-    <section className="relative pt-0 pb-20 overflow-visible bg-background dark:bg-background">
+    <section className="relative pt-0 px-4 pb-20 overflow-visible bg-background dark:bg-background">
       {/* 1. Main Hero Slider */}
       <div className="w-full relative">
         <BannerSlider
@@ -71,7 +73,7 @@ export function HeroSection() {
       <AboutSectionHero />
 
   {/* 3. Featured Brands */}
-  <div className="container mx-auto px-4 pt-20">
+  <div className=" mx-auto px-4 pt-20">
     <div className="flex items-center justify-between mb-10">
        <div>
          <h2 className="text-3xl font-black uppercase tracking-tighter">{t("featuredBrands")}</h2>

@@ -95,8 +95,8 @@ export function CategoriesSlider() {
   const swiperRef = useRef<SwiperType | null>(null);
 
   useEffect(() => {
-    fetchCategories();
-  }, [fetchCategories]);
+    fetchCategories(locale as "en" | "ar");
+  }, [fetchCategories, locale]);
 
   return (
     <section className="py-24 bg-[--color-background] overflow-hidden">

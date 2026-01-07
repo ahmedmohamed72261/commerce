@@ -20,6 +20,12 @@ http.interceptors.request.use((config) => {
       config.headers = config.headers || {};
       (config.headers as Record<string, string>)["Authorization"] = `Bearer ${token}`;
     }
+    const lang =
+      (typeof document !== "undefined" && document.documentElement.lang) ||
+      (typeof window !== "undefined" && (window.location.pathname.split("/")[1] || "")) ||
+      "en";
+    config.headers = config.headers || {};
+    (config.headers as Record<string, string>)["Accept-Language"] = lang === "ar" ? "ar" : "en";
   } catch {}
   return config;
 });

@@ -30,12 +30,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}/, "") || "/";
     
     // Check if current path requires auth
-    const isPublic = PUBLIC_PATHS.some(p => 
-      pathWithoutLocale === p || 
-      pathWithoutLocale.startsWith("/shop") || // Allow shop browsing
-      pathWithoutLocale.startsWith("/product") || // Allow product viewing
-      pathWithoutLocale.startsWith("/categories") // Allow categories
-    );
+    const isPublic = PUBLIC_PATHS.some(p => pathWithoutLocale === p);
 
     if (!isPublic && !token) {
       // Redirect to login if trying to access protected route without token

@@ -68,7 +68,7 @@ export function OffcanvasSidebar({ open, onClose, version = 1 }: OffcanvasSideba
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/30 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/10 backdrop-blur-sm"
           />
 
           {/* Sidebar Panel */}
@@ -93,7 +93,7 @@ export function OffcanvasSidebar({ open, onClose, version = 1 }: OffcanvasSideba
               isRtl ? "left-0" : "right-0",
               "shadow-[0_20px_60px_rgba(0,0,0,0.35)]",
               "border-l dark:border-l-0 dark:border-r border-neutral-200/70 dark:border-white/10",
-              "bg-white/95 text-neutral-800 dark:bg-neutral-900/90 dark:text-neutral-200 backdrop-blur-xl",
+              "bg-white text-neutral-800 dark:bg-neutral-900/90 dark:text-neutral-200 backdrop-blur-xl",
               s.panel
             )}
           >
@@ -122,7 +122,7 @@ export function OffcanvasSidebar({ open, onClose, version = 1 }: OffcanvasSideba
             <div className="flex-1 overflow-y-auto custom-scrollbar overscroll-contain will-change-scroll">
               {/* Promo Banner */}
               <div className="px-6 mt-6">
-                <div className="bg-gradient-to-r from-pink-500 to-red-600 dark:from-[#C40000] dark:to-black rounded-2xl p-6 text-white relative overflow-hidden group">
+                <div className="bg-gradient-to-r from-rose-400 to-red-500 dark:from-[#C40000] dark:to-black rounded-2xl p-6 text-white relative overflow-hidden group">
                    <div className="relative z-10">
                       <p className="text-[10px] font-bold uppercase tracking-widest opacity-80">Season Sale</p>
                       <p className="text-2xl font-black italic">UP TO 50% OFF</p>
@@ -148,7 +148,7 @@ export function OffcanvasSidebar({ open, onClose, version = 1 }: OffcanvasSideba
                         className={cn("flex items-center justify-between p-4 rounded-xl transition-all group bg-white hover:bg-neutral-100 dark:bg-white/5 dark:hover:bg-white/10", s.item)}
                       >
                         <div className="flex items-center gap-4">
-                          <item.icon className={cn("w-5 h-5", item.color || "text-neutral-600 dark:text-neutral-400")} />
+                          <item.icon className={cn("w-5 h-5", item.color || "text-neutral-700 dark:text-neutral-400")} />
                           <span className="font-bold uppercase text-sm tracking-tight group-hover:text-red-600 transition-colors">{item.name}</span>
                         </div>
                         {item.label ? (

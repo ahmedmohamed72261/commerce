@@ -116,3 +116,34 @@ html {
   background: var(--primary);
   color: white;
 }
+
+/* ===============================
+   Toast Styles (nextjs-toast-notify)
+================================ */
+:root {
+  --toast-bg: var(--glass-bg);
+  --toast-border: var(--glass-border);
+  --toast-shadow: var(--glass-shadow);
+}
+.nextjs-toast-notify__container {
+  z-index: 10000;
+}
+.nextjs-toast-notify__toast {
+  background: var(--toast-bg) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
+  border: 1px solid var(--toast-border) !important;
+  box-shadow: var(--toast-shadow) !important;
+  color: var(--foreground) !important;
+  border-radius: 16px !important;
+  overflow: hidden;
+}
+.nextjs-toast-notify__toast--success {
+  border-left: 4px solid #22c55e !important;
+}
+.nextjs-toast-notify__toast--error {
+  border-left: 4px solid #ef4444 !important;
+}
+.nextjs-toast-notify__toast--info {
+  border-left: 4px solid #3b82f6 !important;
+}

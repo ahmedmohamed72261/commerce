@@ -122,3 +122,28 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ user: null, token: null, message: null });
   },
 }));
+
+// Hydrate auth state on client mount
+try {
+  if (typeof window !== "undefined") {
+    const existingToken = localStorage.getItem("auth_token");
+    if (existingToken) {
+      useAuthStore.setState({ token: existingToken });
+      http
+        .get("/auth/me")
+        .then((res) => {
+          const data = res.data as { success: boolean; data?: { user: User }; message?: string };
+          if (data?.success && data?.data?.user) {
+            useAuthStore.setState({ user: data.data.user });
+          }
+        })
+        .catch(() => {
+          // If token invalid, clear it
+          try {
+            localStorage.removeItem("auth_token");
+          } catch {}
+          useAuthStore.setState({ token: null, user: null });
+        });
+    }
+  }
+} catch {}

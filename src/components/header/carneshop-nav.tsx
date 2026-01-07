@@ -5,11 +5,12 @@ import { Search, ShoppingCart, User, List, X, ChevronDown, Moon, Sun } from "luc
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { OffcanvasSidebar } from "./offcanvas-sidebar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { useLocale } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth";
+import { http } from "@/config/http";
 
 export function CarneshopNav({ locale }: { locale: string }) {
   const t = useTranslations("Nav");
@@ -25,6 +26,21 @@ export function CarneshopNav({ locale }: { locale: string }) {
   const pathname = usePathname();
   const [langOpen, setLangOpen] = useState(false);
   const { user, logout } = useAuthStore();
+
+  // Ensure user data persists across refreshes
+  useEffect(() => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
+    if (token && !user) {
+      http.get("/auth/me").then((res) => {
+        const data = res.data as { success: boolean; data?: { user: any } };
+        if (data?.success && data?.data?.user) {
+          useAuthStore.setState({ user: data.data.user });
+        }
+      }).catch(() => {
+        // ignore
+      });
+    }
+  }, [user]);
 
   const switchLocale = (target: "en" | "ar") => {
     if (!pathname) return;

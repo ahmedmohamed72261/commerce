@@ -14,7 +14,7 @@ type BrandsState = {
   brands: Brand[];
   loading: boolean;
   error: string | null;
-  fetchBrands: () => Promise<void>;
+  fetchBrands: (locale?: "en" | "ar") => Promise<void>;
 };
 
 function cleanImage(url: unknown): string | undefined {
@@ -28,7 +28,7 @@ export const useBrandsStore = create<BrandsState>((set) => ({
   brands: [],
   loading: false,
   error: null,
-  async fetchBrands() {
+  async fetchBrands(locale = "en") {
     set({ loading: true, error: null });
     try {
       const res = await http.get("/brands");
@@ -40,7 +40,7 @@ export const useBrandsStore = create<BrandsState>((set) => ({
         : [];
       const brands: Brand[] = arr.map((b: any) => ({
         _id: String(b?._id ?? b?.id ?? ""),
-        name: String(b?.name ?? ""),
+        name: typeof (b?.name) === "object" ? (b.name[locale] ?? b.name["en"] ?? "") : String(b?.name ?? ""),
         image: cleanImage(b?.image),
         isActive: Boolean(b?.isActive),
       }));

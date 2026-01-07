@@ -1,36 +1,30 @@
 "use client";
 
-import { create } from "zustand";
+import { showToast } from "nextjs-toast-notify";
 
 export type ToastVariant = "success" | "error" | "info";
 
-export type ToastItem = {
-  id: number;
-  message: string;
-  variant: ToastVariant;
-};
-
-type ToastState = {
-  toasts: ToastItem[];
-  add: (t: Omit<ToastItem, "id">) => void;
-  remove: (id: number) => void;
-};
-
-export const useToastStore = create<ToastState>((set, get) => ({
-  toasts: [],
-  add(t) {
-    const id = Date.now() + Math.floor(Math.random() * 1000);
-    set({ toasts: [...get().toasts, { id, ...t }] });
-    setTimeout(() => {
-      get().remove(id);
-    }, 3500);
-  },
-  remove(id) {
-    set({ toasts: get().toasts.filter((x) => x.id !== id) });
-  },
-}));
-
 export function addToast(input: { message: string; variant?: ToastVariant }) {
-  const { add } = useToastStore.getState();
-  add({ message: input.message, variant: input.variant ?? "info" });
+  const variant = input.variant ?? "info";
+  const options: Record<string, unknown> = {
+    duration: 4000,
+    position: "top-right",
+    transition: "bounceIn",
+    progress: true,
+    sound: false,
+    icon:
+      variant === "success"
+        ? '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>'
+        : variant === "error"
+        ? '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="M6 6 18 18"/></svg>'
+        : '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>',
+  };
+
+  if (variant === "success") {
+    showToast.success(input.message, options);
+  } else if (variant === "error") {
+    showToast.error(input.message, options);
+  } else {
+    showToast.info(input.message, options);
+  }
 }

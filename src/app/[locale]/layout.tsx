@@ -16,18 +16,23 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: siteConfig.name,
-    template: `%s | ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const desc =
+    (siteConfig.description as Record<string, string>)[locale as "en" | "ar"] ??
+    (siteConfig.description as Record<string, string>)["en"];
+  return {
+    title: {
+      default: siteConfig.name,
+      template: `%s | ${siteConfig.name}`,
+    },
+    description: desc,
+  };
+}
 
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { WhatsAppFloat } from "@/components/ui/whatsapp-float";
-import { ToastRenderer } from "@/components/ui/toast";
 import { AuthGuard } from "@/components/auth/auth-guard";
 
 export default async function RootLayout({
@@ -55,7 +60,6 @@ export default async function RootLayout({
               </main>
               <Footer />
               <WhatsAppFloat />
-              <ToastRenderer />
             </AuthGuard>
           </I18nProvider>
         </ThemeProvider>
