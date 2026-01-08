@@ -5,7 +5,7 @@ import { ChevronDown, Menu, User, ShoppingCart, List } from "lucide-react";
 import { SectionsDropdown } from "./sections-dropdown";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { OffcanvasSidebar } from "./sidebar";
+import { Sidebar } from "./sidebar";
 import { useState } from "react";
 
 export function NavBar({ locale }: { locale: string }) {
