@@ -13,30 +13,97 @@ interface ProductCardProps {
   oldPrice?: number;
   image: string;
   rating?: number;
+  category?: string;
+  brand?: string;
+  stock?: number;
+  condition?: string;
+  salePrice?: number;
 }
 
-export function ProductCard({ variant = "v1", title, price, oldPrice = price * 1.2, image, rating = 4 }: ProductCardProps) {
+export function ProductCard({ variant = "v1", title, price, oldPrice = price * 1.2, image, rating = 4, category, brand, stock, condition, salePrice }: ProductCardProps) {
   const t = useTranslations("Shop");
   // GLOBAL TRANSITION: 1000ms
   const common = "relative w-full sm:w-[280px] md:w-[320px] h-[320px] sm:h-[420px] overflow-hidden transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group select-none flex flex-col text-foreground rtl:text-right";
 
   switch (variant) {
     // 01. DEFAULT: GLASSMORPHIC RED (High-End Retail)
+    // 01. ENHANCED V1: GLASSMORPHIC TECH (Premium Crystal)
     case "v1":
       return (
-        <div className={cn(common, "rounded-[3rem] bg-[--card] backdrop-blur-xl border border-[--border] hover:shadow-2xl hover:border-red-600/50")}>
-          <div className="h-2/3 p-6 overflow-hidden relative">
-             <motion.img whileHover={{ scale: 1.1 }} transition={{ duration: 1 }} src={image} className="w-full h-full object-cover rounded-[2.5rem]"/>
-             <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
-                <button className="p-4 bg-white rounded-full"><Eye size={20}/></button>
-                <button className="p-4 bg-red-600 text-white rounded-full"><ShoppingCart size={20}/></button>
-             </div>
-          </div>
-          <div className="p-8 flex flex-col justify-between flex-grow">
-            <h3 className="text-2xl font-black tracking-tighter uppercase line-clamp-2">{title}</h3>
-            <div className="flex justify-between items-end"><span className="text-4xl font-black text-red-600">${price}</span><ArrowUpRight className="group-hover:rotate-45 transition-transform duration-1000"/></div>
+        <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -8 }}
+      className="group relative w-full sm:w-[320px] rounded-[2rem] bg-white border border-neutral-100 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] transition-all duration-500 overflow-hidden"
+    >
+      {/* --- Image Section (White & Minimal) --- */}
+      <div className="relative md:h-[320px] h-[150px] w-full p-2 bg-white">
+        {/* Action Buttons (Floating White Glass) */}
+        <div className="absolute top-6 right-6 z-20 flex flex-col gap-2 opacity-0 scale-90 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300">
+          <button className="p-3 rounded-2xl bg-white/70 backdrop-blur-md border border-neutral-100 shadow-sm hover:bg-red-600 hover:text-white transition-all text-neutral-600">
+            <Heart size={18} />
+          </button>
+          <button className="p-3 rounded-2xl bg-white/70 backdrop-blur-md border border-neutral-100 shadow-sm hover:bg-red-600 hover:text-white transition-all text-neutral-600">
+            <Eye size={18} />
+          </button>
+        </div>
+
+        {/* Product Image */}
+        <div className="w-full h-full flex items-center justify-center p-2 ">
+          <motion.img
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            src={image}
+            alt={title}
+            className="w-full h-full object-cover rounded-xl"
+          />
+        </div>
+      </div>
+
+      {/* --- Information Section --- */}
+      <div className="px-8 pb-8 pt-2 bg-white">
+        <div className="flex justify-between items-center mb-1">
+          {brand && (
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">
+              {brand}
+            </span>
+          )}
+          <div className="flex gap-0.5">
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} size={12} className={cn(i < rating ? "fill-amber-400 text-amber-400" : "text-neutral-200")} />
+            ))}
           </div>
         </div>
+
+        <div className="space-y-1 flex justify-between">
+          <div>
+            <h3 className="md:text-2xl text-md font-bold tracking-tight text-neutral-900 group-hover:text-red-600 transition-colors">
+            {title}
+          </h3>
+          {stock && (
+            <div className="flex items-center gap-1.5 text-[9px] font-bold text-neutral-400 uppercase">
+              <Box size={10} /> {stock} Units Left
+            </div>
+          )}
+          </div>
+          <div className="flex flex-col">
+            <span className="md:text-2xl text-md font-black tracking-tighter text-neutral-900">
+              ${salePrice || price}
+            </span>
+          </div>
+        </div>
+
+        {/* --- Primary Action --- */}
+        <div className="mt-2">
+          <button className="w-full group/btn relative h-10 overflow-hidden rounded-[1rem] bg-red-600 text-white transition-all hover:shadow-[0_15px_30px_-10px_rgba(220,38,38,0.4)] active:scale-95">
+            <div className="absolute inset-0 w-full h-full bg-neutral-900 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
+            <span className="relative z-10 flex items-center justify-center gap-2 font-black uppercase text-xs tracking-widest">
+              <ShoppingCart size={15} /> Add Cart
+            </span>
+          </button>
+        </div>
+      </div>
+    </motion.div>
       );
       // 2. TECH-NOIR (Dark Mode Specialized, Cyber Neon)
     case "v2":

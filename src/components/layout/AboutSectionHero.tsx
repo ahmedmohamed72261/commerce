@@ -107,7 +107,7 @@ export function AboutSectionHero({
     const stock = preferred?.stock ?? undefined;
 
     return (
-        <div className="container mx-auto px-4 relative z-30 -mt-24 group">
+        <div className="max-w-6xl mx-auto px-2 relative z-30 -mt-10 md:-mt-30 group">
             <div className={cn(
                 "flex flex-col lg:flex-row transition-all duration-700 overflow-hidden rtl:md:flex-row-reverse rtl:flex-col",
                 s.card,
@@ -117,7 +117,7 @@ export function AboutSectionHero({
             )}>
 
                 <div className={cn(
-                    "lg:w-[45%] relative min-h-[300px] sm:min-h-[380px] lg:min-h-[460px] flex items-center justify-center transition-colors duration-500",
+                    "lg:w-[45%] w-full relative min-h-[230px] sm:min-h-[380px] lg:min-h-[460px] flex items-center justify-center transition-colors duration-500",
                     s.img,
                     customStyles.imageSection
                 )}>
@@ -135,7 +135,7 @@ export function AboutSectionHero({
                     )}
                 </div>
 
-                <div className={cn("lg:w-[55%] p-6 sm:p-10 lg:p-20 flex flex-col justify-center text-foreground rtl:text-right", customStyles.textSection)}>
+                <div className={cn("lg:w-[55%] p-4 sm:p-10 lg:p-20 flex flex-col justify-center text-foreground rtl:text-right", customStyles.textSection)}>
                     {loading ? (
                         <div className="h-10 sm:h-12 w-2/3 bg-neutral-100 animate-pulse rounded-lg mb-6 sm:mb-8" />
                     ) : (

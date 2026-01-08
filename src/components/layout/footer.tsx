@@ -18,7 +18,7 @@ export function Footer() {
         <div className="container mx-auto px-4 sm:px-8 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Logo Area */}
           <div className="flex items-center gap-3">
-             <div className="relative h-20 w-40 p-1 rounded">
+             <div className="relative md:h-20 md:w-40 h-10 w-25 p-1 rounded">
                <img src="/images/logo-dark.png" alt="Carne Shop" className="h-full w-full object-cover" />
              </div>
           </div>
@@ -30,7 +30,7 @@ export function Footer() {
                 <User className="w-6 h-6" />
               </div>
               <div>
-                <div className="text-2xl font-bold">365k+</div>
+                <div className="md:text-2xl text-sm font-bold">365k+</div>
                 <div className="text-xs opacity-80 uppercase">Happy Customers</div>
               </div>
             </div>
@@ -39,7 +39,7 @@ export function Footer() {
                 <ShoppingBag className="w-6 h-6" />
               </div>
               <div>
-                <div className="text-2xl font-bold">850k+</div>
+                <div className="md:text-2xl text-sm font-bold">850k+</div>
                 <div className="text-xs opacity-80 uppercase">Products Sold</div>
               </div>
             </div>
@@ -49,23 +49,24 @@ export function Footer() {
 
       {/* Main Dark Section */}
       <div className="bg-[#0b0d17] text-gray-400 py-16">
-        <div className="container mx-auto px-4 sm:px-8 md:px-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div className="container mx-auto px-4 sm:px-8 md:px-12 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5">
           
           {/* Column 1: About */}
           <div>
-            <h3 className="text-white text-lg font-bold mb-6">{t("aboutTitle")}</h3>
+             {/* Logo Area */}
+            <div className="flex items-center gap-3 mb-2">
+              <div className="relative md:h-20 md:w-40 h-10 w-25 p-1 rounded">
+                <img src="/images/logo-dark.png" alt="Carne Shop" className="h-full w-full object-cover" />
+              </div>
+            </div>
             <p className="mb-6 text-sm leading-relaxed">
               {t("aboutText")}
             </p>
-            <div className="flex items-center gap-3 text-white">
-              <Mail className="w-5 h-5 text-red-600" />
-              <span>support@techstore.com</span>
-            </div>
           </div>
 
           {/* Column 2: Quick Links */}
           <div>
-            <h3 className="text-white text-lg font-bold mb-6">{t("quickLinks")}</h3>
+            <h3 className="text-white text-lg font-bold mb-3">{t("quickLinks")}</h3>
             <ul className="space-y-4 text-sm">
               <li><Link href="/" className="hover:text-red-600 transition">{t("links.home")}</Link></li>
               <li><Link href="/shop" className="hover:text-red-600 transition">{t("links.shop")}</Link></li>
@@ -97,9 +98,9 @@ export function Footer() {
             </div>
             
             {/* Payment Icons */}
-            <div className="flex items-center gap-2 mt-8">
+            {/* <div className="flex items-center gap-2 mt-8">
                <img src="/images/game-cards.svg" alt="Payment Methods" className="h-8 bg-white rounded p-1" />
-            </div>
+            </div> */}
           </div>
 
         </div>

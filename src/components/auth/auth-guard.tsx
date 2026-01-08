@@ -7,14 +7,7 @@ import { useProductsStore } from "@/store/products";
 import { useBrandsStore } from "@/store/brands";
 import { useCategoriesStore } from "@/store/categories";
 
-const PUBLIC_PATHS = [
-  "/",
-  "/(auth)/login",
-  "/(auth)/signup",
-  "/(auth)/forgot-password",
-  "/(auth)/reset-password",
-  "/(auth)/verify-code",
-];
+const PUBLIC_PATHS = ["/", "/login", "/signup", "/forgot-password", "/reset-password", "/verify-code"];
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();

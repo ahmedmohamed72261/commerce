@@ -18,7 +18,7 @@ function CategoryCard({ cat }: { cat: Category }) {
     <motion.div 
       initial="initial"
       whileHover="hover"
-      className="relative h-[260px] sm:h-[320px] md:h-[420px] w-full overflow-hidden rounded-[3.5rem] cursor-pointer bg-black group"
+      className="relative h-[220px] sm:h-[320px] md:h-[420px] w-full overflow-hidden rounded-[2rem] cursor-pointer bg-black group"
     >
       {/* IMAGE LAYER: Fixed 'scale' not working by using motion variants */}
       <motion.img
@@ -42,7 +42,7 @@ function CategoryCard({ cat }: { cat: Category }) {
       />
 
       {/* TEXT CONTENT */}
-      <div className="absolute inset-0 z-20 p-12 flex flex-col justify-end">
+      <div className="absolute inset-0 z-20 md:p-12 p-2  flex flex-col justify-end md:items-baseline items-center ">
         <div className="space-y-4">
           <motion.div
             variants={{
@@ -73,9 +73,9 @@ function CategoryCard({ cat }: { cat: Category }) {
       </div>
 
       {/* FLOATING PRODUCT COUNT */}
-      <div className="absolute top-10 left-10 rtl:left-auto rtl:right-10 z-20">
-        <div className="backdrop-blur-2xl bg-white/10 border border-white/20 px-6 py-2 rounded-full">
-          <span className="text-xs sm:text-sm md:text-base font-black uppercase tracking-widest text-white/90">
+      <div className="absolute md:top-10 top-4 md:left-10 left-2 rtl:left-auto rtl:md:right-10 rtl:right-2 z-20">
+        <div className="backdrop-blur-2xl bg-white/10 border border-white/20 md:px-6 px-4 py-2 rounded-full">
+          <span className="text-xs sm:text-sm md:text-base font-black uppercase tracking-widest text-white">
             {cat.count} PIECES
           </span>
         </div>
@@ -99,11 +99,11 @@ export function CategoriesSlider() {
   }, [fetchCategories, locale]);
 
   return (
-    <section className="py-24 bg-[--color-background] overflow-hidden">
+    <section className="py-5 bg-[--color-background] overflow-hidden">
       <div className=" mx-auto px-6 md:px-12">
         
         {/* HEADER SECTION */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-10">
+        <div className="flex md:flex-row md:items-end justify-between mb-5 gap-5">
           <div className="max-w-2xl">
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tighter text-[--color-foreground] leading-none uppercase">
               {t("categoriesTitle")}
@@ -113,13 +113,13 @@ export function CategoriesSlider() {
         <div className="flex gap-4">
           <button
             onClick={() => swiperRef.current?.slidePrev()}
-            className="h-12 w-12 sm:h-16 sm:w-16 md:h-20 md:w-20 rounded-full border border-[--color-border] flex items-center justify-center hover:bg-[--color-foreground] hover:text-[--color-background] transition-all active:scale-90"
+            className="h-8 w-8 sm:h-16 sm:w-16 md:h-20 md:w-20 rounded-full border border-[--color-border] flex items-center justify-center hover:bg-[--color-foreground] hover:text-[--color-background] transition-all active:scale-90"
           >
             <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8" />
           </button>
           <button
             onClick={() => swiperRef.current?.slideNext()}
-            className="h-12 w-12 sm:h-16 sm:w-16 md:h-20 md:w-20 rounded-full border border-[--color-border] flex items-center justify-center hover:bg-[--color-foreground] hover:text-[--color-background] transition-all active:scale-90"
+            className="h-8 w-8 sm:h-16 sm:w-16 md:h-20 md:w-20 rounded-full border border-[--color-border] flex items-center justify-center hover:bg-[--color-foreground] hover:text-[--color-background] transition-all active:scale-90"
           >
             <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8" />
           </button>

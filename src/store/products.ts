@@ -12,6 +12,10 @@ export type Product = {
   category?: string;
   salePrice?: number;
   stock?: number;
+  brand?: string;
+  condition?: string;
+  description?: string;
+  createdAt?: string;
 };
 
 type Pagination = {
@@ -53,8 +57,7 @@ function pickLocaleString(input: unknown, locale: "en" | "ar"): string {
 
 function mapRawProduct(p: unknown, locale: "en" | "ar"): Product {
   const obj = p as Record<string, unknown>;
-  const rawId = obj["_id"] ?? obj["id"];
-  const id = String(typeof rawId === "string" || typeof rawId === "number" ? rawId : "");
+  const id = String(p?._id ?? p?.id ?? "");
   const title = pickLocaleString(obj?.name, locale) || String(obj?.title ?? "");
   const salePrice = typeof obj?.salePrice === "number" ? (obj.salePrice as number) : undefined;
   const basePrice = typeof obj?.price === "number" ? (obj.price as number) : undefined;
@@ -62,9 +65,14 @@ function mapRawProduct(p: unknown, locale: "en" | "ar"): Product {
   const image = Array.isArray(obj?.images) ? cleanImage((obj.images as unknown[])[0]) : cleanImage(obj?.image);
   const catObj = (obj?.category as { name?: unknown } | undefined);
   const category = pickLocaleString(catObj?.name, locale);
+  const brandObj = (obj?.brand as { name?: unknown } | undefined);
+  const brand = pickLocaleString(brandObj?.name, locale);
   const rating = typeof obj?.rating === "number" ? (obj.rating as number) : undefined;
   const stock = typeof obj?.stock === "number" ? (obj.stock as number) : undefined;
-  return { id, title, price, image, rating, category, salePrice, stock };
+  const condition = typeof obj?.condition === "string" ? String(obj.condition) : undefined;
+  const description = typeof obj?.description === "string" ? String(obj.description) : undefined;
+  const createdAt = typeof obj?.createdAt === "string" ? String(obj.createdAt) : undefined;
+  return { id, title, price, image, rating, category, salePrice, stock, brand, condition, description, createdAt };
 }
 
 function normalizeProductsResponse(raw: unknown, locale: "en" | "ar"): { items: Product[]; total?: number } {

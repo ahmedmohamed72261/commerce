@@ -23,7 +23,7 @@ export default function HomePage() {
       <HeroSection />
       <CategoriesSlider />
 
-      <div className=" mx-auto sm:px-8 md:px-12 py-12 space-y-12 overflow-hidden">
+      <div className=" mx-auto sm:px-8 md:px-12  space-y-12 overflow-hidden">
         <ProductSlider 
           title={t("featuredProducts")} 
           products={items} 

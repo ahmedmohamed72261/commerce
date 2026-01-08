@@ -30,19 +30,19 @@ export function BannerCard({
 }: CategoryCardProps) {
   
   const Wrapper = href ? Link : "div";
-  const common = cn("group relative overflow-hidden block w-full aspect-[4/5] transition-all duration-700 rtl:text-right", className);
+  const common = cn("group relative overflow-hidden block w-full h-[300px] md:h-full aspect-[4/5] transition-all duration-700 rtl:text-right", className);
 
   // --- CASE 1: THE SILK LUXURY ---
   if (variant === 1) return (
-    <Wrapper href={href as string} className={cn(common, "rounded-[2.5rem] bg-neutral-900 shadow-2xl")}>
-      <img src={image} className="absolute inset-0 w-full h-[450px] object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000" alt={title} />
+    <Wrapper href={href as string} className={cn(common, "rounded-[2rem] bg-neutral-900 shadow-2xl")}>
+      <img src={image} className="absolute inset-0 w-full md:h-full  object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000" alt={title} />
       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/20" />
-      <div className="absolute inset-0 p-10 flex flex-col justify-between">
+      <div className="absolute inset-0 p-5 flex flex-col justify-between">
         <div className="flex justify-between items-start">
-          <div className="w-12 h-12 rounded-full border border-white/20 backdrop-blur-md flex items-center justify-center text-white"><Crown size={20} /></div>
+          <div className="md:w-12 md:h-12 w-4 h-4 rounded-full border border-white/20 backdrop-blur-md flex  items-center justify-center text-white"><Crown size={10} /></div>
           <span className="text-white/40 text-[10px] font-black tracking-[0.3em] uppercase">{count} Items</span>
         </div>
-        <div className="space-y-4">
+        <div className="space-y-2">
           <h3 className="text-white text-4xl font-light tracking-tighter leading-tight uppercase">{title.split(' ').join('\n')}</h3>
           <div className="w-0 group-hover:w-full h-0.5 bg-red-600 transition-all duration-500" />
         </div>
@@ -258,7 +258,7 @@ export function BannerCard({
     <Wrapper href={href as string} className={cn(common, "bg-zinc-100 rounded-[2rem] border border-neutral-200")}>
       <div className="absolute inset-0 flex flex-col">
         {/* Top Section: Dynamic Image with "Slide-in" Mask */}
-        <div className="relative h-[65%] w-full overflow-hidden m-3 rounded-[1.5rem]">
+        <div className="relative h-[65%] w-full overflow-hidden rounded-[1.5rem]">
           <img 
             src={image} 
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" 
@@ -272,17 +272,19 @@ export function BannerCard({
         </div>
         
         {/* Bottom Section: Clean Info with Offset Action */}
-        <div className="flex-1 px-6 pb-6 flex items-end justify-between rtl:flex-row-reverse">
-          <div className="space-y-1 rtl:text-right">
+        <div className="w-full px-4 pt-2 pb-6 flex items-end justify-between rtl:flex-row-reverse">
+          <div className="space-y-1 w-full rtl:text-right">
             <h3 className="text-black text-lg sm:text-xl md:text-2xl lg:text-3xl font-black leading-none tracking-tighter uppercase">
               {title}
             </h3>
-            <p className="text-neutral-400 text-xs font-medium uppercase tracking-widest">
-              Catalog — {count}
-            </p>
-          </div>
-          <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-red-600 text-white rounded-2xl flex items-center justify-center -rotate-12 group-hover:rotate-0 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-red-600/20">
-            <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
+            <div className="flex md:justify-between w-full">
+              <p className="text-neutral-400 text-xs font-medium uppercase tracking-widest">
+                Catalog — {count}
+              </p>
+              <div className="w-10 h-6 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-red-600 text-white rounded-2xl flex items-center justify-center -rotate-12 group-hover:rotate-0 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-red-600/20">
+                <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
+              </div>
+            </div>
           </div>
         </div>
       </div>

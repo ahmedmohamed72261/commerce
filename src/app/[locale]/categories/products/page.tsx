@@ -70,7 +70,18 @@ export default function CategoryProductsPage({ params }: { params: Promise<{ loc
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {items.map((p) => (
-                <ProductCard key={p.id} title={p.title} price={p.price} image={p.image ?? "/images/a.jpg"} rating={p.rating ?? 4} />
+                <ProductCard
+                  key={p.id}
+                  title={p.title}
+                  price={p.price}
+                  salePrice={p.salePrice}
+                  image={p.image ?? "/images/a.jpg"}
+                  rating={p.rating ?? 4}
+                  category={p.category}
+                  brand={p.brand}
+                  stock={p.stock}
+                  condition={p.condition}
+                />
               ))}
             </div>
             <Pagination
@@ -85,4 +96,3 @@ export default function CategoryProductsPage({ params }: { params: Promise<{ loc
     </div>
   );
 }
-

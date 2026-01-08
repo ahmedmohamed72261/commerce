@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Search, ShoppingCart, User, List, X, ChevronDown, Moon, Sun } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { OffcanvasSidebar } from "./offcanvas-sidebar";
+import { Sidebar } from "./sidebar";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { useLocale } from "next-intl";
@@ -127,7 +127,7 @@ export function CarneshopNav({ locale }: { locale: string }) {
                 <div className="absolute right-0 rtl:left-0 rtl:right-auto top-full mt-2 w-40 bg-white border shadow-md rounded-md p-2 z-50">
                   <Link href={`/${locale}/account`} className="block px-3 py-2 text-sm hover:bg-neutral-100 rounded">Account</Link>
                   <button
-                    onClick={() => { logout(); setUserMenuOpen(false); router.push(`/${locale}`); }}
+                    onClick={() => { logout(); setUserMenuOpen(false); router.push(`/${locale}/login`); }}
                     className="block w-full text-left px-3 py-2 text-sm hover:bg-neutral-100 rounded text-red-600"
                   >
                     Logout
@@ -176,7 +176,7 @@ export function CarneshopNav({ locale }: { locale: string }) {
         </div>
       </div>
       
-      <OffcanvasSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
     </div>
   );
 }

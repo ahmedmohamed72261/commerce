@@ -42,6 +42,9 @@ export const useAuthStore = create<AuthState>((set) => ({
       const data = res.data as RegisterResponse;
       if (data.success && data.data?.token) {
         localStorage.setItem("auth_token", data.data.token);
+        try {
+          localStorage.setItem("auth_user", JSON.stringify(data.data.user));
+        } catch {}
         set({ user: data.data.user, token: data.data.token });
         addToast({ variant: "success", message: data.message || "Registered successfully" });
       } else {
@@ -65,6 +68,9 @@ export const useAuthStore = create<AuthState>((set) => ({
       const data = res.data as LoginResponse;
       if (data.success && data.data?.token) {
         localStorage.setItem("auth_token", data.data.token);
+        try {
+          localStorage.setItem("auth_user", JSON.stringify(data.data.user));
+        } catch {}
         set({ user: data.data.user, token: data.data.token });
         addToast({ variant: "success", message: data.message || "Login successful" });
       } else {
@@ -118,6 +124,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   logout() {
     try {
       localStorage.removeItem("auth_token");
+      localStorage.removeItem("auth_user");
     } catch {}
     set({ user: null, token: null, message: null });
   },
@@ -129,20 +136,35 @@ try {
     const existingToken = localStorage.getItem("auth_token");
     if (existingToken) {
       useAuthStore.setState({ token: existingToken });
+      // Optimistically hydrate user from localStorage if available
+      try {
+        const storedUser = localStorage.getItem("auth_user");
+        if (storedUser) {
+          const parsed = JSON.parse(storedUser) as User;
+          useAuthStore.setState({ user: parsed });
+        }
+      } catch {}
       http
         .get("/auth/me")
         .then((res) => {
           const data = res.data as { success: boolean; data?: { user: User }; message?: string };
           if (data?.success && data?.data?.user) {
             useAuthStore.setState({ user: data.data.user });
+            try {
+              localStorage.setItem("auth_user", JSON.stringify(data.data.user));
+            } catch {}
           }
         })
-        .catch(() => {
+        .catch((err) => {
           // If token invalid, clear it
-          try {
-            localStorage.removeItem("auth_token");
-          } catch {}
-          useAuthStore.setState({ token: null, user: null });
+          const status = (err?.response?.status as number | undefined) ?? undefined;
+          if (status === 401 || status === 403) {
+            try {
+              localStorage.removeItem("auth_token");
+              localStorage.removeItem("auth_user");
+            } catch {}
+            useAuthStore.setState({ token: null, user: null });
+          }
         });
     }
   }

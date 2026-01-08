@@ -36,7 +36,7 @@ export function HeroSection() {
   // Brands are fetched via store and mapped into cards below
 
   return (
-    <section className="relative pt-0 px-4 pb-20 overflow-visible bg-background dark:bg-background">
+    <section className="relative pt-0 px-4 pb-5 overflow-visible bg-background dark:bg-background">
       {/* 1. Main Hero Slider */}
       <div className="w-full relative">
         <BannerSlider
@@ -53,14 +53,14 @@ export function HeroSection() {
                   <div className="h-px w-10 bg-red-600" />
                   <span className="uppercase tracking-[0.4em] text-xs font-bold text-red-500">Premium Tech Solutions</span>
                 </div>
-                <h1 className="text-5xl md:text-7xl font-black drop-shadow-md leading-[0.9] uppercase tracking-tighter animate-fade-up opacity-0 [animation-delay:200ms] [animation-fill-mode:forwards]">
+                <h1 className="text-3xl md:text-7xl font-black drop-shadow-md leading-[0.9] uppercase tracking-tighter animate-fade-up opacity-0 [animation-delay:200ms] [animation-fill-mode:forwards]">
                   {t("heroTitle")}
                 </h1>
-                <p className="mt-6 text-xl text-white/80 leading-relaxed max-w-lg animate-fade-up opacity-0 [animation-delay:400ms] [animation-fill-mode:forwards]">
+                <p className="mt-6 text-md md:text-xl text-white/80 leading-relaxed max-w-lg animate-fade-up opacity-0 [animation-delay:400ms] [animation-fill-mode:forwards]">
                   {t("heroDesc")}
                 </p>
-                <div className="mt-10 flex gap-4 animate-fade-up opacity-0 [animation-delay:600ms] [animation-fill-mode:forwards]">
-                  <Button className="bg-[#C40000] hover:bg-white hover:text-black text-white px-10 py-7 text-lg font-black uppercase tracking-widest rounded-none transition-all duration-300 shadow-2xl">
+                <div className="my-10 flex gap-4 animate-fade-up opacity-0 [animation-delay:600ms] [animation-fill-mode:forwards]">
+                  <Button className="bg-[#C40000] hover:bg-white hover:text-black text-white px-10 py-7 md:text-lg text-md font-black uppercase tracking-widest rounded-none transition-all duration-300 shadow-2xl">
                     {t("ctaShop")}
                   </Button>
                 </div>
@@ -73,10 +73,10 @@ export function HeroSection() {
       <AboutSectionHero />
 
   {/* 3. Featured Brands */}
-  <div className=" mx-auto px-4 pt-20">
+  <div className="px-4 pt-10">
     <div className="flex items-center justify-between mb-10">
        <div>
-         <h2 className="text-3xl font-black uppercase tracking-tighter">{t("featuredBrands")}</h2>
+         <h2 className="text-xl md:text-2xl font-black uppercase tracking-tighter">{t("featuredBrands")}</h2>
          <div className="h-1 w-20 bg-[#C40000] mt-2" />
        </div>
            
