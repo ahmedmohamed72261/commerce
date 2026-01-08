@@ -45,7 +45,13 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   // Global homepage loading gate until key data is ready
   const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}/, "") || "/";
   const isHome = pathWithoutLocale === "/";
-  const isLoading = productsLoading || preferredLoading || brandsLoading || categoriesLoading;
+
+  const isLoading = [
+    productsLoading,
+    preferredLoading,
+    brandsLoading,
+    categoriesLoading,
+  ].every(Boolean);
 
   return (
     <>

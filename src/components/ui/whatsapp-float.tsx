@@ -4,9 +4,9 @@ import { Phone } from "lucide-react";
 
 export function WhatsAppFloat() {
   return (
-    <div className="fixed bottom-8 right-8 z-50">
+    <div className="fixed bottom-4 right-4 z-50">
       <a
-        href="https://wa.me/1234567890" // Replace with actual number
+        href="https://wa.me/+201155624668" // Replace with actual number
         target="_blank"
         rel="noopener noreferrer"
         className="
@@ -17,7 +17,7 @@ export function WhatsAppFloat() {
           border border-white/10
           shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_8px_40px_-10px_rgba(0,0,0,0.5)]
           transition-all duration-500 cubic-bezier(0.34, 1.56, 0.64, 1)
-          hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(16,185,129,0.4)]
+          hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(220,38,38,0.4)]
         "
         style={{
            // Inline style for the specific spring easing if Tailwind config isn't set
@@ -27,8 +27,8 @@ export function WhatsAppFloat() {
         {/* 1. The Glowing Icon Circle */}
         <div className="
           relative flex items-center justify-center w-12 h-12 rounded-full 
-          bg-gradient-to-b from-emerald-500 to-emerald-700 
-          shadow-lg shadow-emerald-500/30
+          bg-gradient-to-b from-red-500 to-red-700 
+          shadow-lg shadow-red-500/30
           group-hover:scale-110 transition-transform duration-500
         ">
             {/* Subtle inner ripple ring */}
@@ -39,7 +39,7 @@ export function WhatsAppFloat() {
 
         {/* 2. The Text Content */}
         <div className="flex flex-col items-start justify-center">
-          <span className="text-[10px] uppercase tracking-wider text-emerald-400 font-bold leading-none opacity-80 mb-0.5">
+          <span className="text-[10px] uppercase tracking-wider text-red-400 font-bold leading-none opacity-80 mb-0.5">
             Support
           </span>
           <span className="text-sm font-semibold text-white leading-none tracking-wide">
