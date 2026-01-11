@@ -10,7 +10,7 @@ import { useTheme } from "next-themes";
 import { useLocale } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth";
-import { http } from "@/config/http";
+import { http } from "@/services/http";
 
 export function CarneshopNav({ locale }: { locale: string }) {
   const t = useTranslations("Nav");

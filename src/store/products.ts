@@ -1,15 +1,17 @@
 "use client";
 
 import { create } from "zustand";
-import { http } from "@/config/http";
+import { http } from "@/services/http";
 
 export type Product = {
   id: string | number;
   title: string;
   price: number;
   image?: string;
+  images?: string[];
   rating?: number;
   category?: string;
+  categoryId?: string;
   salePrice?: number;
   stock?: number;
   brand?: string;
@@ -36,6 +38,9 @@ type ProductsState = {
   preferred: Product | null;
   preferredLoading?: boolean;
   fetchPreferred: (locale?: "en" | "ar") => Promise<Product | null>;
+  productDetails: Product | null;
+  productDetailsLoading: boolean;
+  getProductDetails: (productId: string, locale?: "en" | "ar") => Promise<Product | null>;
 };
 
 function cleanImage(url: unknown): string | undefined {
@@ -62,17 +67,26 @@ function mapRawProduct(p: unknown, locale: "en" | "ar"): Product {
   const salePrice = typeof obj?.salePrice === "number" ? (obj.salePrice as number) : undefined;
   const basePrice = typeof obj?.price === "number" ? (obj.price as number) : undefined;
   const price = (salePrice ?? basePrice ?? 0);
-  const image = Array.isArray(obj?.images) ? cleanImage((obj.images as unknown[])[0]) : cleanImage(obj?.image);
-  const catObj = (obj?.category as { name?: unknown } | undefined);
+  
+  // Handle images array
+  const images = Array.isArray(obj?.images) 
+    ? (obj.images as unknown[]).map(img => cleanImage(img)).filter(Boolean) as string[]
+    : undefined;
+  const image = images?.[0] ?? cleanImage(obj?.image);
+  
+  const catObj = (obj?.category as { name?: unknown; _id?: unknown } | undefined);
   const category = pickLocaleString(catObj?.name, locale);
+  const categoryId = catObj?._id ? String(catObj._id) : undefined;
+  
   const brandObj = (obj?.brand as { name?: unknown } | undefined);
   const brand = pickLocaleString(brandObj?.name, locale);
   const rating = typeof obj?.rating === "number" ? (obj.rating as number) : undefined;
   const stock = typeof obj?.stock === "number" ? (obj.stock as number) : undefined;
   const condition = typeof obj?.condition === "string" ? String(obj.condition) : undefined;
-  const description = typeof obj?.description === "string" ? String(obj.description) : undefined;
+  const description = pickLocaleString(obj?.description, locale) || (typeof obj?.description === "string" ? String(obj.description) : undefined);
   const createdAt = typeof obj?.createdAt === "string" ? String(obj.createdAt) : undefined;
-  return { id, title, price, image, rating, category, salePrice, stock, brand, condition, description, createdAt };
+  
+  return { id, title, price, image, images, rating, category, categoryId, salePrice, stock, brand, condition, description, createdAt };
 }
 
 function normalizeProductsResponse(raw: unknown, locale: "en" | "ar"): { items: Product[]; total?: number } {
@@ -101,6 +115,8 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
   currentCategory: null,
   preferred: null,
   preferredLoading: false,
+  productDetails: null,
+  productDetailsLoading: false,
 
   async fetch(input) {
     const prev = get().pagination;
@@ -155,6 +171,23 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
       return mapped;
     } catch (e) {
       set({ preferredLoading: false });
+      return null;
+    }
+  },
+
+  async getProductDetails(productId: string, locale = "en") {
+    set({ productDetailsLoading: true, error: null });
+    try {
+      const res = await http.get(`/products/${productId}`);
+      const raw = res.data;
+      const data = raw?.data || raw;
+      const mapped = mapRawProduct(data, locale);
+      set({ productDetails: mapped, productDetailsLoading: false });
+      return mapped;
+    } catch (e: unknown) {
+      const err = e as { response?: { data?: { message?: string } }; message?: string };
+      const msg = err.response?.data?.message || err.message || "Failed to load product details";
+      set({ error: msg, productDetailsLoading: false });
       return null;
     }
   },

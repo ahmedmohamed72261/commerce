@@ -1,7 +1,7 @@
 "use client";
 
 import { create } from "zustand";
-import { http } from "@/config/http";
+import { http } from "@/services/http";
 
 export type Brand = {
   _id: string;

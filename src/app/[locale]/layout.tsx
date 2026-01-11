@@ -30,10 +30,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   };
 }
 
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
-import { WhatsAppFloat } from "@/components/ui/whatsapp-float";
 import { AuthGuard } from "@/components/auth/auth-guard";
+import { ToastProvider } from "@/providers/ToastProvider";
 
 export default async function RootLayout({
   children,
@@ -54,14 +52,10 @@ export default async function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <I18nProvider locale={locale} messages={messages}>
             <AuthGuard>
-              <Header />
-              <main className="min-h-screen pt-20">
-                {children}
-              </main>
-              <Footer />
-              <WhatsAppFloat />
+              {children}
             </AuthGuard>
           </I18nProvider>
+          <ToastProvider />
         </ThemeProvider>
       </body>
     </html>
