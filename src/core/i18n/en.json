@@ -65,7 +65,9 @@
     "links": {
       "home": "Home",
       "shop": "Shop",
-      "about": "About Us",
+      "categories": "Categories",
+      "wishlist": "Wishlist",
+      "cart": "Cart",
       "contact": "Contact",
       "faq": "FAQ"
     },

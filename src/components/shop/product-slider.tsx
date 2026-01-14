@@ -6,7 +6,7 @@ import { ProductCard } from "@/components/shop/product-card";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import "swiper/css";
 import "swiper/css/navigation";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 
 interface Product {
   id: string | number;
@@ -68,26 +68,32 @@ export function ProductSlider({ products, title, className }: ProductSliderProps
         }}
         className="!overflow-visible"
       >
-        {(products.length ? products : Array.from({ length: 5 }).map((_, i) => ({ id: `s-${i}` })) as any[]).map((p: any) => (
-          <SwiperSlide key={p.id} className="h-auto">
-            {"title" in p ? (
-              <ProductCard 
-                key={p.id}
-                title={p.title}
-                price={p.price}
-                salePrice={p.salePrice}
-                image={p.image ?? "/images/a.jpg"}
-                rating={p.rating ?? 4}
-                category={p.category}
-                brand={p.brand}
-                stock={p.stock}
-                condition={p.condition}
-              />
-            ) : (
-              <div className="rounded-[2rem] bg-neutral-100 animate-pulse h-[320px] sm:h-[420px]" />
-            )}
-          </SwiperSlide>
-        ))}
+        {(() => {
+          const display: Product[] = products.length
+            ? products
+            : Array.from({ length: 5 }).map((_, i) => ({
+                id: `s-${i}`,
+                title: "",
+                price: 0,
+                image: undefined,
+                rating: 0,
+              }));
+          return display.map((p) => (
+            <SwiperSlide key={p.id} className="h-auto">
+              {p.title ? (
+                <ProductCard
+                  key={p.id}
+                  title={p.title}
+                  price={p.price}
+                  image={p.image ?? "/images/a.jpg"}
+                  rating={p.rating ?? 4}
+                />
+              ) : (
+                <div className="rounded-[2rem] bg-neutral-100 animate-pulse h-[320px] sm:h-[420px]" />
+              )}
+            </SwiperSlide>
+          ));
+        })()}
       </Swiper>
     </div>
   );

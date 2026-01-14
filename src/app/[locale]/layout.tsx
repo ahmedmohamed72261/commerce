@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { ThemeProvider } from "@/providers/theme.provider";
-import { I18nProvider } from "@/providers/i18n.provider";
+import { ThemeProvider } from "@/core/providers/theme.provider";
+import { I18nProvider } from "@/core/providers/i18n.provider";
 import { siteConfig } from "@/config/site";
-import { getDictionary } from "@/features/i18n/dictionaries";
+import { getDictionary } from "@/core/i18n/dictionaries";
 import "@/styles/globals.css";
 
 const geistSans = Geist({
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 import { AuthGuard } from "@/components/auth/auth-guard";
-import { ToastProvider } from "@/providers/ToastProvider";
+import { ToastProvider } from "@/core/providers/ToastProvider";
 
 export default async function RootLayout({
   children,

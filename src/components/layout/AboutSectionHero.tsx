@@ -7,7 +7,7 @@ import {
   Heart, Share2, Eye, Flame, Crown, Sparkles,
   Truck, Box, ZapOff, Smartphone, Headphones
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { useLocale } from "next-intl";
 
 interface CustomStyles {

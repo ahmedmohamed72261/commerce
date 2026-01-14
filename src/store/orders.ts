@@ -20,15 +20,15 @@ export type ShippingAddress = {
 
 export type Order = {
   _id: string;
-  user: string;
+  user?: string;
   items: OrderItem[];
   totalAmount: number;
-  paymentMethod: "cash" | "card" | "online";
-  shippingAddress: ShippingAddress;
+  paymentMethod: string;
+  shippingAddress?: ShippingAddress;
   notes?: string;
   status: string;
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
 };
 
 interface OrdersState {
@@ -75,9 +75,28 @@ export const useOrdersStore = create<OrdersState>((set) => ({
   async getOrders() {
     set({ loading: true, error: null });
     try {
-      const res = await http.get("/orders");
+      const res = await http.get("/orders/my-orders");
       const raw = res.data;
-      const data = Array.isArray(raw) ? raw : Array.isArray(raw?.data) ? raw.data : [];
+      const arr = Array.isArray(raw) ? raw : Array.isArray(raw?.data) ? raw.data : [];
+      const data: Order[] = arr
+        .map((o: any) => {
+          const id = String(o?._id ?? o?.orderId ?? "");
+          const created = String(o?.createdAt ?? o?.date ?? "");
+          if (!id || !created) return null;
+          return {
+            _id: id,
+            user: typeof o?.user === "string" ? o.user : undefined,
+            items: Array.isArray(o?.items) ? o.items : [],
+            totalAmount: Number(o?.totalAmount ?? 0),
+            paymentMethod: String(o?.paymentMethod ?? ""),
+            shippingAddress: (o?.shippingAddress ?? o?.shipping) as ShippingAddress | undefined,
+            notes: typeof o?.notes === "string" ? o.notes : undefined,
+            status: String(o?.status ?? ""),
+            createdAt: created,
+            updatedAt: typeof o?.updatedAt === "string" ? o.updatedAt : undefined,
+          };
+        })
+        .filter(Boolean) as Order[];
       set({ orders: data, loading: false });
       return data;
     } catch (e: unknown) {
@@ -87,6 +106,7 @@ export const useOrdersStore = create<OrdersState>((set) => ({
       return [];
     }
   },
+  
 
   async getOrderById(orderId: string) {
     set({ loading: true, error: null });

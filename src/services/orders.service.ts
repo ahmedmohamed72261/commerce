@@ -5,7 +5,9 @@ export const getOrders = async () => {
   return response.data;
 };
 
-export const createOrder = async (orderData: any) => {
+export const createOrder = async (orderData: unknown) => {
   const response = await http.post('/orders/', orderData);
   return response.data;
 };
+
+

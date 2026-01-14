@@ -1,6 +1,6 @@
 import {http} from './http';
 
-export const addToCart = async (data: { product: string; quantity: number; attributes?: any }) => {
+export const addToCart = async (data: { product: string; quantity: number; attributes?: Record<string, string | number | boolean> }) => {
   const response = await http.post('/cart/', data);
   return response.data;
 };

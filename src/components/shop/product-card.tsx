@@ -1,6 +1,6 @@
 "use client";
 import { ShoppingCart, Heart, Eye, ArrowUpRight, Star, Plus, Zap, Shield, Layers,Maximize2, Hash, MoveUpRight, Globe, Share2, Info, Compass, Box, Cpu, Radio } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 

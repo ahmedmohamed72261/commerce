@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Search, ShoppingCart, User, List, X, ChevronDown, Moon, Sun } from "lucide-react";
+import { Search, ShoppingCart, User, List, X, ChevronDown, Moon, Sun, Heart } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Sidebar } from "./sidebar";
@@ -11,6 +11,8 @@ import { useLocale } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth";
 import { http } from "@/services/http";
+import { useCart } from "@/store/cart";
+import { useWishlist } from "@/store/wishlist";
 
 export function CarneshopNav({ locale }: { locale: string }) {
   const t = useTranslations("Nav");
@@ -26,6 +28,8 @@ export function CarneshopNav({ locale }: { locale: string }) {
   const pathname = usePathname();
   const [langOpen, setLangOpen] = useState(false);
   const { user, logout } = useAuthStore();
+  const { totalItems: cartTotalItems, getCart } = useCart();
+  const { totalItems: wishlistTotalItems } = useWishlist();
 
   // Ensure user data persists across refreshes
   useEffect(() => {
@@ -41,6 +45,10 @@ export function CarneshopNav({ locale }: { locale: string }) {
       });
     }
   }, [user]);
+
+  useEffect(() => {
+    getCart(locale as "en" | "ar");
+  }, [getCart, locale]);
 
   const switchLocale = (target: "en" | "ar") => {
     if (!pathname) return;
@@ -76,25 +84,13 @@ export function CarneshopNav({ locale }: { locale: string }) {
               </Link>
             </li>
             <li>
-              <Link href={`/${locale}/about`} className="py-4 hover:text-red-600 transition">{t("about")}</Link>
-            </li>
-            <li className="group relative">
-              <Link href={`/${locale}/pages`} className="py-4 hover:text-red-600 transition flex items-center gap-1">
-                {t("pages")} <span className="text-red-600 text-xs">+</span>
-              </Link>
-            </li>
-            <li className="group relative">
-              <Link href={`/${locale}/elements`} className="py-4 hover:text-red-600 transition flex items-center gap-1">
-                {t("elements")} <span className="text-red-600 text-xs">+</span>
-              </Link>
-            </li>
-            <li className="group relative">
-              <Link href={`/${locale}/news`} className="py-4 hover:text-red-600 transition flex items-center gap-1">
-                {t("news")} <span className="text-red-600 text-xs">+</span>
-              </Link>
+              <Link href={`/${locale}/products`} className="py-4 hover:text-red-600 transition">Shop</Link>
             </li>
             <li>
-              <Link href={`/${locale}/contact`} className="py-4 hover:text-red-600 transition">{t("contact")}</Link>
+              <Link href={`/${locale}/categories`} className="py-4 hover:text-red-600 transition">Categories</Link>
+            </li>
+            <li>
+              <Link href={`/${locale}/contact`} className="py-4 hover:text-red-600 transition">Contact</Link>
             </li>
           </ul>
         </nav>
@@ -125,7 +121,13 @@ export function CarneshopNav({ locale }: { locale: string }) {
               </button>
               {userMenuOpen && (
                 <div className="absolute right-0 rtl:left-0 rtl:right-auto top-full mt-2 w-40 bg-white border shadow-md rounded-md p-2 z-50">
-                  <Link href={`/${locale}/account`} className="block px-3 py-2 text-sm hover:bg-neutral-100 rounded">Account</Link>
+                  <Link
+                    href={`/${locale}/profile`}
+                    onClick={() => setUserMenuOpen(false)}
+                    className="block px-3 py-2 text-sm hover:bg-neutral-100 rounded"
+                  >
+                    Profile
+                  </Link>
                   <button
                     onClick={() => { logout(); setUserMenuOpen(false); router.push(`/${locale}/login`); }}
                     className="block w-full text-left px-3 py-2 text-sm hover:bg-neutral-100 rounded text-red-600"
@@ -142,10 +144,20 @@ export function CarneshopNav({ locale }: { locale: string }) {
           )
           }
 
+          {/* Wishlist */}
+          <Link href={`/${locale}/wishlist`} className="relative text-neutral-600 hover:text-red-600 transition">
+            <Heart className="w-5 h-5" />
+            <span className="absolute -top-2 -right-2 h-4 w-4 rounded-full bg-red-600 text-white text-[10px] flex items-center justify-center">
+              {wishlistTotalItems()}
+            </span>
+          </Link>
+
           {/* Cart */}
           <Link href={`/${locale}/cart`} className="relative text-neutral-600 hover:text-red-600 transition">
             <ShoppingCart className="w-5 h-5" />
-            <span className="absolute -top-2 -right-2 h-4 w-4 rounded-full bg-red-600 text-white text-[10px] flex items-center justify-center">0</span>
+            <span className="absolute -top-2 -right-2 h-4 w-4 rounded-full bg-red-600 text-white text-[10px] flex items-center justify-center">
+              {cartTotalItems()}
+            </span>
           </Link>
 
           {/* Sidebar Toggle */}

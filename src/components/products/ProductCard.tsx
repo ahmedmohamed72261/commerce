@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { ShoppingCart, Heart, Star, Cpu, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Product } from '@/store/products';
+import { useWishlist } from '@/store/wishlist';
 
 interface ProductCardProps {
   product: Product;
@@ -20,11 +21,30 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   locale = 'en',
   onAddToCart
 }) => {
+  const { addItem, removeItem, isInWishlist } = useWishlist();
+  const isWishlisted = isInWishlist(product.id);
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (onAddToCart) {
       onAddToCart(product.id);
+    }
+  };
+
+  const handleWishlist = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isWishlisted) {
+        removeItem(product.id);
+    } else {
+        addItem({
+            id: product.id,
+            title: product.title,
+            price: product.price,
+            image: product.image,
+            salePrice: product.salePrice
+        });
     }
   };
 
@@ -103,13 +123,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             <Button 
               size="icon" 
               variant="ghost" 
-              className="h-10 w-10 rounded-xl hover:bg-red-50 hover:text-red-600"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-              }}
+              className={`h-10 w-10 rounded-xl hover:bg-red-50 hover:text-red-600 ${isWishlisted ? 'text-red-600 bg-red-50' : ''}`}
+              onClick={handleWishlist}
             >
-              <Heart size={18}/>
+              <Heart size={18} fill={isWishlisted ? "currentColor" : "none"} />
             </Button>
             <Button 
               className="h-12 px-6 rounded-xl bg-slate-950 text-white font-black text-[10px] tracking-widest uppercase hover:bg-red-600 transition-all flex gap-2"

@@ -9,6 +9,7 @@ import { CheckoutForm } from '@/components/cart/CheckoutForm';
 import { Loader2, ShoppingBag } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { getAllPaymentMethods } from '@/services/payment-methods.service';
 
 interface CartPageProps {
   params: Promise<{ locale: string }>;
@@ -21,6 +22,7 @@ const CartPage = async ({ params }: CartPageProps) => {
 
 const CartPageClient = ({ locale }: { locale: string }) => {
   const [showCheckout, setShowCheckout] = useState(false);
+  const [paymentMethods, setPaymentMethods] = useState<Array<{ _id: string; name: string; icon?: string; instructions?: Record<string,string>; isActive?: boolean }>>([]);
   const router = useRouter();
   
   const { 
@@ -38,6 +40,15 @@ const CartPageClient = ({ locale }: { locale: string }) => {
 
   useEffect(() => {
     getCart(locale as "en" | "ar");
+    (async () => {
+      try {
+        const res = await getAllPaymentMethods();
+        const data = Array.isArray(res?.data) ? res.data : Array.isArray(res) ? res : [];
+        setPaymentMethods(data);
+      } catch {
+        setPaymentMethods([]);
+      }
+    })();
   }, [locale, getCart]);
 
   const handleUpdateQuantity = async (itemId: string, quantity: number) => {
@@ -69,7 +80,7 @@ const CartPageClient = ({ locale }: { locale: string }) => {
 
   const handlePlaceOrder = async (
     shippingAddress: any,
-    paymentMethod: 'cash' | 'card' | 'online',
+    paymentMethod: string,
     notes?: string
   ) => {
     if (!cart || !cart.items.length) return;
@@ -148,6 +159,7 @@ const CartPageClient = ({ locale }: { locale: string }) => {
               <CheckoutForm 
                 onSubmit={handlePlaceOrder}
                 loading={orderLoading}
+                paymentMethods={paymentMethods}
               />
             )}
           </div>

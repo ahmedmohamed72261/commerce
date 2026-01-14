@@ -33,7 +33,7 @@ type ProductsState = {
   error: string | null;
   pagination: Pagination;
   currentCategory: string | null;
-  fetch: (input?: { category?: string; page?: number; pageSize?: number; locale?: "en" | "ar" }) => Promise<void>;
+  fetch: (input?: { category?: string; page?: number; pageSize?: number; locale?: "en" | "ar"; filters?: any }) => Promise<void>;
   setPage: (page: number) => Promise<void>;
   preferred: Product | null;
   preferredLoading?: boolean;
@@ -111,7 +111,7 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
   items: [],
   loading: false,
   error: null,
-  pagination: { page: 1, pageSize: 9, total: 0, totalPages: 0 },
+  pagination: { page: 1, pageSize: 10, total: 0, totalPages: 0 },
   currentCategory: null,
   preferred: null,
   preferredLoading: false,
@@ -124,10 +124,22 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
     const pageSize = input?.pageSize ?? prev.pageSize;
     const category = input?.category ?? get().currentCategory ?? undefined;
     const locale = input?.locale ?? "en";
+    const filters = input?.filters ?? {};
+
     set({ loading: true, error: null });
     try {
+      const params: Record<string, unknown> = { page, size: pageSize };
+      if (category) params.category = category;
+      Object.entries(filters).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+          params[key] = value.join(",");
+        } else {
+          params[key] = value as unknown;
+        }
+      });
+
       const res = await http.get("/products", {
-        params: { page, size: pageSize, category },
+        params,
       });
       const { items, total } = normalizeProductsResponse(res.data, locale);
       const t = typeof total === "number" ? total : items.length;

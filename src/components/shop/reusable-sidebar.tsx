@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Filter, ChevronDown, ChevronUp } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { Button } from "@/components/ui/button";
 
 export interface FilterOption {
@@ -24,13 +24,22 @@ interface ReusableSidebarProps {
   filters: FilterGroup[];
   onFilterChange?: (filters: Record<string, string[] | number>) => void;
   className?: string;
+  initialFilters?: Record<string, string[] | number>;
 }
 
-export function ReusableSidebar({ filters, onFilterChange, className }: ReusableSidebarProps) {
-  const [activeFilters, setActiveFilters] = useState<Record<string, string[] | number>>({});
-  const [expanded, setExpanded] = useState<Record<string, boolean>>(
+export function ReusableSidebar({ filters, onFilterChange, className, initialFilters }: ReusableSidebarProps) {
+  const [activeFilters, setActiveFilters] = useState<Record<string, string[] | number>>(initialFilters || {});
+  const [expanded, setExpanded] = useState<Record<string, boolean>>(() =>
     filters.reduce((acc, f) => ({ ...acc, [f.id]: true }), {})
   );
+
+  const initialRef = useRef<Record<string, string[] | number> | null>(initialFilters || null);
+  useEffect(() => {
+    if (initialRef.current && Object.keys(initialRef.current).length > 0) {
+      onFilterChange?.(initialRef.current);
+      initialRef.current = null;
+    }
+  }, [onFilterChange]);
 
   const toggleSection = (id: string) => {
     setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));

@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { X, ChevronRight, ShoppingBag, Heart, User, Settings, Phone, Mail, Instagram, Facebook, Twitter, Globe, Percent, Moon, Sun } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { useTheme } from "next-themes";
 import { useAuthStore } from "@/store/auth";
 import { useCategoriesStore } from "@/store/categories";

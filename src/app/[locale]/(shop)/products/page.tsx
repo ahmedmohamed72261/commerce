@@ -9,27 +9,194 @@ import {
 import { Button } from '@/components/ui/button';
 import { useProductsStore } from '@/store/products';
 import { ProductCard } from '@/components/products/ProductCard';
-import { ProductFilters } from '@/components/products/ProductFilters';
+import { ReusableSidebar, type FilterGroup } from '@/components/shop/reusable-sidebar';
+import { getFilters } from '@/services/products.service';
+import { getCategories } from '@/services/categories.service';
 import { useCart } from '@/store/cart';
 import { toast } from 'sonner';
+import { useParams } from 'next/navigation';
 
-interface ProductsPageProps {
-  params: Promise<{ locale: string }>;
-}
 
-const ProductsPage = async ({ params }: ProductsPageProps) => {
-  const { locale } = await params;
+export default function ProductsPage() {
+  const { locale } = useParams() as { locale: string };
   return <ProductsPageClient locale={locale} />;
-};
+}
 
 const ProductsPageClient = ({ locale }: { locale: string }) => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const { items, loading, fetch, pagination, setPage } = useProductsStore();
   const { addToCart } = useCart();
+  const [sort, setSort] = useState<string>('-price');
+  const [pageSize, setPageSize] = useState<number>(12);
+  
+  const [filters, setFilters] = useState<FilterGroup[]>([]);
+  const [filtersLoading, setFiltersLoading] = useState(true);
+  const [initialFilters, setInitialFilters] = useState<Record<string, string[] | number>>({});
+
+  const isRecord = (value: unknown): value is Record<string, unknown> =>
+    typeof value === "object" && value !== null;
+
+  const getNestedData = (value: unknown): unknown => {
+    if (!isRecord(value)) return value;
+    if ("data" in value) return (value as Record<string, unknown>)["data"];
+    return value;
+  };
+
+  const pickString = (value: unknown): string | undefined => {
+    return typeof value === "string" && value.trim() ? value : undefined;
+  };
+
+  const pickLocaleLabel = (value: unknown): string | undefined => {
+    if (typeof value === "string") return value;
+    if (isRecord(value)) {
+      const v = value[locale === "ar" ? "ar" : "en"];
+      const s = pickString(v);
+      if (s) return s;
+      return pickString(value["en"]) ?? pickString(value["ar"]);
+    }
+    return undefined;
+  };
 
   useEffect(() => {
-    fetch({ locale: locale as "en" | "ar" });
-  }, [locale, fetch]);
+    const loadFilters = async () => {
+      try {
+        const res = await getFilters();
+        const raw = getNestedData(getNestedData(res));
+        const rawRecord = isRecord(raw) ? raw : {};
+        const nextFilters: FilterGroup[] = [];
+
+        const rawBrands = rawRecord["brands"];
+        if (Array.isArray(rawBrands) && rawBrands.length > 0) {
+          nextFilters.push({
+            id: "brand",
+            title: "Brand",
+            type: "checkbox",
+            options: rawBrands
+              .map((b) => (isRecord(b) ? b : null))
+              .filter(Boolean)
+              .map((b) => ({
+                value:
+                  pickString(b!["_id"]) ??
+                  pickString(b!["id"]) ??
+                  pickString(b!["value"]) ??
+                  "",
+                label:
+                  pickLocaleLabel(b!["name"]) ??
+                  pickString(b!["label"]) ??
+                  pickString(b!["name"]) ??
+                  "",
+                count: typeof b!["count"] === "number" ? (b!["count"] as number) : undefined,
+              }))
+              .filter((o) => o.value && o.label),
+          });
+        }
+
+        const priceRange = rawRecord["priceRange"];
+        const minRaw =
+          isRecord(priceRange) ? priceRange["min"] : rawRecord["minPrice"];
+        const maxRaw =
+          isRecord(priceRange) ? priceRange["max"] : rawRecord["maxPrice"];
+        const min = typeof minRaw === "number" ? minRaw : Number(minRaw ?? 0);
+        const max = typeof maxRaw === "number" ? maxRaw : Number(maxRaw ?? 1000);
+        if (Number.isFinite(min) || Number.isFinite(max)) {
+          nextFilters.push({
+            id: "price",
+            title: "Price",
+            type: "range",
+            min: Number.isFinite(min) ? min : 0,
+            max: Number.isFinite(max) ? max : 1000,
+          });
+        }
+
+        const rawConditions = rawRecord["conditions"];
+        if (Array.isArray(rawConditions) && rawConditions.length > 0) {
+          nextFilters.push({
+            id: "condition",
+            title: "Condition",
+            type: "tags",
+            options: rawConditions
+              .map((c) => {
+                if (isRecord(c)) {
+                  const val = pickString(c["value"]) ?? "";
+                  return {
+                    value: val,
+                    label: val,
+                    count: typeof c["count"] === "number" ? (c["count"] as number) : undefined,
+                  };
+                }
+                const val = pickString(c) ?? "";
+                return { value: val, label: val };
+              })
+              .filter((o) => o.value),
+          });
+        }
+
+        const rawAttributes = rawRecord["attributes"];
+        if (isRecord(rawAttributes)) {
+          Object.entries(rawAttributes).forEach(([key, values]) => {
+            if (!Array.isArray(values) || values.length === 0) return;
+            nextFilters.push({
+              id: key,
+              title: key,
+              type: "checkbox",
+              options: values
+                .map((v) => {
+                  if (isRecord(v)) {
+                    const val = pickString(v["value"]) ?? String(v["value"] ?? "");
+                    return {
+                      value: val,
+                      label: val,
+                      count: typeof v["count"] === "number" ? (v["count"] as number) : undefined,
+                    };
+                  }
+                  const val = pickString(v) ?? String(v ?? "");
+                  return { value: val, label: val };
+                })
+                .filter((o) => o.value && o.label),
+            });
+          });
+        }
+
+        // Fetch categories and add as first filter group
+        try {
+          const catsRes = await getCategories();
+          const catsRaw = getNestedData(getNestedData(catsRes));
+          const catsArr = Array.isArray(catsRaw?.data) ? (catsRaw as any).data : Array.isArray(catsRaw) ? (catsRaw as any) : [];
+          const options = catsArr
+            .map((c: any) => (isRecord(c) ? c : null))
+            .filter(Boolean)
+            .map((c: any) => ({
+              value: pickString(c["_id"]) ?? pickString(c["id"]) ?? "",
+              label: pickLocaleLabel(c["name"]) ?? pickString(c["name"]) ?? "",
+            }))
+            .filter((o) => o.value && o.label);
+          if (options.length > 0) {
+            nextFilters.unshift({
+              id: "category",
+              title: "Category",
+              type: "checkbox",
+              options,
+            });
+            // Select first category by default
+            setInitialFilters({ category: [options[0].value] });
+            // Trigger initial fetch with category
+            await fetch({ locale: locale as "en" | "ar", filters: { category: options[0].value, sort }, page: 1, pageSize });
+          }
+        } catch {}
+
+        setFilters(nextFilters);
+      } catch (err) {
+        setFilters([]);
+      } finally {
+        setFiltersLoading(false);
+      }
+    };
+    loadFilters();
+  }, [locale]);
+
+  useEffect(() => {
+    fetch({ locale: locale as "en" | "ar", pageSize, filters: { sort } });
+  }, [locale, fetch, sort, pageSize]);
 
   const handleAddToCart = async (productId: string | number) => {
     const success = await addToCart(String(productId), 1);
@@ -38,6 +205,24 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
     } else {
       toast.error('Failed to add to cart');
     }
+  };
+
+  const handleFilterChange = (newFilters: Record<string, string[] | number>) => {
+    const mapped: Record<string, string | number> = {};
+    Object.entries(newFilters).forEach(([key, value]) => {
+      if (key === 'price' && typeof value === 'number') {
+        const priceGroup = filters.find((f) => f.id === 'price');
+        const min = typeof priceGroup?.min === 'number' ? priceGroup!.min : 0;
+        mapped['minPrice'] = min;
+        mapped['maxPrice'] = value;
+      } else if (Array.isArray(value)) {
+        mapped[key] = value.join(',');
+      } else {
+        mapped[key] = value;
+      }
+    });
+    mapped['sort'] = sort;
+    fetch({ locale: locale as "en" | "ar", filters: mapped, page: 1, pageSize });
   };
 
   const handleLoadMore = async () => {
@@ -73,7 +258,20 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
         
         {/* 2. SIDEBAR FILTERS (Styled like image_8a566e) */}
         <aside className="w-full lg:w-[280px] shrink-0 space-y-10">
-          <ProductFilters />
+          {filtersLoading ? (
+             <div className="space-y-4">
+               <div className="h-10 bg-slate-100 animate-pulse rounded" />
+               <div className="h-40 bg-slate-100 animate-pulse rounded" />
+               <div className="h-20 bg-slate-100 animate-pulse rounded" />
+             </div>
+          ) : (
+            <ReusableSidebar 
+               key={filters.map((f) => f.id).join("|")}
+               filters={filters}
+               onFilterChange={handleFilterChange}
+               initialFilters={initialFilters}
+             />
+          )}
         </aside>
 
         {/* 3. MAIN PRODUCT GRID AREA */}
@@ -103,19 +301,25 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
               {/* Sort & Limit Dropdowns (As seen in reference image) */}
               <div className="flex items-center gap-2">
                 <div className="relative group">
-                  <select className="appearance-none bg-white border border-slate-200 rounded-lg px-4 pr-10 h-11 text-xs font-bold text-[#0F172A] focus:ring-2 focus:ring-red-600/10 outline-none cursor-pointer shadow-sm">
-                    <option>Latest</option>
-                    <option>Price: Low to High</option>
-                    <option>Price: High to Low</option>
+                  <select 
+                    value={sort}
+                    onChange={(e) => setSort(e.target.value)}
+                    className="appearance-none bg-white border border-slate-200 rounded-lg px-4 pr-10 h-11 text-xs font-bold text-[#0F172A] focus:ring-2 focus:ring-red-600/10 outline-none cursor-pointer shadow-sm">
+                    <option value="-price">Price: High to Low</option>
+                    <option value="price">Price: Low to High</option>
+                    <option value="-createdAt">Latest</option>
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={14} />
                 </div>
                 
                 <div className="relative">
-                  <select className="appearance-none bg-white border border-slate-200 rounded-lg px-4 pr-10 h-11 text-xs font-bold text-[#0F172A] focus:ring-2 focus:ring-red-600/10 outline-none cursor-pointer shadow-sm">
-                    <option>20</option>
-                    <option>40</option>
-                    <option>60</option>
+                  <select 
+                    value={pageSize}
+                    onChange={(e) => setPageSize(Number(e.target.value))}
+                    className="appearance-none bg-white border border-slate-200 rounded-lg px-4 pr-10 h-11 text-xs font-bold text-[#0F172A] focus:ring-2 focus:ring-red-600/10 outline-none cursor-pointer shadow-sm">
+                    <option value={12}>12</option>
+                    <option value={20}>20</option>
+                    <option value={40}>40</option>
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={14} />
                 </div>
@@ -182,5 +386,3 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
     </div>
   );
 };
-
-export default ProductsPage;

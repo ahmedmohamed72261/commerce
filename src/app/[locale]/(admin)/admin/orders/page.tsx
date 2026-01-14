@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { WhiteCard } from '@/components/admin/ui/cards';
 import { getOrders } from '@/services/orders.service';
-import { Search, Filter, Eye } from 'lucide-react';
+import { updateOrderStatus, bulkUpdateOrdersStatus } from '@/services/admin-orders.service';
+import { Search, Filter, Eye, CheckCircle } from 'lucide-react';
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -23,6 +24,15 @@ export default function OrdersPage() {
     fetchData();
   }, []);
 
+  const refresh = async () => {
+    setLoading(true);
+    try {
+      const response = await getOrders();
+      setOrders(response.data || []);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="space-y-6">
        <div className="flex justify-between items-center">
@@ -36,6 +46,15 @@ export default function OrdersPage() {
              <Search size={14} className="absolute left-2.5 top-2.5 text-gray-400" />
            </div>
            <button className="p-1.5 border border-gray-300 rounded text-gray-500 hover:bg-gray-50"><Filter size={16} /></button>
+           <button
+             className="p-1.5 border border-green-600 text-green-700 rounded hover:bg-green-50 flex items-center gap-1 text-sm"
+             onClick={async () => {
+               await bulkUpdateOrdersStatus('delivered');
+               await refresh();
+             }}
+           >
+             <CheckCircle size={16} /> Mark all delivered
+           </button>
          </div>
        }>
          <table className="w-full text-left text-sm text-gray-600">
@@ -59,9 +78,9 @@ export default function OrdersPage() {
                orders.map((order: any) => (
                  <tr key={order.orderId || order._id} className="hover:bg-gray-50/50 transition-colors">
                    <td className="px-5 py-3"><input type="checkbox" /></td>
-                   <td className="px-5 py-3 font-medium text-gray-800">#{order.orderId?.substring(0, 8) || order._id?.substring(0, 8)}</td>
+                   <td className="px-5 py-3 font-medium text-gray-800">#{(order.orderId || order._id || '').toString().substring(0, 8)}</td>
                    <td className="px-5 py-3 text-xs text-gray-500">
-                     {order.date ? new Date(order.date).toLocaleDateString() : 'N/A'}
+                     {(order.date || order.createdAt) ? new Date(order.date || order.createdAt).toLocaleDateString() : 'N/A'}
                    </td>
                    <td className="px-5 py-3">
                      <div className="font-medium text-gray-800">{order.customer?.name}</div>
@@ -76,9 +95,20 @@ export default function OrdersPage() {
                        {order.status}
                      </span>
                    </td>
-                   <td className="px-5 py-3 font-bold text-gray-800">${order.totalAmount}</td>
+                   <td className="px-5 py-3 font-bold text-gray-800">${Number(order.totalAmount || 0).toFixed(2)}</td>
                    <td className="px-5 py-3 text-right">
-                     <button className="text-gray-400 hover:text-blue-600 transition-colors"><Eye size={18} /></button>
+                     <button className="text-gray-400 hover:text-blue-600 transition-colors mr-2"><Eye size={18} /></button>
+                     <button
+                       className="text-green-600 hover:text-green-800 transition-colors text-xs font-bold uppercase"
+                       onClick={async () => {
+                         const id = (order._id || order.orderId || '').toString();
+                         if (!id) return;
+                         await updateOrderStatus(id, 'delivered');
+                         await refresh();
+                       }}
+                     >
+                       Mark delivered
+                     </button>
                    </td>
                  </tr>
                ))

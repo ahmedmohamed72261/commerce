@@ -2,7 +2,7 @@
 import React from 'react';
 import { Mail, Phone, MapPin, Send, Globe, ShieldCheck, ArrowUpRight } from 'lucide-react';
 
-export default function CrimsonLightContact() {
+export default function Contact() {
   return (
     <div className="relative min-h-screen w-full bg-[#FBFBFA] font-sans overflow-hidden flex items-center justify-center p-4 md:p-8">
       

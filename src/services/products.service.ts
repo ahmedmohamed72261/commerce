@@ -18,3 +18,12 @@ export const createProduct = async (formData: FormData) => {
   });
   return response.data;
 };
+
+export const getFilters = (categoryId?: string) => {
+  const url = categoryId ? `/products/filters?category=${categoryId}` : '/products/filters';
+  return http.get(url);
+};
+
+export const getFilteredProducts = (params: Record<string, string | number | boolean | undefined>) => {
+  return http.get('/products', { params });
+};

@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { Mail, Facebook, Twitter, Youtube, Instagram, ChevronUp, User, ShoppingBag } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 export function Footer() {
   const t = useTranslations("Footer");
+  const locale = useLocale() as "en" | "ar";
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -68,11 +69,12 @@ export function Footer() {
           <div>
             <h3 className="text-white text-lg font-bold mb-3">{t("quickLinks")}</h3>
             <ul className="space-y-4 text-sm">
-              <li><Link href="/" className="hover:text-red-600 transition">{t("links.home")}</Link></li>
-              <li><Link href="/shop" className="hover:text-red-600 transition">{t("links.shop")}</Link></li>
-              <li><Link href="/about" className="hover:text-red-600 transition">{t("links.about")}</Link></li>
-              <li><Link href="/contact" className="hover:text-red-600 transition">{t("links.contact")}</Link></li>
-              <li><Link href="/faq" className="hover:text-red-600 transition">{t("links.faq")}</Link></li>
+              <li><Link href={`/${locale}`} className="hover:text-red-600 transition">{t("links.home")}</Link></li>
+              <li><Link href={`/${locale}/products`} className="hover:text-red-600 transition">{t("links.shop")}</Link></li>
+              <li><Link href={`/${locale}/categories`} className="hover:text-red-600 transition">{t("links.categories")}</Link></li>
+              <li><Link href={`/${locale}/wishlist`} className="hover:text-red-600 transition">{t("links.wishlist")}</Link></li>
+              <li><Link href={`/${locale}/contact`} className="hover:text-red-600 transition">{t("links.contact")}</Link></li>
+              <li><Link href={`/${locale}/cart`} className="hover:text-red-600 transition">{t("links.cart")}</Link></li>
             </ul>
           </div>
 
@@ -80,11 +82,11 @@ export function Footer() {
           <div>
             <h3 className="text-white text-lg font-bold mb-6">{t("categories")}</h3>
             <ul className="space-y-4 text-sm">
-              <li><Link href="/categories/laptops" className="hover:text-red-600 transition">{t("categoryList.laptops")}</Link></li>
-              <li><Link href="/categories/smartphones" className="hover:text-red-600 transition">{t("categoryList.smartphones")}</Link></li>
-              <li><Link href="/categories/gaming" className="hover:text-red-600 transition">{t("categoryList.gaming")}</Link></li>
-              <li><Link href="/categories/accessories" className="hover:text-red-600 transition">{t("categoryList.accessories")}</Link></li>
-              <li><Link href="/categories/cameras" className="hover:text-red-600 transition">{t("categoryList.cameras")}</Link></li>
+              <li><Link href={`/${locale}/categories/laptops`} className="hover:text-red-600 transition">{t("categoryList.laptops")}</Link></li>
+              <li><Link href={`/${locale}/categories/smartphones`} className="hover:text-red-600 transition">{t("categoryList.smartphones")}</Link></li>
+              <li><Link href={`/${locale}/categories/gaming`} className="hover:text-red-600 transition">{t("categoryList.gaming")}</Link></li>
+              <li><Link href={`/${locale}/categories/accessories`} className="hover:text-red-600 transition">{t("categoryList.accessories")}</Link></li>
+              <li><Link href={`/${locale}/categories/cameras`} className="hover:text-red-600 transition">{t("categoryList.cameras")}</Link></li>
             </ul>
           </div>
 

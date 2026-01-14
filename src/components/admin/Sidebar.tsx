@@ -20,7 +20,7 @@ export function AdminSidebar() {
   const isParentActive = (paths: string[]) => paths.some(p => pathname.startsWith(p));
 
   return (
-    <aside className="w-64 bg-white text-slate-600 flex flex-col fixed h-full z-30 border-r border-slate-200 transition-all duration-300">
+    <aside className="hidden md:flex w-64 bg-white text-slate-600 flex-col fixed h-full z-30 border-r border-slate-200 transition-all duration-300">
         {/* Header / Logo Section */}
         <div className="h-16 flex items-center px-6 bg-white border-b border-slate-100">
           <div className="bg-red-600 p-1.5 rounded-lg flex items-center justify-center shadow-md shadow-red-200">

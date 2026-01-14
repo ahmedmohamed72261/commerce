@@ -1,15 +1,16 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useOrdersStore, ShippingAddress } from '@/store/orders';
 
 interface CheckoutFormProps {
-  onSubmit: (shippingAddress: ShippingAddress, paymentMethod: 'cash' | 'card' | 'online', notes?: string) => void;
+  onSubmit: (shippingAddress: ShippingAddress, paymentMethod: string, notes?: string) => void;
   loading?: boolean;
+  paymentMethods?: Array<{ _id: string; name: string; icon?: string; instructions?: Record<string,string>; isActive?: boolean }>;
 }
 
-export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading }) => {
+export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, paymentMethods }) => {
   const [formData, setFormData] = useState<ShippingAddress>({
     city: '',
     street: '',
@@ -18,8 +19,15 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading })
     apartment: '',
     additionalInfo: ''
   });
-  const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card' | 'online'>('cash');
+  const [paymentMethod, setPaymentMethod] = useState<string>('cash');
   const [notes, setNotes] = useState('');
+
+  useEffect(() => {
+    const firstActive = paymentMethods?.find((pm) => pm.isActive);
+    if (firstActive?.name) {
+      setPaymentMethod(firstActive.name);
+    }
+  }, [paymentMethods]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -128,22 +136,42 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading })
         <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3 block">
           Payment Method *
         </label>
-        <div className="flex gap-4">
-          {(['cash', 'card', 'online'] as const).map((method) => (
-            <button
-              key={method}
-              type="button"
-              onClick={() => setPaymentMethod(method)}
-              className={`flex-1 h-12 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${
-                paymentMethod === method
-                  ? 'bg-red-600 text-white shadow-lg'
-                  : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
-              }`}
-            >
-              {method}
-            </button>
-          ))}
-        </div>
+        {paymentMethods && paymentMethods.length > 0 ? (
+          <div className="flex flex-col gap-2">
+            {paymentMethods.filter((pm) => pm.isActive !== false).map((pm) => (
+              <button
+                key={pm._id}
+                type="button"
+                onClick={() => setPaymentMethod(pm.name)}
+                className={`flex items-center gap-3 h-12 rounded-xl font-black text-xs uppercase tracking-widest transition-all px-4 ${
+                  paymentMethod === pm.name
+                    ? 'bg-red-600 text-white shadow-lg'
+                    : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                {pm.icon && <img src={pm.icon} alt={pm.name} className="h-6 w-6 object-contain" />}
+                <span className="flex-1 text-left">{pm.name}</span>
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div className="flex gap-4">
+            {(['cash', 'card', 'online'] as const).map((method) => (
+              <button
+                key={method}
+                type="button"
+                onClick={() => setPaymentMethod(method)}
+                className={`flex-1 h-12 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${
+                  paymentMethod === method
+                    ? 'bg-red-600 text-white shadow-lg'
+                    : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                {method}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="mb-6">
