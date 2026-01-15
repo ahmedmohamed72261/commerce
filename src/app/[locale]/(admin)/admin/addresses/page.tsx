@@ -4,8 +4,8 @@ import { WhiteCard } from '@/components/admin/ui/cards';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Button } from '@/components/admin/ui/button';
-import { Input } from '@/components/admin/ui/input';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/admin/ui/form';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { addAddress, getProfile, updateAddress } from '@/services/user.service';
@@ -19,7 +19,7 @@ const addressSchema = z.object({
   floor: z.string().min(1, "Floor is required"),
   apartment: z.string().min(1, "Apartment is required"),
   additionalInfo: z.string().optional(),
-  isDefault: z.boolean().default(false),
+  isDefault: z.boolean(),
 });
 
 export default function AddressesPage() {

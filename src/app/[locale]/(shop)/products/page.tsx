@@ -161,7 +161,11 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
         try {
           const catsRes = await getCategories();
           const catsRaw = getNestedData(getNestedData(catsRes));
-          const catsArr = Array.isArray(catsRaw?.data) ? (catsRaw as any).data : Array.isArray(catsRaw) ? (catsRaw as any) : [];
+          const catsArr = Array.isArray((catsRaw as any)?.data)
+            ? (catsRaw as any).data
+            : Array.isArray(catsRaw as any)
+            ? (catsRaw as any)
+            : [];
           const options = catsArr
             .map((c: any) => (isRecord(c) ? c : null))
             .filter(Boolean)
@@ -169,7 +173,7 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
               value: pickString(c["_id"]) ?? pickString(c["id"]) ?? "",
               label: pickLocaleLabel(c["name"]) ?? pickString(c["name"]) ?? "",
             }))
-            .filter((o) => o.value && o.label);
+            .filter((o: { value: string; label: string }) => o.value && o.label);
           if (options.length > 0) {
             nextFilters.unshift({
               id: "category",

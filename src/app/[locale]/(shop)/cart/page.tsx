@@ -91,7 +91,12 @@ const CartPageClient = ({ locale }: { locale: string }) => {
       attributesSelected: item.attributes || {}
     }));
 
-    const order = await createOrder(orderItems, paymentMethod, shippingAddress, notes);
+    const order = await createOrder(
+      orderItems,
+      paymentMethod as "cash" | "card" | "online",
+      shippingAddress,
+      notes
+    );
     
     if (order) {
       await clearCart();

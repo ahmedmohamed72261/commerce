@@ -3,7 +3,7 @@
 import { ArrowRight, Filter } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { useTranslations } from "next-intl";
 
 export function Sidebar() {

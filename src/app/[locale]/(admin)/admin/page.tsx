@@ -159,7 +159,17 @@ export default function AdminDashboard() {
   );
 }
 
-function ActivityItem({ icon: Icon, color, text, time }: any) {
+function ActivityItem({
+  icon: Icon,
+  color,
+  text,
+  time,
+}: {
+  icon: React.ComponentType<any>;
+  color: "green" | "blue" | "orange";
+  text: React.ReactNode;
+  time: string;
+}) {
   const colors = {
     green: "bg-green-100 text-green-600",
     blue: "bg-blue-100 text-blue-600",

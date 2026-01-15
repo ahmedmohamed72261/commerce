@@ -38,22 +38,26 @@ export const useWishlist = create<WishlistState>((set, get) => ({
 
       const list = Array.isArray(data) ? data : [];
 
+      const isRecord = (v: unknown): v is Record<string, unknown> =>
+        typeof v === "object" && v !== null;
+
+      const pickString = (v: unknown): string | undefined =>
+        typeof v === "string" ? v : undefined;
+
       const mappedItems: WishlistItem[] = list
-        .map((p) => {
+        .map((p): WishlistItem | null => {
           if (typeof p !== "object" || p === null) return null;
           const product = p as Record<string, unknown>;
 
           const name = product["name"];
-          const title =
-            typeof name === "string"
-              ? name
-              : typeof name === "object" && name !== null
-                ? (name as Record<string, unknown>)["en"] ??
-                  (name as Record<string, unknown>)["ar"] ??
-                  ""
-                : typeof product["title"] === "string"
-                  ? (product["title"] as string)
-                  : "";
+          let title: string = "";
+          if (typeof name === "string") {
+            title = name;
+          } else if (isRecord(name)) {
+            title = pickString(name["en"]) ?? pickString(name["ar"]) ?? "";
+          } else if (typeof product["title"] === "string") {
+            title = product["title"] as string;
+          }
 
           const images = product["images"];
           const image =
