@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { X, ChevronRight, ShoppingBag, Heart, User, Settings, Phone, Mail, Instagram, Facebook, Twitter, Globe, Percent, Moon, Sun } from "lucide-react";
+import { X, ChevronRight, ShoppingBag, Heart, User, Settings, Phone, Mail, Instagram, Facebook, Twitter, Globe, Percent, Moon, Sun, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/utils/utils";
@@ -62,7 +62,15 @@ export function Sidebar({ open, onClose, version = 1 }: SidebarProps) {
 
   const s = getTheme(version);
 
-  const menuItems = [
+  interface MenuItem {
+    name: string;
+    href: string;
+    icon: React.ComponentType<any>;
+    label?: string;
+    color?: string;
+  }
+
+  const menuItems: MenuItem[] = [
     { name: "home", href: "/", icon: Sparkles },
     { name: "about", href: "/about", icon: User },
     { name: "categories", href: "/categories", icon: ShoppingBag },
@@ -257,9 +265,3 @@ export function Sidebar({ open, onClose, version = 1 }: SidebarProps) {
     </AnimatePresence>
   );
 }
-
-// Dummy Icon mapping for the demo
-const Sparkles = (props: any) => <Globe {...props} />;
-const Headphones = (props: any) => <Globe {...props} />;
-const Smartphone = (props: any) => <Globe {...props} />;
-const Truck = (props: any) => <Globe {...props} />;
