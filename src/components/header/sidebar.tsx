@@ -61,8 +61,8 @@ export function Sidebar({ open, onClose, version = 1 }: OffcanvasSidebarProps) {
 
   const menuItems = [
     { name: "Home", href: "/", icon: Sparkles },
-    { name: "Shop", href: "/shop", icon: ShoppingBag },
-    { name: "New Arrivals", href: "/new", icon: Sparkles, label: "HOT" },
+    { name: "Categories", href: "/categories", icon: ShoppingBag },
+    { name: "Products", href: "/products", icon: Sparkles, label: "HOT" },
     { name: "Audio Collection", href: "/shop/audio", icon: Headphones },
     { name: "Smart Devices", href: "/shop/tech", icon: Smartphone },
     { name: "About Us", href: "/about", icon: User },
@@ -82,6 +82,13 @@ export function Sidebar({ open, onClose, version = 1 }: OffcanvasSidebarProps) {
     const nextPath = segments.join("/") || `/${target}`;
     router.replace(nextPath);
   };
+
+  useEffect(() => {
+    if (open) {
+      onClose();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   return (
     <AnimatePresence>
@@ -121,6 +128,12 @@ export function Sidebar({ open, onClose, version = 1 }: OffcanvasSidebarProps) {
                 </div>
               </div>
               <div className="flex items-center gap-2">
+                <Link href={`/${locale}/wishlist`} className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
+                  <Heart className="w-5 h-5" />
+                </Link>
+                <Link href={`/${locale}/cart`} className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
+                  <ShoppingBag className="w-5 h-5" />
+                </Link>
                 <div className="flex items-center gap-1">
                   <button
                     onClick={() => switchLocale("en")}
@@ -213,14 +226,14 @@ export function Sidebar({ open, onClose, version = 1 }: OffcanvasSidebarProps) {
 
               {/* Quick Settings Grid */}
               <div className="px-6 py-4 grid grid-cols-2 gap-4">
-                 <button className="flex flex-col items-center justify-center p-4 bg-neutral-50 dark:bg-white/5 rounded-2xl gap-2 hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
-                    <User className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
-                    <span className="text-[10px] font-bold uppercase">Account</span>
-                 </button>
-                 <button className="flex flex-col items-center justify-center p-4 bg-neutral-50 dark:bg-white/5 rounded-2xl gap-2 hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
+                 <Link href={`/${locale}/wishlist`} className="flex flex-col items-center justify-center p-4 bg-neutral-50 dark:bg-white/5 rounded-2xl gap-2 hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
                     <Heart className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
                     <span className="text-[10px] font-bold uppercase">Wishlist</span>
-                 </button>
+                 </Link>
+                 <Link href={`/${locale}/cart`} className="flex flex-col items-center justify-center p-4 bg-neutral-50 dark:bg-white/5 rounded-2xl gap-2 hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
+                    <ShoppingBag className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
+                    <span className="text-[10px] font-bold uppercase">Cart</span>
+                 </Link>
               </div>
             </div>
 

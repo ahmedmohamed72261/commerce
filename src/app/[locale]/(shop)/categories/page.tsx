@@ -17,7 +17,7 @@ const CategoriesPageClient = ({ locale }: { locale: string }) => {
     <div className="min-h-screen bg-[#F6F6F7] text-slate-900 font-sans antialiased selection:bg-red-100 selection:text-red-600">
       
       {/* SHOP UTILITY NAVIGATION */}
-      <nav className="w-full border-b border-slate-200 bg-white/80 backdrop-blur-xl sticky top-0 z-50">
+      <nav className="w-full border-b border-slate-200 bg-white/80 backdrop-blur-xl sticky top-0 z-10">
         <div className="max-w-[1440px] mx-auto px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">
             <span className="hover:text-red-600 transition-colors cursor-pointer">Hub</span>
