@@ -96,12 +96,12 @@ export function CarneshopNav({ locale }: { locale: string }) {
         </nav>
 
         {/* Right Icons */}
-        <div className="flex items-center gap-4">
+        <div className="flex  items-center gap-4">
           
           {/* Theme Toggle (Optional, kept from original) */}
           <button
             onClick={() => setTheme(isDark ? "light" : "dark")}
-            className="text-muted-foreground hover:text-red-600 transition"
+            className="hidden sm:block text-muted-foreground hover:text-red-600 transition"
           >
             {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
@@ -145,7 +145,7 @@ export function CarneshopNav({ locale }: { locale: string }) {
           }
 
           {/* Wishlist */}
-          <Link href={`/${locale}/wishlist`} className="relative text-neutral-600 hover:text-red-600 transition">
+          <Link href={`/${locale}/wishlist`} className="relative hidden sm:block text-neutral-600 hover:text-red-600 transition">
             <Heart className="w-5 h-5" />
             <span className="absolute -top-2 -right-2 h-4 w-4 rounded-full bg-red-600 text-white text-[10px] flex items-center justify-center">
               {wishlistTotalItems()}
@@ -153,7 +153,7 @@ export function CarneshopNav({ locale }: { locale: string }) {
           </Link>
 
           {/* Cart */}
-          <Link href={`/${locale}/cart`} className="relative text-neutral-600 hover:text-red-600 transition">
+          <Link href={`/${locale}/cart`} className="relative hidden sm:block text-neutral-600 hover:text-red-600 transition">
             <ShoppingCart className="w-5 h-5" />
             <span className="absolute -top-2 -right-2 h-4 w-4 rounded-full bg-red-600 text-white text-[10px] flex items-center justify-center">
               {cartTotalItems()}

@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useOrdersStore, ShippingAddress } from '@/store/orders';
+import { getProfile } from '@/services/user.service';
 
 interface CheckoutFormProps {
   onSubmit: (shippingAddress: ShippingAddress, paymentMethod: string, notes?: string) => void;
@@ -11,6 +12,20 @@ interface CheckoutFormProps {
 }
 
 export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, paymentMethods }) => {
+  type Address = {
+    _id?: string;
+    city?: string;
+    street?: string;
+    building?: string;
+    floor?: string;
+    apartment?: string;
+    additionalInfo?: string;
+    isDefault?: boolean;
+  };
+
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
+  const [showNewForm, setShowNewForm] = useState(false);
   const [formData, setFormData] = useState<ShippingAddress>({
     city: '',
     street: '',
@@ -23,6 +38,26 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, p
   const [notes, setNotes] = useState('');
 
   useEffect(() => {
+    (async () => {
+      try {
+        const res = await getProfile();
+        const payload = (res as unknown as { data?: unknown })?.data;
+        const data = (payload && typeof payload === "object" && "data" in (payload as any)) ? (payload as any).data : payload;
+        const arr = Array.isArray((data as any)?.addresses) ? (data as any).addresses : [];
+        const list: Address[] = arr
+          .map((a: any) => (a && typeof a === "object") ? a : null)
+          .filter(Boolean);
+        setAddresses(list);
+        const def = list.find((a) => a?.isDefault);
+        setSelectedAddressId((def?._id as string) ?? null);
+      } catch {
+        setAddresses([]);
+        setSelectedAddressId(null);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
     const firstActive = paymentMethods?.find((pm) => pm.isActive);
     if (firstActive?.name) {
       setPaymentMethod(firstActive.name);
@@ -31,6 +66,19 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, p
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const selected = addresses.find((a) => String(a._id) === String(selectedAddressId));
+    if (selected && !showNewForm) {
+      const addr: ShippingAddress = {
+        city: String(selected.city ?? ""),
+        street: String(selected.street ?? ""),
+        building: String(selected.building ?? ""),
+        floor: String(selected.floor ?? ""),
+        apartment: String(selected.apartment ?? ""),
+        additionalInfo: selected.additionalInfo ? String(selected.additionalInfo) : ""
+      };
+      onSubmit(addr, paymentMethod, notes);
+      return;
+    }
     onSubmit(formData, paymentMethod, notes);
   };
 
@@ -47,6 +95,49 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, p
         Shipping Information
       </h2>
 
+      <div className="mb-6">
+        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3 block">
+          Select Address
+        </label>
+        {addresses.length > 0 ? (
+          <div className="space-y-2">
+            {addresses.map((addr) => {
+              const id = String(addr._id ?? "");
+              const label = [
+                addr.city, addr.street, addr.building, addr.floor, addr.apartment
+              ].filter(Boolean).join(", ");
+              return (
+                <label key={id} className={`flex items-center gap-3 h-12 rounded-xl px-4 border ${selectedAddressId === id ? 'border-red-200 bg-red-50' : 'border-slate-200 bg-slate-50 hover:bg-slate-100'} cursor-pointer`}>
+                  <input
+                    type="radio"
+                    name="selectedAddress"
+                    checked={selectedAddressId === id}
+                    onChange={() => { setSelectedAddressId(id); setShowNewForm(false); }}
+                  />
+                  <span className="text-xs font-bold text-slate-700 flex-1">
+                    {label || 'Address'}
+                    {addr.isDefault ? <span className="ml-2 text-[10px] text-green-600 font-black uppercase">Default</span> : null}
+                  </span>
+                </label>
+              );
+            })}
+          </div>
+        ) : (
+          <p className="text-slate-500 text-sm">No saved addresses found.</p>
+        )}
+        <div className="mt-3">
+          <Button
+            type="button"
+            onClick={() => setShowNewForm((v) => !v)}
+            variant={showNewForm ? "outline" : undefined}
+            className={`h-10 rounded-xl text-xs font-black uppercase tracking-widest ${showNewForm ? 'border-slate-200' : 'bg-slate-900 text-white'}`}
+          >
+            {showNewForm ? 'Use Saved Address' : 'Add New Address'}
+          </Button>
+        </div>
+      </div>
+
+      {showNewForm && (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div>
           <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 block">
@@ -131,6 +222,7 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, p
           />
         </div>
       </div>
+      )}
 
       <div className="mb-6">
         <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3 block">

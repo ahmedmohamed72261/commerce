@@ -48,20 +48,20 @@ const WishlistPage = () => {
 
       <div className="max-w-6xl mx-auto px-6 mt-12">
         {/* Header */}
-        <header className="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
+        <header className="flex flex-row justify-between items-end gap-6 mb-12">
           <div className="space-y-2">
-            <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tighter italic leading-none">
+            <h1 className="text-2xl md:text-6xl font-black uppercase tracking-tighter italic leading-none">
               FAV<span className="text-red-600">ORITES</span>
             </h1>
             <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.3em]">
-              Strategic Asset Selection / 2026
+              Wishlist
             </p>
           </div>
-          <div className="bg-slate-900 text-white p-6 rounded-2xl shadow-xl min-w-[200px]">
-            <p className="text-[10px] font-bold uppercase opacity-50 mb-1">
+          <div className="bg-slate-900 text-white p-2 md:flex-none flex justify-around items-center md:p-6 rounded-2xl shadow-xl min-w-[150px]">
+            <p className="text-[12px] font-bold uppercase opacity-50 mb-1">
               Total Items
             </p>
-            <p className="text-4xl font-black italic">0{totalItems()}</p>
+            <p className="text-xl md:text-4xl font-black italic">0{totalItems()}</p>
           </div>
         </header>
 
@@ -151,10 +151,6 @@ const WishlistPage = () => {
             >
               <ArrowRight className="rotate-180" size={14} /> Back to Scouting
             </Link>
-            <div className="h-8 w-[1px] bg-slate-100 hidden md:block"></div>
-            <p className="text-xs font-bold text-slate-400 uppercase italic">
-              يتم الاحتفاظ بالاختيارات لمدة <span className="text-slate-900">24 ساعة</span>
-            </p>
           </div>
 
           <div className="flex items-center gap-4 w-full md:w-auto">

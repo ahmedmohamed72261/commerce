@@ -10,7 +10,7 @@ export default function ShopLayout({
   return (
     <>
       <Header />
-      <main className="min-h-screen pt-35">
+      <main className="min-h-screen pt-25 overflow-hidden">
         {children}
       </main>
       <Footer />

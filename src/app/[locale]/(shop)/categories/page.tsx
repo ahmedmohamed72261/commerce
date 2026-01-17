@@ -3,16 +3,12 @@
 import React, { useState } from 'react';
 import { ChevronRight, LayoutGrid, List, Cpu } from 'lucide-react';
 import { CategoryList } from '@/components/categories/CategoryList';
+import { useParams } from 'next/navigation';
 
-interface CategoriesPageProps {
-  params: Promise<{ locale: string }>;
-}
-
-const CategoriesPage = async ({ params }: CategoriesPageProps) => {
-  const { locale } = await params;
-  
+export default function CategoriesPage() {
+  const { locale } = useParams() as { locale: string };
   return <CategoriesPageClient locale={locale} />;
-};
+}
 
 const CategoriesPageClient = ({ locale }: { locale: string }) => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -46,14 +42,11 @@ const CategoriesPageClient = ({ locale }: { locale: string }) => {
         </div>
       </nav>
 
-      <main className="max-w-[1440px] mx-auto px-8 py-16">
-        <header className="mb-14 flex flex-col md:flex-row justify-between items-end gap-6">
+      <main className="max-w-[1440px] mx-auto px-3 py-3">
+        <header className="mb-2 flex flex-col md:flex-row justify-between items-start gap-6">
           <div className="space-y-4">
-            <div className="flex items-center gap-2 text-red-600 font-bold text-[10px] uppercase tracking-[0.5em] animate-in fade-in slide-in-from-left-4 duration-1000">
-              <Cpu size={14} className="animate-pulse" /> Industrial Registry
-            </div>
-            <h1 className="text-6xl md:text-7xl font-black uppercase italic tracking-tighter leading-none text-slate-950">
-              Asset <span className="text-red-600 drop-shadow-sm">Inventory</span>
+            <h1 className="md:text-4xl text-xl  font-black uppercase italic tracking-tighter leading-none text-slate-950">
+              Category <span className="text-red-600 drop-shadow-sm">List</span>
             </h1>
           </div>
         </header>
@@ -63,5 +56,3 @@ const CategoriesPageClient = ({ locale }: { locale: string }) => {
     </div>
   );
 };
-
-export default CategoriesPage;

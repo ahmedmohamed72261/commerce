@@ -15,17 +15,17 @@ import { useWishlist } from '@/store/wishlist';
 import { ProductGallery } from '@/components/products/ProductGallery';
 import { ProductCard } from '@/components/products/ProductCard';
 import { toast } from 'sonner';
+import { useParams } from 'next/navigation';
+import { useLocale } from 'next-intl';
 
-interface ProductDetailsPageProps {
-  params: Promise<{ locale: string; productId: string }>;
+export default function ProductDetailsPage() {
+  const { locale, productId } = useParams() as { locale: string; productId: string };
+  return <ProductDetailsClient locale={locale} productId={productId} />;
 }
 
-const ProductDetailsPage = async ({ params }: ProductDetailsPageProps) => {
-  const { locale, productId } = await params;
-  return <ProductDetailsClient locale={locale} productId={productId} />;
-};
-
 const ProductDetailsClient = ({ locale, productId }: { locale: string; productId: string }) => {
+  const localeIntl = useLocale() as "en" | "ar";
+  const isAr = (locale ?? localeIntl) === "ar";
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('details');
   
@@ -100,30 +100,24 @@ const ProductDetailsClient = ({ locale, productId }: { locale: string; productId
   const relatedProducts = items.filter(p => String(p.id) !== String(productDetails.id)).slice(0, 4);
 
   return (
-    <div className="bg-[#fcfcfc] min-h-screen text-slate-900 font-sans pb-20">
+    <div dir={isAr ? "rtl" : "ltr"} className="bg-[#fcfcfc] min-h-screen text-slate-900 font-sans pb-20">
       {/* BREADCRUMBS */}
       <div className="bg-white border-b border-slate-100">
         <div className="container mx-auto px-4 py-4">
           <nav className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
             <ul className="flex items-center gap-2">
-              <li className="hover:text-red-600 transition"><Link href={`/${locale}`}>Home</Link></li>
+              <li className="hover:text-red-600 transition"><Link href={`/${locale}`}>{isAr ? "الرئيسية" : "Home"}</Link></li>
               <ChevronRight size={12} className="text-slate-200" />
-              <li className="hover:text-red-600 transition"><Link href={`/${locale}/products`}>All Products</Link></li>
+              <li className="hover:text-red-600 transition"><Link href={`/${locale}/products`}>{isAr ? "المنتجات" : "Products"}</Link></li>
               <ChevronRight size={12} className="text-slate-200" />
-              {productDetails.category && (
-                <>
-                  <li className="hover:text-red-600 transition">{productDetails.category}</li>
-                  <ChevronRight size={12} className="text-slate-200" />
-                </>
-              )}
               <li className="text-slate-900 italic line-clamp-1">{productDetails.title}</li>
             </ul>
           </nav>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 mt-8 lg:mt-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 bg-white rounded-3xl border border-slate-100 shadow-sm p-6 lg:p-12">
+      <div className="container mx-auto px-4 mt-2 lg:mt-2">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-white rounded-3xl border border-slate-100 shadow-sm p-6 lg:p-12">
           
           {/* IMAGE GALLERY */}
           <div className="lg:col-span-5">
@@ -140,13 +134,13 @@ const ProductDetailsClient = ({ locale, productId }: { locale: string; productId
 
           {/* DETAILS & ACTIONS */}
           <div className="lg:col-span-7 flex flex-col">
-            <div className="mb-6">
+            <div className="mb-2">
               {productDetails.brand && (
                 <div className="flex items-center gap-2 text-red-600 font-bold text-[10px] uppercase tracking-[0.2em] mb-2">
                   <Package size={14} /> {productDetails.brand}
                 </div>
               )}
-              <h1 className="text-4xl lg:text-5xl font-black tracking-tighter uppercase leading-[0.9] mb-4 italic">
+              <h1 className="text-xl lg:text-3xl font-black tracking-tighter uppercase leading-[0.9] mb-2 italic">
                 {productDetails.title}
               </h1>
               {productDetails.rating && (
@@ -168,11 +162,11 @@ const ProductDetailsClient = ({ locale, productId }: { locale: string; productId
               )}
             </div>
 
-            <div className="grid grid-cols-2 gap-8 border-y border-slate-100 py-8 mb-8">
+            <div className="grid grid-cols-2 gap-8 border-y border-slate-100 py-2 mb-2">
               <div>
                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Sale Price</p>
                 <div className="flex items-center gap-3">
-                  <span className="text-4xl font-black text-red-600 tracking-tighter">
+                  <span className="md:text-3xl text-lg font-black text-red-600 tracking-tighter">
                     ${(productDetails.salePrice || productDetails.price).toFixed(2)}
                   </span>
                   {productDetails.salePrice && productDetails.price > productDetails.salePrice && (
@@ -200,13 +194,13 @@ const ProductDetailsClient = ({ locale, productId }: { locale: string; productId
             </div>
 
             {productDetails.description && (
-              <p className="text-slate-500 font-medium leading-relaxed mb-8 border-l-4 border-slate-100 pl-6">
+              <p className="text-slate-500 font-medium leading-relaxed mb-3 border-l-4 border-slate-100 pl-6">
                 {productDetails.description}
               </p>
             )}
 
             {/* QUANTITY SELECTOR */}
-            <div className="space-y-8 mb-10">
+            <div className="space-y-8 mb-2">
               <div className="flex items-center gap-8">
                 <div>
                   <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Qty:</h3>
@@ -217,16 +211,16 @@ const ProductDetailsClient = ({ locale, productId }: { locale: string; productId
                       onClick={() => setQuantity(q => Math.max(1, q - 1))} 
                       className="hover:text-red-600"
                     >
-                      <Minus className="h-4 w-4" />
+                      <Minus className="md:h-4 md:w-4 h-3 w-3" />
                     </Button>
-                    <span className="px-4 text-lg font-black">{quantity}</span>
+                    <span className="px-3 md:text-lg text-md font-black">{quantity}</span>
                     <Button 
                       variant="ghost" 
                       size="icon" 
                       onClick={() => setQuantity(q => q + 1)} 
                       className="hover:text-red-600"
                     >
-                      <Plus className="h-4 w-4" />
+                      <Plus className="md:h-4 md:w-4 h-3 w-3" />
                     </Button>
                   </div>
                 </div>
@@ -236,11 +230,12 @@ const ProductDetailsClient = ({ locale, productId }: { locale: string; productId
             {/* MAIN BUTTONS */}
             <div className="flex gap-4 mb-6">
               <Button 
+              size={'sm'}
                 onClick={handleAddToCart}
                 disabled={!productDetails.stock || productDetails.stock === 0}
-                className="flex-1 h-16 bg-red-600 hover:bg-black text-white rounded-xl text-lg font-black uppercase italic transition-all shadow-xl shadow-red-600/20 disabled:opacity-50"
+                className="flex-1 h-16 bg-red-600 hover:bg-black text-white rounded-xl  font-black uppercase italic transition-all shadow-xl shadow-red-600/20 disabled:opacity-50"
               >
-                <ShoppingCart className="mr-3" size={20} /> Add to Cart
+                <ShoppingCart className="mr-3" size={20} /> <span className='md:text-lg text-sm'>Add to Cart</span>
               </Button>
               <Button 
                 onClick={handleToggleWishlist}
@@ -255,33 +250,20 @@ const ProductDetailsClient = ({ locale, productId }: { locale: string; productId
                   }`} 
                 />
               </Button>
-              <Button variant="outline" className="h-16 w-16 rounded-xl border-slate-200 hover:bg-slate-50 transition-all">
-                <GitCompare />
-              </Button>
-            </div>
-
-            {/* UTILITY LINKS */}
-            <div className="flex space-x-6 text-[10px] font-black uppercase tracking-widest text-slate-400">
-              <a href="#" className="flex items-center hover:text-red-600 transition-colors">
-                <Printer className="w-4 h-4 mr-2" /> Print Sheet
-              </a>
-              <a href="#" className="flex items-center hover:text-red-600 transition-colors">
-                <Mail className="w-4 h-4 mr-2" /> Send to Friend
-              </a>
             </div>
           </div>
         </div>
       </div>
 
       {/* TABS SECTION */}
-      <div className="container mx-auto px-4 mt-20">
+      <div className="container mx-auto px-4 mt-8">
         <div className="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-sm">
           <div className="border-b border-slate-100 flex bg-slate-50/50">
             {['details', 'info'].map(tab => (
               <button 
                 key={tab}
                 onClick={() => setActiveTab(tab)} 
-                className={`py-6 px-10 text-[10px] font-black uppercase tracking-[0.2em] relative transition-all ${
+                className={`py-6 px-10 text-[13px] md:text-[20px] font-black uppercase tracking-[0.2em] relative transition-all ${
                   activeTab === tab ? 'text-red-600 bg-white' : 'text-slate-400 hover:text-slate-700'
                 }`}
               >
@@ -290,7 +272,7 @@ const ProductDetailsClient = ({ locale, productId }: { locale: string; productId
               </button>
             ))}
           </div>
-          <div className="p-10 lg:p-16 text-slate-500 font-medium leading-relaxed text-lg">
+          <div className="p-10 lg:p-16 text-slate-500 font-medium leading-relaxed md:text-lg text-md">
             {activeTab === 'details' && (
               <div>
                 <p>{productDetails.description || 'No detailed description available.'}</p>
@@ -317,9 +299,9 @@ const ProductDetailsClient = ({ locale, productId }: { locale: string; productId
 
       {/* RELATED PRODUCTS */}
       {relatedProducts.length > 0 && (
-        <section className="container mx-auto px-4 mt-24">
-          <div className="flex justify-between items-end mb-10 border-b border-slate-100 pb-6">
-            <h2 className="text-3xl font-black uppercase tracking-tighter">
+        <section className="container mx-auto px-4 mt-10">
+          <div className="flex justify-between items-end mb-2 border-b border-slate-100 pb-6">
+            <h2 className="md:text-3xl text-xl font-black uppercase tracking-tighter">
               Related <span className="text-red-600 italic">Products</span>
             </h2>
             {productDetails.categoryId && (
@@ -352,5 +334,3 @@ const ProductDetailsClient = ({ locale, productId }: { locale: string; productId
     </div>
   );
 };
-
-export default ProductDetailsPage;

@@ -34,7 +34,7 @@ export function ProductCard({ variant = "v1", title, price, oldPrice = price * 1
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -8 }}
-      className="group relative w-full sm:w-[320px] rounded-[2rem] bg-white border border-neutral-100 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] transition-all duration-500 overflow-hidden"
+      className="group relative w-full sm:w-[320px] rounded-2xl bg-white border border-neutral-100 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] transition-all duration-500 overflow-hidden"
     >
       {/* --- Image Section (White & Minimal) --- */}
       <div className="relative md:h-[320px] h-[150px] w-full p-2 bg-white">
@@ -55,13 +55,13 @@ export function ProductCard({ variant = "v1", title, price, oldPrice = price * 1
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             src={image}
             alt={title}
-            className="w-full h-full object-cover rounded-xl"
+            className="w-full h-full object-cover rounded-lg"
           />
         </div>
       </div>
 
       {/* --- Information Section --- */}
-      <div className="px-8 pb-8 pt-2 bg-white">
+      <div className="px-3 pb-3 pt-2 bg-white">
         <div className="flex justify-between items-center mb-1">
           {brand && (
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">
@@ -98,7 +98,7 @@ export function ProductCard({ variant = "v1", title, price, oldPrice = price * 1
           <button className="w-full group/btn relative h-10 overflow-hidden rounded-[1rem] bg-red-600 text-white transition-all hover:shadow-[0_15px_30px_-10px_rgba(220,38,38,0.4)] active:scale-95">
             <div className="absolute inset-0 w-full h-full bg-neutral-900 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
             <span className="relative z-10 flex items-center justify-center gap-2 font-black uppercase text-xs tracking-widest">
-              <ShoppingCart size={15} /> Add Cart
+              <ShoppingCart size={14} /> Add Cart
             </span>
           </button>
         </div>

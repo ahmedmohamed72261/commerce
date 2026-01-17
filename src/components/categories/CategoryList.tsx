@@ -43,8 +43,8 @@ export const CategoryList: React.FC<CategoryListProps> = ({ viewMode, locale = '
 
   return (
     <div className={viewMode === 'grid' 
-      ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" 
-      : "flex flex-col gap-6"
+      ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-2" 
+      : "flex flex-col gap-2"
     }>
       {categories.map((category) => (
         <CategoryCard 

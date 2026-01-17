@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/utils/utils";
 import { useTheme } from "next-themes";
 import { useAuthStore } from "@/store/auth";
+import { useLocale } from "next-intl";
 
 interface OffcanvasSidebarProps {
   open: boolean;
@@ -17,6 +18,7 @@ interface OffcanvasSidebarProps {
 export function OffcanvasSidebar({ open, onClose, version = 1 }: OffcanvasSidebarProps) {
   const { theme, setTheme } = useTheme();
   const { user, logout } = useAuthStore();
+  const locale = useLocale() as "en" | "ar";
   
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "unset";
@@ -97,6 +99,12 @@ export function OffcanvasSidebar({ open, onClose, version = 1 }: OffcanvasSideba
                 <span className="font-black tracking-tighter text-lg sm:text-xl uppercase italic">Menu</span>
               </div>
               <div className="flex items-center gap-2">
+                <Link href={`/${locale}/wishlist`} className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
+                  <Heart className="w-5 h-5" />
+                </Link>
+                <Link href={`/${locale}/cart`} className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
+                  <ShoppingBag className="w-5 h-5" />
+                </Link>
                 <button
                   onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
                   className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors"

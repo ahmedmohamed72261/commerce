@@ -21,6 +21,7 @@ import { getProfile, updatePassword, addAddress, updateAddress, type AddressPayl
 import { toast } from "sonner";
 import { useWishlist } from "@/store/wishlist";
 import { useOrdersStore } from "@/store/orders";
+import { useLocale } from "next-intl";
 
 type Address = {
   _id?: string;
@@ -50,6 +51,8 @@ const pickString = (value: unknown): string | undefined =>
   typeof value === "string" ? value : undefined;
 
 const ProfilePage = () => {
+  const locale = useLocale() as "en" | "ar";
+  const isAr = locale === "ar";
   const [activeTab, setActiveTab] = useState('My Profile');
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isEditAddressModalOpen, setIsEditAddressModalOpen] = useState(false);
@@ -121,7 +124,7 @@ const ProfilePage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FDFDFD] text-slate-900 font-sans antialiased">
+    <div dir={isAr ? "rtl" : "ltr"} className="min-h-screen bg-[#FDFDFD] text-slate-900 font-sans antialiased">
       {/* HEADER BREADCRUMB */}
       <div className="border-b border-slate-100 bg-white">
         <div className="max-w-[1400px] mx-auto px-8 h-14 flex items-center gap-2 text-[11px] font-medium text-slate-400">
@@ -130,10 +133,10 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-8 py-10 flex flex-col lg:flex-row gap-10">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-8 flex flex-col lg:flex-row gap-6 lg:gap-10">
         
         {/* SIDEBAR */}
-        <aside className="w-full lg:w-[280px] shrink-0">
+        <aside className="hidden lg:block lg:w-[280px] shrink-0">
           <div className="space-y-1">
             {sidebarItems.map((item) => (
               <button
@@ -152,61 +155,79 @@ const ProfilePage = () => {
           </div>
         </aside>
 
+        {/* Mobile Tabs */}
+        <div className="lg:hidden">
+          <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+            {sidebarItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setActiveTab(item.id)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest border ${
+                  activeTab === item.id ? 'bg-red-600 text-white border-red-600' : 'bg-white text-slate-600 border-slate-200'
+                }`}
+              >
+                <item.icon size={14} />
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* MAIN CONTENT */}
         <main className="flex-1">
-          <div className="bg-white border border-slate-200 rounded-[2.5rem] shadow-sm min-h-[600px]">
+          <div className="bg-white border border-slate-200 rounded-[2rem] shadow-sm min-h-[600px]">
             
             {/* 1. PROFILE TAB */}
             {activeTab === 'My Profile' && (
-              <div className="p-10 space-y-10 animate-in fade-in slide-in-from-bottom-2">
+              <div className="p-6 md:p-10 space-y-8 md:space-y-10 animate-in fade-in slide-in-from-bottom-2">
                 <section className="space-y-6">
                   <div className="flex items-center gap-4">
                     <div className="w-1.5 h-6 bg-red-600 rounded-full" />
-                    <h3 className="text-lg font-black text-slate-900 uppercase italic">Basic_Info</h3>
+                    <h3 className="text-base md:text-lg font-black text-slate-900 uppercase italic">Basic_Info</h3>
                   </div>
                   {profileLoading ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                       <div className="h-12 rounded-2xl border border-transparent bg-slate-100 animate-pulse" />
                       <div className="h-12 rounded-2xl border border-transparent bg-slate-100 animate-pulse" />
                       <div className="h-12 rounded-2xl border border-transparent bg-slate-100 animate-pulse" />
                       <div className="h-12 rounded-2xl border border-transparent bg-slate-100 animate-pulse" />
                     </div>
                   ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black text-slate-400 uppercase">First Name</label>
+                      <label className="text-[10px] md:text-xs font-black text-slate-400 uppercase">First Name</label>
                       <input
                         type="text"
                         value={profile?.firstName ?? ""}
                         readOnly
-                        className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 h-12 text-sm font-bold outline-none"
+                        className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-4 md:px-5 h-11 md:h-12 text-sm font-bold outline-none"
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black text-slate-400 uppercase">Last Name</label>
+                      <label className="text-[10px] md:text-xs font-black text-slate-400 uppercase">Last Name</label>
                       <input
                         type="text"
                         value={profile?.lastName ?? ""}
                         readOnly
-                        className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 h-12 text-sm font-bold outline-none"
+                        className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-4 md:px-5 h-11 md:h-12 text-sm font-bold outline-none"
                       />
                     </div>
                     <div className="space-y-2 md:col-span-2">
-                      <label className="text-[10px] font-black text-slate-400 uppercase">Email</label>
+                      <label className="text-[10px] md:text-xs font-black text-slate-400 uppercase">Email</label>
                       <input
                         type="email"
                         value={profile?.email ?? ""}
                         readOnly
-                        className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 h-12 text-sm font-bold outline-none"
+                        className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-4 md:px-5 h-11 md:h-12 text-sm font-bold outline-none"
                       />
                     </div>
                     <div className="space-y-2 md:col-span-2">
-                      <label className="text-[10px] font-black text-slate-400 uppercase">Phone</label>
+                      <label className="text-[10px] md:text-xs font-black text-slate-400 uppercase">Phone</label>
                       <input
                         type="tel"
                         value={profile?.phone ?? ""}
                         readOnly
-                        className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 h-12 text-sm font-bold outline-none"
+                        className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-4 md:px-5 h-11 md:h-12 text-sm font-bold outline-none"
                       />
                     </div>
                   </div>
@@ -216,7 +237,7 @@ const ProfilePage = () => {
                 <section className="pt-8 border-t border-slate-50 space-y-6">
                   <div className="flex items-center gap-4">
                     <div className="w-1.5 h-6 bg-red-600 rounded-full" />
-                    <h3 className="text-lg font-black text-slate-900 uppercase italic">Security_Access</h3>
+                    <h3 className="text-base md:text-lg font-black text-slate-900 uppercase italic">Security_Access</h3>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <input
@@ -250,7 +271,7 @@ const ProfilePage = () => {
                       setPasswordSaving(false);
                     }
                   }}
-                  className="bg-red-600 hover:bg-slate-900 text-white w-full md:w-auto px-12 h-14 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-red-50 disabled:opacity-50"
+                  className="bg-red-600 hover:bg-slate-900 text-white w-full md:w-auto px-10 md:px-12 h-12 md:h-14 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-red-50 disabled:opacity-50"
                 >
                   Save_Deployment
                 </Button>

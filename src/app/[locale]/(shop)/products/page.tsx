@@ -10,11 +10,13 @@ import { Button } from '@/components/ui/button';
 import { useProductsStore } from '@/store/products';
 import { ProductCard } from '@/components/products/ProductCard';
 import { ReusableSidebar, type FilterGroup } from '@/components/shop/reusable-sidebar';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { getFilters } from '@/services/products.service';
 import { getCategories } from '@/services/categories.service';
 import { useCart } from '@/store/cart';
 import { toast } from 'sonner';
 import { useParams } from 'next/navigation';
+import { cn } from '@/utils/utils';
 
 
 export default function ProductsPage() {
@@ -32,6 +34,7 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
   const [filters, setFilters] = useState<FilterGroup[]>([]);
   const [filtersLoading, setFiltersLoading] = useState(true);
   const [initialFilters, setInitialFilters] = useState<Record<string, string[] | number>>({});
+  const [filterOpen, setFilterOpen] = useState(false);
 
   const isRecord = (value: unknown): value is Record<string, unknown> =>
     typeof value === "object" && value !== null;
@@ -239,7 +242,7 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
     <div className="min-h-screen bg-[#FDFDFD] text-[#0F172A] font-sans antialiased">
       
       {/* 1. BREADCRUMB NAVIGATOR */}
-      <div className="bg-white border-b border-slate-100">
+      <div className="bg-white border-b border-slate-100 sm:pt-9">
         <div className="max-w-[1600px] mx-auto px-6 h-14 flex items-center justify-between">
           <nav className="flex items-center gap-3">
             <div className="flex items-center gap-2 text-slate-400 hover:text-red-600 transition-colors cursor-pointer">
@@ -261,7 +264,7 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
       <div className="max-w-[1600px] mx-auto px-6 py-8 flex flex-col lg:flex-row gap-10">
         
         {/* 2. SIDEBAR FILTERS (Styled like image_8a566e) */}
-        <aside className="w-full lg:w-[280px] shrink-0 space-y-10">
+        <aside className="hidden lg:block lg:w-[280px] shrink-0 space-y-10">
           {filtersLoading ? (
              <div className="space-y-4">
                <div className="h-10 bg-slate-100 animate-pulse rounded" />
@@ -283,9 +286,9 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
           
           {/* Header Controls (Matching Image Toolbar) */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-            <h1 className="text-2xl font-black text-[#0F172A] tracking-tight">Shop</h1>
+            <h1 className="text-2xl font-black text-[#0F172A] tracking-tight">Products</h1>
             
-            <div className="flex items-center gap-3 w-full sm:w-auto">
+            <div className="flex flex-wrap justify-between items-center gap-3 w-full sm:w-auto">
               {/* View Switches */}
               <div className="flex items-center border border-slate-200 rounded-lg overflow-hidden bg-white shadow-sm">
                 <button 
@@ -301,6 +304,12 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
                   <List size={18}/>
                 </button>
               </div>
+              <Button 
+                onClick={() => setFilterOpen(true)} 
+                className="lg:hidden h-11 px-4 rounded-lg bg-red-600 text-white text-xs font-black uppercase tracking-widest"
+              >
+                Filter
+              </Button>
 
               {/* Sort & Limit Dropdowns (As seen in reference image) */}
               <div className="flex items-center gap-2">
@@ -341,8 +350,8 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
             <>
               {/* Product Cards Layout */}
               <div className={viewMode === 'grid' 
-                ? "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6" 
-                : "flex flex-col gap-4"}>
+                ? "grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2" 
+                : "flex flex-col gap-2"}>
                 
                 {items.map(product => (
                   <ProductCard 
@@ -387,6 +396,45 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
           )}
         </main>
       </div>
+      <Dialog open={filterOpen} onOpenChange={setFilterOpen}>
+        <DialogContent
+          rounded="none"
+          className={cn(
+            /* Remove centering from base */
+            "fixed inset-y-0 z-50 w-[85vw] max-w-[420px] bg-white",
+            "p-6 border-none shadow-2xl",
+            "transition-all duration-1000 ease-out",
+            "data-[state=open]:translate-x-0",
+            "data-[state=closed]:opacity-0",
+
+            locale !== "ar"
+              ? "left-0 data-[state=closed]:-translate-x-full -translate-y-0 top-0"
+              : "right-0 data-[state=closed]:translate-x-full -translate-y-0 top-0"
+          )}
+        >
+          <DialogHeader>
+            <DialogTitle className="text-lg font-black uppercase tracking-widest">Filters</DialogTitle>
+          </DialogHeader>
+          <div className="max-h-[80vh] overflow-y-auto pr-2">
+            {filtersLoading ? (
+              <div className="space-y-4">
+                <div className="h-10 bg-slate-100 animate-pulse rounded" />
+                <div className="h-40 bg-slate-100 animate-pulse rounded" />
+                <div className="h-20 bg-slate-100 animate-pulse rounded" />
+              </div>
+            ) : (
+              <ReusableSidebar 
+                key={filters.map((f) => f.id).join("|")}
+                filters={filters}
+                onFilterChange={(f) => {
+                  handleFilterChange(f);
+                }}
+                initialFilters={initialFilters}
+              />
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

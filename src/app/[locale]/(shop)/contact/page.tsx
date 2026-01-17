@@ -1,10 +1,13 @@
 "use client";
 import React from 'react';
 import { Mail, Phone, MapPin, Send, Globe, ShieldCheck, ArrowUpRight } from 'lucide-react';
+import { useLocale } from 'next-intl';
 
 export default function Contact() {
+  const locale = useLocale() as "en" | "ar";
+  const isAr = locale === "ar";
   return (
-    <div className="relative min-h-screen w-full bg-[#FBFBFA] font-sans overflow-hidden flex items-center justify-center p-4 md:p-8">
+    <div dir={isAr ? "rtl" : "ltr"} className="relative min-h-screen w-full bg-[#FBFBFA] font-sans overflow-hidden flex items-center justify-center p-4 md:p-8">
       
       {/* BACKGROUND: High-Contrast Light Map */}
       <div className="absolute inset-0 z-0 grayscale contrast-150 brightness-110">

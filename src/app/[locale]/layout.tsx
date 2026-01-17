@@ -47,7 +47,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} dir={dir} suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <I18nProvider locale={locale} messages={messages}>
@@ -55,7 +55,7 @@ export default async function RootLayout({
               {children}
             </AuthGuard>
           </I18nProvider>
-          <ToastProvider />
+          {/* <ToastProvider /> */}
         </ThemeProvider>
       </body>
     </html>

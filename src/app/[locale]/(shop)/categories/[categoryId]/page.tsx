@@ -7,21 +7,19 @@ import Link from 'next/link';
 import { Loader2, LayoutGrid, List, RefreshCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ReusableSidebar, type FilterGroup } from '@/components/shop/reusable-sidebar';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { getFilters } from '@/services/products.service';
 import { useProductsStore } from '@/store/products';
 import { ProductCard } from '@/components/products/ProductCard';
 import { useCart } from '@/store/cart';
 import { toast } from 'sonner';
+import { useParams } from 'next/navigation';
+import { cn } from '@/utils/utils';
 
-interface CategoryProductsPageProps {
-  params: Promise<{ locale: string; categoryId: string }>;
-}
-
-const CategoryProductsPage = async ({ params }: CategoryProductsPageProps) => {
-  const { locale, categoryId } = await params;
-  
+export default function CategoryProductsPage() {
+  const { locale, categoryId } = useParams() as { locale: string; categoryId: string };
   return <CategoryProductsClient locale={locale} categoryId={categoryId} />;
-};
+}
 
 const CategoryProductsClient = ({ locale, categoryId }: { locale: string; categoryId: string }) => {
   const { getCategoryProducts, categoryProducts, categoryProductsLoading, error } = useCategoriesStore();
@@ -29,6 +27,7 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
   const { addToCart } = useCart();
   const [sort, setSort] = useState<string>('-price');
   const [pageSize, setPageSize] = useState<number>(12);
+  const [filterOpen, setFilterOpen] = useState(false);
 
   const [filters, setFilters] = useState<FilterGroup[]>([]);
   const [filtersLoading, setFiltersLoading] = useState(true);
@@ -210,22 +209,22 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
 
   return (
     <div className="min-h-screen bg-[#F4F5F7] text-slate-900 font-sans antialiased">
-      <div className="max-w-[1600px] mx-auto px-6 py-10">
+      <div className="max-w-[1600px] mx-auto px-2 sm:pt-9">
         
         {/* CATEGORY HEADER */}
         {categoryProductsLoading ? (
-          <div className="bg-white rounded-3xl p-8 mb-10 border border-slate-200 shadow-sm flex items-center justify-center">
-            <Loader2 className="w-6 h-6 animate-spin text-red-600" />
+          <div className="bg-white rounded-2xl p-3 mb-10 border border-slate-200 shadow-sm flex items-center justify-center">
+            <Loader2 className="w-8 h-8 animate-spin text-red-600" />
           </div>
         ) : error ? (
           <div className="bg-red-50 border border-red-200 rounded-2xl p-8 text-center mb-10">
             <p className="text-red-600 font-bold text-lg">{error}</p>
           </div>
         ) : categoryProducts ? (
-          <div className="bg-white rounded-3xl p-8 mb-10 border border-slate-200 shadow-sm">
+          <div className="bg-white rounded-2xl p-3 mb-10 border border-slate-200 shadow-sm">
             <div className="flex items-center gap-6">
               {categoryProducts.category.image && (
-                <div className="relative w-24 h-24 rounded-2xl overflow-hidden bg-slate-100 shrink-0">
+                <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-slate-100 shrink-0">
                   <Image 
                     src={categoryProducts.category.image} 
                     alt={categoryProducts.category.name}
@@ -235,7 +234,7 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
                 </div>
               )}
               <div className="flex-1">
-                <h1 className="text-4xl md:text-5xl font-black uppercase italic tracking-tighter text-slate-950 mb-2">
+                <h1 className="text-sm md:text-4xl font-black uppercase italic tracking-tighter text-slate-950 mb-2">
                   {categoryProducts.category.name}
                 </h1>
                 <p className="text-slate-400 font-bold text-sm">
@@ -246,8 +245,8 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
           </div>
         ) : null}
 
-        <div className="flex flex-col lg:flex-row gap-10">
-          <aside className="w-full lg:w-[280px] shrink-0 space-y-10">
+        <div className="flex flex-col relative lg:flex-row gap-10">
+          <aside className="hidden lg:block lg:w-[280px] shrink-0 space-y-10">
             {filtersLoading ? (
               <div className="space-y-4">
                 <div className="h-10 bg-slate-100 animate-pulse rounded" />
@@ -264,7 +263,7 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
           </aside>
 
           <main className="flex-1">
-            <div className="flex items-center gap-3 w-full sm:w-auto mb-6">
+            <div className="flex items-center justify-between gap-3 w-full sm:w-auto mb-2 px-3">
               <div className="flex items-center border border-slate-200 rounded-lg overflow-hidden bg-white shadow-sm">
                 <button 
                   className="p-2.5 transition-all bg-[#0F172A] text-white"
@@ -279,16 +278,22 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
                   <List size={18}/>
                 </button>
               </div>
+              <Button 
+                onClick={() => setFilterOpen(true)} 
+                className="lg:hidden h-10 px-4 rounded-lg bg-red-600 text-white text-xs font-black uppercase tracking-widest"
+              >
+                Filter
+              </Button>
             </div>
 
             {loading && items.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-24 bg-white rounded-[2rem] border border-dashed border-slate-200">
                 <RefreshCcw className="w-10 h-10 animate-spin text-red-600 mb-4" />
-                <p className="text-slate-400 font-bold text-sm uppercase tracking-widest">Fetching_Assets...</p>
+                <p className="text-slate-400 font-bold text-sm uppercase tracking-widest">Fetching_Categories...</p>
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2 gap-y-4">
                   {items.map(product => (
                     <ProductCard 
                       key={product.id} 
@@ -330,9 +335,45 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
             )}
           </main>
         </div>
+        <Dialog open={filterOpen} onOpenChange={setFilterOpen}>
+          <DialogContent
+            rounded="none"
+            className={cn(
+              /* Remove centering from base */
+              "fixed inset-y-0 z-50 w-[85vw] max-w-[420px] bg-white",
+              "p-6 border-none shadow-2xl",
+              "transition-all duration-1000 ease-out",
+              "data-[state=open]:translate-x-0",
+              "data-[state=closed]:opacity-0",
+
+              locale !== "ar"
+                ? "left-0 data-[state=closed]:-translate-x-full -translate-y-0 top-0"
+                : "right-0 data-[state=closed]:translate-x-full -translate-y-0 top-0"
+            )}
+          >
+            <DialogHeader>
+              <DialogTitle className="text-lg font-black uppercase tracking-widest">Filters</DialogTitle>
+            </DialogHeader>
+            <div className="max-h-[80vh] overflow-y-auto pr-2">
+              {filtersLoading ? (
+                <div className="space-y-4">
+                  <div className="h-10 bg-slate-100 animate-pulse rounded" />
+                  <div className="h-40 bg-slate-100 animate-pulse rounded" />
+                  <div className="h-20 bg-slate-100 animate-pulse rounded" />
+                </div>
+              ) : (
+                <ReusableSidebar 
+                  key={filters.map((f) => f.id).join("|")}
+                  filters={filters}
+                  onFilterChange={(f) => {
+                    handleFilterChange(f);
+                  }}
+                />
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
 };
-
-export default CategoryProductsPage;

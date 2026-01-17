@@ -76,7 +76,7 @@ export function ReusableSidebar({ filters, onFilterChange, className, initialFil
       {filters.map((group) => (
         <div 
           key={group.id} 
-          className="glass-panel rounded-xl p-5 border border-border bg-card dark:bg-card/50"
+          className="glass-panel rounded-lg p-5 border border-border bg-card dark:bg-card/50"
         >
           <button 
             onClick={() => toggleSection(group.id)}

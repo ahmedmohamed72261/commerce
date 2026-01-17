@@ -8,6 +8,8 @@ import { useTheme } from "next-themes";
 import { useLocale } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { useAuthStore } from "@/store/auth";
+import { cn } from "@/utils/utils";
 
 export function MainHeader({ locale }: { locale: string }) {
   const { theme, setTheme } = useTheme();
@@ -16,6 +18,8 @@ export function MainHeader({ locale }: { locale: string }) {
   const router = useRouter();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const { user, logout } = useAuthStore();
 
   const switchLocale = (target: "en" | "ar") => {
     if (!pathname) return;
@@ -42,7 +46,44 @@ export function MainHeader({ locale }: { locale: string }) {
           <IconWithBadge icon={<Heart />} badgeCount={0} />
           <IconWithBadge icon={<RefreshCcw />} badgeCount={0} />
           <IconWithBadge icon={<ShoppingCart />} badgeCount={0} />
-          <IconWithBadge icon={<User />} />
+          {user ? (
+            <div className="relative">
+              <button
+                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                className="flex items-center gap-2 px-3 py-2 rounded-full bg-white border border-neutral-200 text-neutral-700 hover:bg-red-50 hover:border-red-200 hover:text-red-700 transition"
+              >
+                <User className="w-5 h-5" />
+                <span className="text-xs font-bold">{user.firstName}</span>
+                <ChevronDown className="w-3 h-3" />
+              </button>
+              {userMenuOpen && (
+                <div
+                  className={cn(
+                    "absolute top-full mt-2 w-40 bg-white border shadow-md rounded-md p-2 z-50",
+                    currentLocale === "ar" ? "left-0" : "right-0"
+                  )}
+                >
+                  <Link
+                    href={`/${String(currentLocale)}/profile`}
+                    onClick={() => setUserMenuOpen(false)}
+                    className="block px-3 py-2 text-sm hover:bg-neutral-100 rounded"
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={() => { logout(); setUserMenuOpen(false); router.push(`/${String(currentLocale)}/login`); }}
+                    className="block w-full text-left px-3 py-2 text-sm hover:bg-neutral-100 rounded text-red-600"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link href={`/${String(currentLocale)}/login`} className="text-neutral-600 hover:text-red-600 transition">
+              <User className="w-5 h-5" />
+            </Link>
+          )}
           <button
             aria-label="Toggle theme"
             className="h-10 w-10 rounded-md border border-[--color-border] bg-[--color-background] text-[--color-foreground] flex items-center justify-center hover:bg-[--color-muted] transition"
