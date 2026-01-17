@@ -8,7 +8,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { useProductsStore } from '@/store/products';
 import { ProductCard } from '@/components/products/ProductCard';
-import { ProductFilters } from '@/components/products/ProductFilters';
+import { FilterSidebar, type FilterGroup } from '@/components/shop/Filter';
 import { useCart } from '@/store/cart';
 import { toast } from 'sonner';
 
@@ -82,7 +82,7 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
       <div className="max-w-[1600px] mx-auto px-6 py-10 flex flex-col lg:flex-row gap-8">
         
         {/* SIDEBAR */}
-        <ProductFilters />
+        <FilterSidebar />
 
         {/* MAIN PRODUCT AREA */}
         <main className="flex-1">
