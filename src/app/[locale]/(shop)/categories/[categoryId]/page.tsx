@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Loader2, LayoutGrid, List, RefreshCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { ReusableSidebar, type FilterGroup } from '@/components/shop/Filter';
+import { FilterSidebar, type FilterGroup } from '@/components/shop/Filter';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { getFilters } from '@/services/products.service';
 import { useProductsStore } from '@/store/products';
@@ -254,7 +254,7 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
                 <div className="h-20 bg-slate-100 animate-pulse rounded" />
               </div>
             ) : (
-              <ReusableSidebar 
+              <FilterSidebar 
                 key={filters.map((f) => f.id).join("|")}
                 filters={filters}
                 onFilterChange={handleFilterChange}
@@ -362,7 +362,7 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
                   <div className="h-20 bg-slate-100 animate-pulse rounded" />
                 </div>
               ) : (
-                <ReusableSidebar 
+                <FilterSidebar 
                   key={filters.map((f) => f.id).join("|")}
                   filters={filters}
                   onFilterChange={(f) => {
