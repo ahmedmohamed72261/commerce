@@ -1,173 +1,178 @@
 "use client";
+
 import React, { useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useLocale, useTranslations } from "next-intl";
 import {
   CheckCircle,
-  XCircle,
-  ArrowRight,
   Trash2,
   ShoppingBag,
   Zap,
   ChevronRight,
   Heart,
+  ArrowRight
 } from "lucide-react";
 import { useWishlist } from "@/store/wishlist";
 
-const WishlistPage = () => {
+export default function WishlistPage() {
   const { items, loading, fetchWishlist, removeItem, totalItems } = useWishlist();
+  const t = useTranslations("Wishlist");
+  const locale = useLocale() as "en" | "ar";
+  const isRTL = locale === "ar";
 
   useEffect(() => {
     fetchWishlist();
   }, [fetchWishlist]);
 
-  const totalValuation = useMemo(
-    () => items.reduce((sum, i) => sum + (i.salePrice ?? i.price ?? 0), 0),
+  const totalValue = useMemo(
+    () => items.reduce((s, i) => s + (i.salePrice ?? i.price ?? 0), 0),
     [items]
   );
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] text-slate-900 font-sans pb-20">
+    <div
+      dir={isRTL ? "rtl" : "ltr"}
+      className="min-h-screen bg-[#f8f9fa] pb-20"
+    >
       {/* Breadcrumb */}
-      <div className="w-full bg-white border-b border-slate-200">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <nav className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-slate-400">
+      <div className="bg-white border-b">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+          <nav className="flex items-center gap-2 text-xs font-bold uppercase text-slate-400">
             <Link href="/" className="hover:text-red-600">
               Home
             </Link>
-            <ChevronRight size={12} />
-            <span className="text-slate-900">Wishlist</span>
+            <ChevronRight
+              size={12}
+              className={isRTL ? "rotate-180" : ""}
+            />
+            <span className="text-slate-900">{t("title")}</span>
           </nav>
-          <div className="flex items-center gap-2 text-red-600 font-bold text-[10px] uppercase italic">
-            <ShoppingBag className="w-4 h-4" />
-            <span>Deploy to cart</span>
-          </div>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 mt-12">
+      <div className="max-w-6xl mx-auto px-4 mt-10">
         {/* Header */}
-        <header className="flex flex-row justify-between items-end gap-6 mb-12">
-          <div className="space-y-2">
-            <h1 className="text-2xl md:text-6xl font-black uppercase tracking-tighter italic leading-none">
-              FAV<span className="text-red-600">ORITES</span>
-            </h1>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.3em]">
-              Wishlist
+        <header className="flex flex-col md:flex-row justify-between gap-6 mb-10">
+          <h1 className="text-3xl md:text-6xl font-black italic">
+            {t("title")}
+          </h1>
+
+          <div className="bg-slate-900 text-white rounded-2xl px-6 py-4 text-center">
+            <p className="text-xs uppercase opacity-60">
+              {t("totalItems")}
             </p>
-          </div>
-          <div className="bg-slate-900 text-white p-2 md:flex-none flex justify-around items-center md:p-6 rounded-2xl shadow-xl min-w-[150px]">
-            <p className="text-[12px] font-bold uppercase opacity-50 mb-1">
-              Total Items
-            </p>
-            <p className="text-xl md:text-4xl font-black italic">0{totalItems()}</p>
+            <p className="text-3xl font-black">{totalItems()}</p>
           </div>
         </header>
 
-        {/* Wishlist Grid */}
-        <div className="grid gap-4">
-          {loading ? (
-            Array.from({ length: 6 }).map((_, i) => (
+        {/* Content */}
+        {loading ? (
+          <div className="grid gap-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="h-40 bg-white rounded-2xl animate-pulse" />
+            ))}
+          </div>
+        ) : items.length === 0 ? (
+          <div className="bg-white rounded-2xl p-10 text-center font-bold text-slate-500">
+            {t("empty")}
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {items.map((item) => (
               <div
-                key={i}
-                className="h-[180px] bg-white border border-slate-200 rounded-2xl animate-pulse"
-              />
-            ))
-          ) : items.length === 0 ? (
-            <div className="col-span-full bg-white border border-slate-200 rounded-2xl p-10 text-center">
-              <p className="text-slate-600 font-bold">
-                لا توجد عناصر في المفضلة حالياً
-              </p>
-            </div>
-          ) : (
-            items.map((item) => (
-              <div
-                key={item.id}
-                className="bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-lg transition-all duration-300 group"
-              >
-                <div className="flex flex-col md:flex-row items-center">
-                  {/* Image */}
-                  <div className="w-full md:w-48 h-48 relative bg-slate-100 flex-shrink-0">
-                    {item.image ? (
-                      <Image
-                        src={item.image}
-                        alt={item.title}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-slate-300">
-                        <Heart className="w-8 h-8" />
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Info */}
-                  <div className="flex-1 p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                    <div className="space-y-1">
-                      <p className="text-[9px] font-black text-red-600 uppercase tracking-widest">
-                        Ref: #{item.id}
-                      </p>
-                      <h2 className="text-2xl font-black uppercase italic tracking-tighter">
-                        {item.title}
-                      </h2>
-                      <div className="flex items-center gap-4 mt-2">
-                        <span className="flex items-center gap-1 text-[10px] font-bold text-green-600 uppercase">
-                          <CheckCircle size={12} /> Saved
-                        </span>
-                        <span className="text-[10px] font-bold text-slate-300 uppercase">
-                          Valuation: ${((item.salePrice ?? item.price) || 0).toFixed(2)}
-                        </span>
-                      </div>
+              key={item.id}
+              className="bg-white rounded-xl border border-slate-200 hover:shadow-md transition"
+            >
+              <div className="flex items-center gap-3 p-3 md:p-6">
+                
+                {/* Image */}
+                <div className="relative w-20 h-20 md:w-40 md:h-40 bg-slate-100 rounded-lg overflow-hidden shrink-0">
+                  {item.image ? (
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center h-full text-slate-300">
+                      <Heart size={20} />
                     </div>
+                  )}
+                </div>
 
-                    {/* Actions */}
-                    <div className="flex items-center gap-3 w-full md:w-auto">
-                      <Button className="flex-1 md:flex-none h-14 px-8 bg-slate-900 hover:bg-red-600 text-white rounded-xl text-xs font-black uppercase italic transition-all group/btn">
-                        Add to Cart{" "}
-                        <ShoppingBag className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                      </Button>
-                      <button
-                        onClick={() => removeItem(item.id)}
-                        className="h-14 w-14 flex items-center justify-center bg-slate-50 hover:bg-red-50 text-slate-300 hover:text-red-600 rounded-xl transition-colors border border-slate-100"
-                      >
-                        <Trash2 size={20} />
-                      </button>
-                    </div>
+                {/* Info */}
+                <div className="flex-1 min-w-0 space-y-1">
+                  <h2 className="text-sm md:text-xl font-black truncate">
+                    { item.title}
+                  </h2>
+
+                  <div className="flex items-center gap-3 text-[11px] font-bold">
+                    <span className="text-green-600 flex items-center gap-1">
+                      <CheckCircle size={12} />
+                      {t("saved")}
+                    </span>
+                    <span className="text-slate-400">
+                      ${((item.salePrice ?? item.price) || 0).toFixed(2)}
+                    </span>
                   </div>
                 </div>
+
+                {/* Actions */}
+                <div className="flex flex-col md:flex-row gap-2">
+                  <Button
+                    size="sm"
+                    className="h-9 px-3 md:px-6"
+                  >
+                    <ShoppingBag size={16} />
+                    <span className="hidden md:inline ms-2">
+                      {t("addToCart")}
+                    </span>
+                  </Button>
+
+                  <button
+                    onClick={() => removeItem(item.id)}
+                    className="h-9 w-9 flex items-center justify-center rounded-lg border text-slate-400 hover:text-red-600"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
               </div>
-            ))
-          )}
-        </div>
-
-        {/* Footer Summary */}
-        <div className="mt-12 flex flex-col md:flex-row justify-between items-center bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm gap-8">
-          <div className="flex items-center gap-6">
-            <Link
-              href="/"
-              className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-red-600 transition-colors flex items-center gap-2"
-            >
-              <ArrowRight className="rotate-180" size={14} /> Back to Scouting
-            </Link>
-          </div>
-
-          <div className="flex items-center gap-4 w-full md:w-auto">
-            <div className="text-right hidden md:block">
-              <p className="text-[10px] font-black uppercase text-slate-300 tracking-widest">
-                إجمالي القيمة
-              </p>
-              <p className="text-2xl font-black italic">${totalValuation.toFixed(2)}</p>
             </div>
-            <Button className="w-full md:w-auto h-16 px-12 bg-red-600 hover:bg-slate-900 text-white rounded-2xl text-sm font-black uppercase italic transition-all shadow-lg shadow-red-200">
-              Deploy All to Cart <Zap className="ml-3 w-4 h-4 fill-current" />
+
+            ))}
+          </div>
+        )}
+
+        {/* Footer */}
+        <div className="mt-12 bg-white rounded-2xl p-6 flex flex-col md:flex-row justify-between items-center gap-6">
+          <Link
+            href="/"
+            className="text-xs uppercase font-bold text-slate-400 hover:text-red-600 flex items-center gap-2"
+          >
+            <ArrowRight className={isRTL ? "" : "rotate-180"} size={14} />
+            {t("back")}
+          </Link>
+
+          <div className="flex items-center gap-6">
+            <div className="text-end hidden md:block">
+              <p className="text-xs text-slate-400">
+                {t("totalValue")}
+              </p>
+              <p className="text-2xl font-black italic">
+                ${totalValue.toFixed(2)}
+              </p>
+            </div>
+
+            <Button className="h-14 px-10 bg-red-600">
+              {t("deployAll")}
+              <Zap className="ms-2 w-4 h-4" />
             </Button>
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-export default WishlistPage;
+}

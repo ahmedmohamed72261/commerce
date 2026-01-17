@@ -12,7 +12,7 @@ import { toast } from 'sonner';
 import { getAllPaymentMethods } from '@/services/payment-methods.service';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { Breadcrumb } from '@/components/ui/breadcrumb';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useIsRTL } from '@/utils/rtl';
 
 export default function CartPage() {
@@ -24,6 +24,8 @@ const CartPageClient = ({ locale }: { locale: string }) => {
   const [showCheckout, setShowCheckout] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const localeIntl = useLocale() as "en" | "ar";
+  const t = useTranslations('cart');
+
   const isRTL = useIsRTL();
   const [paymentMethods, setPaymentMethods] = useState<Array<{ _id: string; name: string; icon?: string; instructions?: Record<string,string>; isActive?: boolean }>>([]);
   const router = useRouter();
@@ -118,13 +120,13 @@ const CartPageClient = ({ locale }: { locale: string }) => {
       <div className="min-h-screen bg-[#F4F5F7] flex items-center justify-center p-6">
         <div className="text-center">
           <ShoppingBag className="w-24 h-24 text-slate-300 mx-auto mb-6" />
-          <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter mb-4">{isRTL ? "سلتك فارغة" : "Your Cart is Empty"}</h2>
-          <p className="text-slate-600 dark:text-slate-300 font-bold mb-8">{isRTL ? "أضف بعض المنتجات للبدء!" : "Add some products to get started!"}</p>
+          <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter mb-4">{t('emptyTitle')}</h2>
+          <p className="text-slate-600 dark:text-slate-300 font-bold mb-8">{t('emptyDesc')}</p>
           <a 
             href={`/${locale}/products`}
             className="inline-block bg-red-600 text-white px-8 py-4 rounded-xl font-black text-sm uppercase tracking-widest transition-all"
           >
-            {isRTL ? "متابعة التسوق" : "Continue Shopping"}
+            {t('continueShopping')}
           </a>
         </div>
       </div>
@@ -136,20 +138,16 @@ const CartPageClient = ({ locale }: { locale: string }) => {
       <div className="mx-auto w-full max-w-[1600px]">
         <Breadcrumb
           items={[
-            { label: isRTL ? "الرئيسية" : "Home", href: `/${locale}` },
-            { label: isRTL ? "السلة" : "Cart" },
+            { label: t('home'), href: `/${locale}` },
+            { label: t('title') },
           ]}
         />
         <header className="my-6 md:my-10">
           <h1 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter leading-none text-indigo-950 mb-2">
-            {isRTL ? (
-              <>سلة <span className="text-red-600">التسوق</span></>
-            ) : (
-              <>Shopping <span className="text-red-600">Cart</span></>
-            )}
+            {t('title')}
           </h1>
           <p className="text-slate-400 dark:text-slate-300 font-bold">
-            {isRTL ? `${totalItems()} عنصر في السلة` : `${totalItems()} items in your cart`}
+            {t('totalItems', { count: totalItems() })}
           </p>
         </header>
 
@@ -162,7 +160,7 @@ const CartPageClient = ({ locale }: { locale: string }) => {
                   <CartItem
                     key={item._id}
                     item={item}
-                    locale={locale}
+                    locale={locale as "en" | "ar"}
                     onUpdateQuantity={handleUpdateQuantity}
                     onRemove={handleRemove}
                   />
@@ -190,10 +188,10 @@ const CartPageClient = ({ locale }: { locale: string }) => {
         <ConfirmDialog
           open={confirmOpen}
           onOpenChange={setConfirmOpen}
-          title={isRTL ? "مسح السلة؟" : "Clear Cart?"}
-          description={isRTL ? "سيؤدي هذا إلى إزالة جميع العناصر من السلة." : "This will remove all items from your cart."}
-          confirmText={isRTL ? "مسح" : "Clear"}
-          cancelText={isRTL ? "إلغاء" : "Cancel"}
+          title={t('clearCartTitle')}
+          description={t('clearCartDesc')}
+          confirmText={t('clear')}
+          cancelText={t('cancel')}
           onConfirm={async () => {
             const success = await clearCart();
             if (success) {

@@ -3,12 +3,13 @@
 import React from "react";
 import Image from "next/image";
 import { Minus, Plus, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { CartItem as CartItemType } from "@/store/cart";
+import { useIsRTL } from "@/utils/rtl";
+import { cn } from "@/utils/utils";
 
 interface CartItemProps {
   item: CartItemType;
-  locale?: string;
+  locale?: "en" | "ar";
   onUpdateQuantity: (itemId: string, quantity: number) => void;
   onRemove: (itemId: string) => void;
 }
@@ -19,116 +20,126 @@ export const CartItem: React.FC<CartItemProps> = ({
   onUpdateQuantity,
   onRemove,
 }) => {
-  const productName =
+  const isRTL = useIsRTL();
+
+  const name =
     typeof item.product.name === "object"
-      ? item.product.name[locale as "en" | "ar"] || item.product.name.en
+      ? item.product.name[locale] || item.product.name.en
       : item.product.name;
 
-  const productImage = item.product.images?.[0] || "";
+  const image = item.product.images?.[0];
+  const total = (item.price * item.quantity).toFixed(2);
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 hover:shadow-lg transition-shadow">
+    <div
+      className={cn(
+        "relative bg-white border border-slate-200 rounded-2xl",
+        "p-3 sm:p-4",
+        "hover:shadow-md transition-all"
+      )}
+      dir={isRTL ? "rtl" : "ltr"}
+    >
+      {/* REMOVE (TOP CORNER) */}
+      <button
+        onClick={() => onRemove(item._id)}
+        className={cn(
+          "absolute top-2 sm:top-3",
+          isRTL ? "left-2 sm:left-3" : "right-2 sm:right-3",
+          "h-8 w-8 rounded-full flex items-center justify-center",
+          "bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-red-600 transition"
+        )}
+      >
+        <X size={16} />
+      </button>
 
-      {/* Header (price + remove) */}
-      <div className="flex items-center justify-between md:hidden mb-3">
-        <p className="text-lg font-black text-slate-950">
-          ${(item.price * item.quantity).toFixed(2)}
-        </p>
-        <button
-          onClick={() => onRemove(item._id)}
-          className="p-2 rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-600"
-        >
-          <X size={18} />
-        </button>
-      </div>
-
-      <div className="flex flex-col sm:flex-row sm:items-center px-2 gap-4 sm:gap-6">
-
-        {/* Image */}
-        <div className="relative w-full sm:w-24 h-40 sm:h-24 rounded-xl overflow-hidden bg-slate-50 shrink-0">
-          {productImage && (
+      {/* MAIN GRID */}
+      <div className="grid grid-cols-[72px_1fr] sm:grid-cols-[96px_1fr_auto] gap-3 sm:gap-5 items-center">
+        {/* IMAGE */}
+        <div className="relative w-18 h-18 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-slate-100">
+          {image && (
             <Image
-              src={productImage}
-              alt={productName}
+              src={image}
+              alt={name}
               fill
               className="object-cover"
             />
           )}
         </div>
 
-        {/* Info */}
-        <div className="flex-1">
-          <h3 className="font-black text-base sm:text-lg tracking-tight uppercase mb-1">
-            {productName}
+        {/* INFO */}
+        <div className="min-w-0">
+          <h3 className="font-black text-sm sm:text-base uppercase truncate">
+            {name}
           </h3>
-          <p className="text-sm text-slate-400 font-bold">
-            ${item.price.toFixed(2)} each
+
+          <p className="text-xs sm:text-sm text-slate-400 font-bold mt-1">
+            ${item.price.toFixed(2)}
+          </p>
+
+          {/* MOBILE TOTAL */}
+          <p className="sm:hidden mt-2 text-base font-black text-red-600">
+            ${total}
           </p>
         </div>
 
-        {/* Desktop Quantity */}
-        <div className="hidden sm:flex items-center bg-slate-50 rounded-xl p-1 border border-slate-100">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() =>
-              onUpdateQuantity(item._id, Math.max(1, item.quantity - 1))
-            }
-            className="h-8 w-8"
-          >
-            <Minus className="h-4 w-4" />
-          </Button>
+        {/* DESKTOP ACTIONS */}
+        <div className="hidden sm:flex items-center gap-4">
+          {/* QTY */}
+          <div className="flex items-center bg-slate-50 border border-slate-200 rounded-xl px-1">
+            <button
+              onClick={() =>
+                onUpdateQuantity(item._id, Math.max(1, item.quantity - 1))
+              }
+              className="h-8 w-8 flex items-center justify-center hover:bg-white rounded-lg"
+            >
+              <Minus size={14} />
+            </button>
 
-          <span className="px-3 font-black">{item.quantity}</span>
+            <span className="px-3 font-black text-sm">
+              {item.quantity}
+            </span>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => onUpdateQuantity(item._id, item.quantity + 1)}
-            className="h-8 w-8"
-          >
-            <Plus className="h-4 w-4" />
-          </Button>
+            <button
+              onClick={() =>
+                onUpdateQuantity(item._id, item.quantity + 1)
+              }
+              className="h-8 w-8 flex items-center justify-center hover:bg-white rounded-lg"
+            >
+              <Plus size={14} />
+            </button>
+          </div>
+
+          {/* PRICE */}
+          <div className="min-w-[80px] text-right font-black text-lg">
+            ${total}
+          </div>
         </div>
-
-        {/* Desktop Price */}
-        <p className="hidden sm:block text-2xl font-black text-slate-950 min-w-[90px] text-right">
-          ${(item.price * item.quantity).toFixed(2)}
-        </p>
-
-        {/* Desktop Remove */}
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => onRemove(item._id)}
-          className="hidden sm:flex hover:bg-red-50 hover:text-red-600"
-        >
-          <X size={18} />
-        </Button>
       </div>
 
-      {/* Mobile Quantity (full width) */}
-      <div className="mt-4 md:hidden">
-        <div className="flex items-center justify-between bg-slate-50 rounded-xl p-2 border border-slate-100">
-          <Button
-            variant="ghost"
-            size="icon"
+      {/* MOBILE QTY BAR */}
+      <div className="sm:hidden mt-4">
+        <div className="flex items-center justify-between bg-slate-50 border border-slate-200 rounded-xl px-3 py-2">
+          <button
             onClick={() =>
               onUpdateQuantity(item._id, Math.max(1, item.quantity - 1))
             }
+            className="h-9 w-9 rounded-lg bg-white flex items-center justify-center"
           >
-            <Minus />
-          </Button>
+            <Minus size={16} />
+          </button>
 
-          <span className="text-lg font-black">{item.quantity}</span>
+          <span className="font-black text-base">
+            {item.quantity}
+          </span>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => onUpdateQuantity(item._id, item.quantity + 1)}
+          <button
+            onClick={() =>
+              onUpdateQuantity(item._id, item.quantity + 1)
+            }
+            className="h-9 w-9 rounded-lg bg-white flex items-center justify-center"
           >
-            <Plus />
-          </Button>
+            <Plus size={16} />
+          </button>
         </div>
       </div>
     </div>

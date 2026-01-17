@@ -58,7 +58,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       {/* IMAGE AREA */}
       <div className={`
         relative bg-slate-50 overflow-hidden transition-all duration-500
-        ${viewMode === 'list' ? 'w-full sm:w-56 h-48 sm:h-auto flex-shrink-0' : 'aspect-[1.2/1]'}
+        ${viewMode === 'list' ? 'w-full sm:w-56 h-40 sm:h-auto flex-shrink-0' : 'aspect-[1.4/1]'}
       `}>
         {product.image && (
           <Image
@@ -83,8 +83,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       </div>
 
       {/* CONTENT AREA */}
-      <div className="p-6 flex flex-col flex-1">
-        <div className="flex justify-between items-start mb-4">
+      <div className="p-3 pt-4 flex flex-col flex-1">
+        <div className="flex justify-between items-start mb-2">
           <h3 className="font-black text-md md:text-lg italic tracking-tighter uppercase text-slate-950 group-hover:text-red-600 transition-colors line-clamp-1">
             {product.title}
           </h3>
@@ -96,7 +96,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </div>
 
         {(product.brand || product.condition) && (
-          <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
+          <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
             <div>
               <span className="text-xl font-black italic tracking-tighter text-slate-950">
                 ${product.salePrice || product.price}

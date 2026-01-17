@@ -13,7 +13,9 @@
     "wishlist": "Wishlist",
     "priceDesc": "Price: High to Low",
     "priceAsc": "Price: Low to High",
-    "latest": "Latest"
+    "latest": "Latest",
+    "favorites": "Favorites",
+    "totalItems": "Total Items"
   },
   "Nav": {
     "navigation": "Navigation",
@@ -39,6 +41,43 @@
     "buyNow": "Buy Now",
     "price": "Price",
     "filter": "Filter"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "emptyTitle": "Your Cart is Empty",
+    "emptyDesc": "Add some products to get started!",
+    "continueShopping": "Continue Shopping",
+    "totalItems": "Total Items",
+
+    "item": {
+      "each": "each",
+      "remove": "Remove",
+      "quantity": "Quantity",
+      "price": "Price"
+    },
+
+    "summary": {
+      "title": "Order Summary",
+      "subtotal": "Subtotal",
+      "shipping": "Shipping",
+      "free": "FREE",
+      "tax": "Tax",
+      "total": "Total",
+      "checkout": "Proceed to Checkout",
+      "clearCart": "Clear Cart"
+    }
+  },
+  "Wishlist": {
+    "title": "Wishlist",
+    "empty": "Your wishlist is empty",
+    "totalItems": "Total Items",
+    "saved": "Saved",
+    "valuation": "Valuation",
+    "addToCart": "Add to Cart",
+    "remove": "Remove",
+    "deployAll": "Deploy All to Cart",
+    "back": "Back to shopping",
+    "totalValue": "Total Value"
   },
   "filters": {
     "filters": "Filters",

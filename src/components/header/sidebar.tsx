@@ -186,7 +186,7 @@ export function Sidebar({ open, onClose, version = 1 }: SidebarProps) {
                       transition={{ delay: i * 0.03 }}
                     >
                       <Link 
-                        href={`/${locale}/categories`}
+                        href={`/${locale}/categories/${cat.id}`}
                         className="flex items-center justify-between p-4 rounded-xl transition-all group bg-white hover:bg-neutral-100 dark:bg-white/5 dark:hover:bg-white/10"
                       >
                         <div className="flex items-center gap-4">

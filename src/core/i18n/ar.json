@@ -13,7 +13,9 @@
     "wishlist": "قائمة الأعجاب",
     "priceDesc": "السعر: من الأعلى إلى الأقل",
     "priceAsc": "السعر: من الأقل إلى الأعلى",
-    "latest": "الأحدث"
+    "latest": "الأحدث",
+    "favorites": "الأعجاب",
+    "totalItems": "إجمالي العناصر"
   },
   "Nav": {
     "navigation": "التنقل",
@@ -39,6 +41,43 @@
     "buyNow": "شراء الآن",
     "price": "السعر",
     "filter": "تصفية"
+  },
+  "cart": {
+    "title": "سلة التسوق",
+    "emptyTitle": "سلتك فارغة",
+    "emptyDesc": "أضف بعض المنتجات للبدء!",
+    "continueShopping": "متابعة التسوق",
+    "totalItems": "إجمالي العناصر",
+
+    "item": {
+      "each": "للقطعة",
+      "remove": "حذف",
+      "quantity": "الكمية",
+      "price": "السعر"
+    },
+
+    "summary": {
+      "title": "ملخص الطلب",
+      "subtotal": "المجموع الفرعي",
+      "shipping": "الشحن",
+      "free": "مجاني",
+      "tax": "الضريبة",
+      "total": "الإجمالي",
+      "checkout": "إتمام الشراء",
+      "clearCart": "مسح السلة"
+    }
+  },
+  "Wishlist": {
+    "title": "المفضلة",
+    "empty": "لا توجد عناصر في المفضلة",
+    "totalItems": "إجمالي العناصر",
+    "saved": "محفوظ",
+    "valuation": "القيمة",
+    "addToCart": "أضف إلى السلة",
+    "remove": "حذف",
+    "deployAll": "إضافة الكل إلى السلة",
+    "back": "العودة للتسوق",
+    "totalValue": "إجمالي القيمة"
   },
   "filters": {
     "filters": "التصفية",
