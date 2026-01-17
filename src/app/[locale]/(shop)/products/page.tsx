@@ -425,7 +425,7 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
                 <div className="h-20 bg-slate-100 animate-pulse rounded" />
               </div>
             ) : (
-              <Filter 
+              <FilterSidebar
                 key={filters.map((f) => f.id).join("|")}
                 filters={filters}
                 onFilterChange={(f) => {
