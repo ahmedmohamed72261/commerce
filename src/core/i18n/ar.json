@@ -1,85 +1,50 @@
 {
   "Common": {
-    "welcome": "مرحبا بكم في GlassShop",
+    "welcome": "مرحبا بكم في Development World",
     "subscribe": "اشترك",
     "learnMore": "اعرف المزيد",
-    "viewAll": "عرض الكل"
+    "viewAll": "عرض الكل",
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج",
+    "profile": "حسابي",
+    "cart": "عربة التسوق",
+    "categories": "التصنيفات",
+    "products": "المنتجات",
+    "wishlist": "قائمة الأعجاب",
+    "priceDesc": "السعر: من الأعلى إلى الأقل",
+    "priceAsc": "السعر: من الأقل إلى الأعلى",
+    "latest": "الأحدث"
   },
   "Nav": {
+    "navigation": "التنقل",
     "home": "الرئيسية",
-    "shop": "المتجر",
-    "about": "حول",
-    "cart": "عربة التسوق",
-    "login": "تسجيل الدخول",
-    "pages": "صفحات",
-    "elements": "عناصر",
-    "news": "الأخبار",
+    "about": "حول DW",
+    "products": "المنتجات",
+    "categories": "التصنيفات",
     "contact": "اتصل",
     "search": "بحث..."
   },
   "Home": {
     "heroTitle": "مستقبل التسوق",
-    "heroDesc": "اختبر الجودة الفاخرة مع مجموعتنا المختارة من التقنيات المستقبلية والإكسسوارات. مصممة لأسلوب الحياة العصري.",
+    "heroDesc": "اختبر الجودة الفاخرة مع مجموعتنا المختارة من التقنيات المستقبلية.",
     "ctaShop": "تسوق الآن",
-    "learnMore": "اعرف المزيد",
     "featuredBrands": "علامات تجارية مميزة",
-    "brand": "علامة تجارية",
-    "categoriesTitle": "التصنيفات",
-    "features": {
-      "fastDelivery": "توصيل سريع",
-      "securePayment": "دفع آمن",
-      "support": "دعم على مدار الساعة",
-      "fastDeliveryDesc": "شحن عالمي خلال 2-3 أيام",
-      "securePaymentDesc": "معالجة دفع آمنة 100%",
-      "supportDesc": "فريق دعم مخصص متاح دائمًا"
-    },
-    "featuredProducts": "منتجات مميزة",
-    "viewAll": "عرض الكل",
-    "newsletterTitle": "انضم إلى مجتمعنا",
-    "newsletterDesc": "اشترك في النشرة للحصول على أحدث الأخبار والعروض الحصرية والوصول المبكر للمنتجات الجديدة.",
-    "subscribe": "اشترك"
+    "featuredProducts": "منتجات مميزة"
+  },
+  "banner": {
+    "catalog": "كتالوج"
   },
   "Shop": {
     "addToCart": "أضف للسلة",
-    "quickView": "نظرة سريعة",
-    "new": "جديد",
-    "categories": "التصنيفات",
-    "filter": "تصفية",
-    "price": "السعر",
-    "filterPrice": "تصفية السعر",
-    "productTags": "وسوم المنتجات",
     "buyNow": "شراء الآن",
-    "viewDetails": "عرض التفاصيل",
-    "connect": "اتصال",
-    "select": "اختر",
-    "premium": "مميز",
-    "sale": "تخفيض"
+    "price": "السعر",
+    "filter": "تصفية"
   },
-  "Footer": {
-    "aboutTitle": "عن TechStore",
-    "aboutText": "نحن نقدم أفضل المنتجات التقنية بجودة عالية وأسعار تنافسية. وجهتك الأولى لكل ما يتعلق بالتكنولوجيا.",
-    "quickLinks": "روابط سريعة",
-    "categories": "التصنيفات",
-    "newsletter": "النشرة البريدية",
-    "newsletterDesc": "اشترك للحصول على عروض خاصة وهدايا مجانية وصفقات لا تتكرر.",
-    "links": {
-      "home": "الرئيسية",
-      "shop": "المتجر",
-      "categories": "التصنيفات",
-      "wishlist": "المفضلة",
-      "cart": "عربة التسوق",
-      "contact": "اتصل بنا",
-      "faq": "الأسئلة الشائعة"
-    },
-    "categoryList": {
-      "laptops": "لابتوب وكمبيوتر",
-      "smartphones": "هواتف ذكية",
-      "gaming": "معدات الألعاب",
-      "accessories": "إكسسوارات",
-      "cameras": "كاميرات ودرونز"
-    },
-    "copyright": "© {year} TechStore. جميع الحقوق محفوظة."
+  "filters": {
+    "filters": "التصفية",
+    "applyFilters": "تطبيق التصفية"
   },
+
   "Auth": {
     "loginTitle": "مرحبًا بعودتك",
     "loginDesc": "سجّل الدخول لمتابعة تجربة التسوق.",
@@ -110,5 +75,30 @@
     "savePassword": "حفظ كلمة المرور",
     "confirm": "تأكيد كلمة المرور",
     "backTo": "العودة إلى"
+  },
+  "Footer": {
+    "aboutTitle": "عن Development World",
+    "aboutText": "نحن نقدم أفضل المنتجات التقنية بجودة عالية وأسعار تنافسية. وجهتك الأولى لكل ما يتعلق بالتكنولوجيا.",
+    "quickLinks": "روابط سريعة",
+    "categories": "التصنيفات",
+    "newsletter": "النشرة البريدية",
+    "newsletterDesc": "اشترك للحصول على عروض خاصة وهدايا مجانية وصفقات لا تتكرر.",
+    "links": {
+      "home": "الرئيسية",
+      "shop": "المتجر",
+      "categories": "التصنيفات",
+      "wishlist": "المفضلة",
+      "cart": "عربة التسوق",
+      "contact": "اتصل بنا",
+      "faq": "الأسئلة الشائعة"
+    },
+    "categoryList": {
+      "laptops": "لابتوب وكمبيوتر",
+      "smartphones": "هواتف ذكية",
+      "gaming": "معدات الألعاب",
+      "accessories": "إكسسوارات",
+      "cameras": "كاميرات ودرونز"
+    },
+    "copyright": "© {year} Development World. جميع الحقوق محفوظة."
   }
 }

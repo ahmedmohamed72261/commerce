@@ -17,6 +17,7 @@ import { ProductCard } from '@/components/products/ProductCard';
 import { toast } from 'sonner';
 import { useParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
+import { useIsRTL } from '@/utils/rtl';
 
 export default function ProductDetailsPage() {
   const { locale, productId } = useParams() as { locale: string; productId: string };
@@ -25,7 +26,7 @@ export default function ProductDetailsPage() {
 
 const ProductDetailsClient = ({ locale, productId }: { locale: string; productId: string }) => {
   const localeIntl = useLocale() as "en" | "ar";
-  const isAr = (locale ?? localeIntl) === "ar";
+  const isRTL = useIsRTL();
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('details');
   
@@ -100,15 +101,15 @@ const ProductDetailsClient = ({ locale, productId }: { locale: string; productId
   const relatedProducts = items.filter(p => String(p.id) !== String(productDetails.id)).slice(0, 4);
 
   return (
-    <div dir={isAr ? "rtl" : "ltr"} className="bg-[#fcfcfc] min-h-screen text-slate-900 font-sans pb-20">
+    <div className="bg-[#fcfcfc] min-h-screen text-slate-900 font-sans pb-20">
       {/* BREADCRUMBS */}
       <div className="bg-white border-b border-slate-100">
         <div className="container mx-auto px-4 py-4">
           <nav className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
             <ul className="flex items-center gap-2">
-              <li className="hover:text-red-600 transition"><Link href={`/${locale}`}>{isAr ? "الرئيسية" : "Home"}</Link></li>
+              <li className="hover:text-red-600 transition"><Link href={`/${locale}`}>{isRTL ? "الرئيسية" : "Home"}</Link></li>
               <ChevronRight size={12} className="text-slate-200" />
-              <li className="hover:text-red-600 transition"><Link href={`/${locale}/products`}>{isAr ? "المنتجات" : "Products"}</Link></li>
+              <li className="hover:text-red-600 transition"><Link href={`/${locale}/products`}>{isRTL ? "المنتجات" : "Products"}</Link></li>
               <ChevronRight size={12} className="text-slate-200" />
               <li className="text-slate-900 italic line-clamp-1">{productDetails.title}</li>
             </ul>

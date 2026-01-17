@@ -3,6 +3,8 @@
 import React from "react";
 import Link from "next/link";
 import { cn } from "@/utils/utils";
+import { useLocale, useTranslations } from "next-intl";
+
 import { 
   ArrowRight, ShoppingBag, Zap, Crown, 
   Sparkles, MoveRight, ChevronRight, Plus,
@@ -28,9 +30,10 @@ export function BannerCard({
   href = "#",
   className = "",
 }: CategoryCardProps) {
-  
+  const locale = useLocale();
+  const t = useTranslations("banner");
   const Wrapper = href ? Link : "div";
-  const common = cn("group relative overflow-hidden block w-full h-[300px] md:h-full aspect-[4/5] transition-all duration-700 rtl:text-right", className);
+  const common = cn("group relative overflow-hidden block w-full h-[250px] sm:h-[300px] md:h-full aspect-[4/5] transition-all duration-700 rtl:text-right", className);
 
   // --- CASE 1: THE SILK LUXURY ---
   if (variant === 1) return (
@@ -255,10 +258,10 @@ export function BannerCard({
 
   // --- CASE 15: THE KINETIC SPLIT (REDESIGNED) ---
   if (variant === 15) return (
-    <Wrapper href={href as string} className={cn(common, "bg-zinc-100 rounded-[2rem] border border-neutral-200")}>
+    <Wrapper href={href as string} className={cn(common, "bg-zinc-100 rounded-2xl border border-neutral-200")}>
       <div className="absolute inset-0 flex flex-col">
         {/* Top Section: Dynamic Image with "Slide-in" Mask */}
-        <div className="relative h-[65%] w-full overflow-hidden rounded-[1.5rem]">
+        <div className="relative h-[65%] w-full overflow-hidden rounded-t-[1rem]">
           <img 
             src={image} 
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" 
@@ -272,17 +275,17 @@ export function BannerCard({
         </div>
         
         {/* Bottom Section: Clean Info with Offset Action */}
-        <div className="w-full px-4 pt-2 pb-6 flex items-end justify-between rtl:flex-row-reverse">
-          <div className="space-y-1 w-full rtl:text-right">
-            <h3 className="text-black text-lg sm:text-xl md:text-2xl lg:text-3xl font-black leading-none tracking-tighter uppercase">
+        <div className="w-full px-4 pt-2 pb-2 flex items-end justify-between rtl:flex-row-reverse">
+          <div className="space-y-1 pt-2 w-full rtl:text-right">
+            <h3 className="text-black text-lg sm:text-xl md:text-xl lg:text-2xl font-black leading-none tracking-tighter uppercase">
               {title}
             </h3>
-            <div className="flex md:justify-between w-full">
-              <p className="text-neutral-400 text-xs font-medium uppercase tracking-widest">
-                Catalog — {count}
-              </p>
-              <div className="w-10 h-6 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-red-600 text-white rounded-2xl flex items-center justify-center -rotate-12 group-hover:rotate-0 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-red-600/20">
-                <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
+            <div className="flex justify-end  w-full">
+              {/* <p className="text-neutral-400 text-xs font-medium uppercase tracking-widest">
+                {t("catalog")} — {count}
+              </p> */}
+              <div className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 bg-red-600 text-white rounded-2xl flex items-center justify-center -rotate-12 group-hover:rotate-0 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-red-600/20">
+                <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-5 md:w-5 md:h-5" />
               </div>
             </div>
           </div>

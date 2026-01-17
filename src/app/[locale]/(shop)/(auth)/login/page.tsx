@@ -50,7 +50,8 @@ export default function LoginPage() {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             icon={Smartphone}
-            placeholder="+201234567890"
+            placeholder=""
+            locale={locale}
           />
           
           <Input
@@ -59,7 +60,8 @@ export default function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             icon={Lock}
-            placeholder="••••••••"
+            placeholder=""
+            locale={locale}
           />
 
           <div className="flex items-center justify-between">

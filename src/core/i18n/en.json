@@ -3,58 +3,48 @@
     "welcome": "Welcome to GlassShop",
     "subscribe": "Subscribe",
     "learnMore": "Learn More",
-    "viewAll": "View All"
+    "viewAll": "View All",
+    "login": "Login",
+    "logout": "Logout",
+    "profile": "Profile",
+    "cart": "Cart",
+    "categories": "Categories",
+    "products": "Products",
+    "wishlist": "Wishlist",
+    "priceDesc": "Price: High to Low",
+    "priceAsc": "Price: Low to High",
+    "latest": "Latest"
   },
   "Nav": {
+    "navigation": "Navigation",
     "home": "Home",
-    "shop": "Shop",
-    "about": "About",
-    "cart": "Cart",
-    "login": "Login",
-    "pages": "Pages",
-    "elements": "Elements",
-    "news": "News",
+    "about": "About Us",
+    "products": "Products",
+    "categories": "Categories",
     "contact": "Contact",
     "search": "Search..."
   },
   "Home": {
     "heroTitle": "The Future of Shopping",
-    "heroDesc": "Experience premium quality with our curated collection of futuristic tech and accessories. Designed for the modern lifestyle.",
+    "heroDesc": "Experience premium quality with our curated collection of futuristic tech and accessories.",
     "ctaShop": "Shop Now",
-    "learnMore": "Learn More",
     "featuredBrands": "Featured Brands",
-    "brand": "Brand",
-    "categoriesTitle": "Categories",
-    "features": {
-      "fastDelivery": "Fast Delivery",
-      "securePayment": "Secure Payment",
-      "support": "24/7 Support",
-      "fastDeliveryDesc": "Global shipping within 2-3 days",
-      "securePaymentDesc": "100% secure payment processing",
-      "supportDesc": "Dedicated support team available"
-    },
-    "featuredProducts": "Featured Products",
-    "viewAll": "View All",
-    "newsletterTitle": "Join Our Community",
-    "newsletterDesc": "Subscribe to our newsletter to get the latest updates, exclusive offers, and early access to new products.",
-    "subscribe": "Subscribe"
+    "featuredProducts": "Featured Products"
+  },
+  "banner": {
+    "catalog": "Catalog"
   },
   "Shop": {
     "addToCart": "Add to Cart",
-    "quickView": "Quick View",
-    "new": "New",
-    "categories": "Categories",
-    "filter": "Filter",
-    "price": "Price",
-    "filterPrice": "Filter Price",
-    "productTags": "Product Tags",
     "buyNow": "Buy Now",
-    "viewDetails": "View Details",
-    "connect": "Connect",
-    "select": "Select",
-    "premium": "Premium",
-    "sale": "Sale"
+    "price": "Price",
+    "filter": "Filter"
   },
+  "filters": {
+    "filters": "Filters",
+    "applyFilters": "Apply Filters"
+  },
+  
   "Footer": {
     "aboutTitle": "About TechStore",
     "aboutText": "We provide the best technology products with premium quality and competitive prices. Your one-stop shop for all things tech.",
@@ -78,7 +68,7 @@
       "accessories": "Accessories",
       "cameras": "Cameras & Drones"
     },
-    "copyright": "© {year} TechStore. All Rights Reserved."
+    "copyright": "© {year} Development World. All Rights Reserved."
   },
   "Auth": {
     "loginTitle": "Welcome back",

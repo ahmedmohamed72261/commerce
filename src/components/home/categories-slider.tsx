@@ -18,7 +18,7 @@ function CategoryCard({ cat }: { cat: Category }) {
     <motion.div 
       initial="initial"
       whileHover="hover"
-      className="relative h-[220px] sm:h-[320px] md:h-[420px] w-full overflow-hidden rounded-[2rem] cursor-pointer bg-black group"
+      className="relative h-[220px] sm:h-[320px] md:h-[380px] w-full overflow-hidden rounded-3xl cursor-pointer bg-black group"
     >
       {/* IMAGE LAYER: Fixed 'scale' not working by using motion variants */}
       <motion.img
@@ -42,7 +42,7 @@ function CategoryCard({ cat }: { cat: Category }) {
       />
 
       {/* TEXT CONTENT */}
-      <div className="absolute inset-0 z-20 md:p-12 p-2  flex flex-col justify-end md:items-baseline items-center ">
+      <div className="absolute inset-0 z-20 md:p-12 p-2 bg-black/50 hover:bg-black/20 flex flex-col justify-end md:items-baseline items-center ">
         <div className="space-y-4">
           <motion.div
             variants={{
@@ -54,7 +54,7 @@ function CategoryCard({ cat }: { cat: Category }) {
             <p className="text-[--color-primary] font-extrabold text-xs sm:text-sm md:text-base tracking-[0.35em] uppercase mb-2">
               {cat.tag}
             </p>
-            <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black tracking-tighter text-white leading-[0.9] dark:text-[--color-primary]">
+            <h3 className="text-lg sm:text-xl md:text-xl lg:text-2xl font-black tracking-tighter text-white leading-[0.9] dark:text-[--color-primary]">
               {cat.name}
             </h3>
           </motion.div>
@@ -86,7 +86,7 @@ function CategoryCard({ cat }: { cat: Category }) {
 
 export function CategoriesSlider() {
   const { categories, fetchCategories, loading } = useCategoriesStore();
-  const t = useTranslations("Home");
+  const t = useTranslations("Common");
   const data = categories;
   const length = data.length;
   const [index, setIndex] = useState(0);
@@ -105,23 +105,23 @@ export function CategoriesSlider() {
         {/* HEADER SECTION */}
         <div className="flex md:flex-row md:items-end justify-between mb-5 gap-5">
           <div className="max-w-2xl">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tighter text-[--color-foreground] leading-none uppercase">
-              {t("categoriesTitle")}
+            <h2 className="text-lg sm:text-xl md:text-xl lg:text-2xl font-black tracking-tighter text-[--color-foreground] leading-none uppercase">
+              {t("categories")}
             </h2>
           </div>
 
         <div className="flex gap-4">
           <button
             onClick={() => swiperRef.current?.slidePrev()}
-            className="h-8 w-8 sm:h-16 sm:w-16 md:h-20 md:w-20 rounded-full border border-[--color-border] flex items-center justify-center hover:bg-[--color-foreground] hover:text-[--color-background] transition-all active:scale-90"
+            className="h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10 rounded-full border border-[--color-border] flex items-center justify-center hover:bg-[--color-foreground] hover:text-[--color-background] transition-all active:scale-90"
           >
-            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8" />
+            <ChevronLeft className="w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8" />
           </button>
           <button
             onClick={() => swiperRef.current?.slideNext()}
-            className="h-8 w-8 sm:h-16 sm:w-16 md:h-20 md:w-20 rounded-full border border-[--color-border] flex items-center justify-center hover:bg-[--color-foreground] hover:text-[--color-background] transition-all active:scale-90"
+            className="h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10 rounded-full border border-[--color-border] flex items-center justify-center hover:bg-[--color-foreground] hover:text-[--color-background] transition-all active:scale-90"
           >
-            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8" />
+            <ChevronRight className="w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8" />
           </button>
         </div>
         </div>
@@ -146,7 +146,7 @@ export function CategoriesSlider() {
             {(loading ? Array.from({ length: 4 }).map((_, i) => ({ id: `s-${i}` })) : data).map((cat: any) => (
               <SwiperSlide key={(cat.key ?? cat.id) as React.Key}>
                 {loading ? (
-                  <div className="relative h-[260px] sm:h-[320px] md:h-[420px] w-full rounded-[3.5rem] bg-neutral-100 animate-pulse" />
+                  <div className="relative h-[260px] sm:h-[320px] md:h-[420px] w-full rounded-3xl bg-neutral-100 animate-pulse" />
                 ) : (
                   <Link href={`/${locale}/categories/${encodeURIComponent((cat as Category).key ?? String(cat.id))}`}>
                     <CategoryCard cat={cat} />

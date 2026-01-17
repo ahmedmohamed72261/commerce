@@ -6,18 +6,21 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/utils/utils";
 import { useTheme } from "next-themes";
+import { useTranslations } from "next-intl";
 import { useAuthStore } from "@/store/auth";
 import { useCategoriesStore } from "@/store/categories";
 import { useLocale } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 
-interface OffcanvasSidebarProps {
+interface SidebarProps {
   open: boolean;
   onClose: () => void;
   version?: number; // 1 to 30 Design Variations
 }
 
-export function Sidebar({ open, onClose, version = 1 }: OffcanvasSidebarProps) {
+export function Sidebar({ open, onClose, version = 1 }: SidebarProps) {
+  const t = useTranslations("Nav");
+  const tCommon = useTranslations("Common");
   const { theme, setTheme } = useTheme();
   const { user, logout } = useAuthStore();
   const { categories, loading, fetchCategories } = useCategoriesStore();
@@ -60,15 +63,11 @@ export function Sidebar({ open, onClose, version = 1 }: OffcanvasSidebarProps) {
   const s = getTheme(version);
 
   const menuItems = [
-    { name: "Home", href: "/", icon: Sparkles },
-    { name: "Categories", href: "/categories", icon: ShoppingBag },
-    { name: "Products", href: "/products", icon: Sparkles, label: "HOT" },
-    { name: "Audio Collection", href: "/shop/audio", icon: Headphones },
-    { name: "Smart Devices", href: "/shop/tech", icon: Smartphone },
-    { name: "About Us", href: "/about", icon: User },
-    { name: "Contact", href: "/contact", icon: Phone },
-    { name: "Flash Sale", href: "/offers", icon: Percent, color: "text-red-600" },
-    { name: "Track My Order", href: "/track", icon: Truck },
+    { name: "home", href: "/", icon: Sparkles },
+    { name: "about", href: "/about", icon: User },
+    { name: "categories", href: "/categories", icon: ShoppingBag },
+    { name: "products", href: "/products", icon: Sparkles, label: "HOT" },
+    { name: "contact", href: "/contact", icon: Phone },
   ];
 
   const switchLocale = (target: "en" | "ar") => {
@@ -164,10 +163,9 @@ export function Sidebar({ open, onClose, version = 1 }: OffcanvasSidebarProps) {
             </div>
 
             <div className="flex-1 overflow-y-auto custom-scrollbar overscroll-contain will-change-scroll">
-
               {/* Categories */}
               <nav className="p-6">
-                <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-[0.3em] mb-4">Categories</p>
+                <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-[0.3em] mb-4">{tCommon("categories")}</p>
                 <div className="space-y-1">
                   {(loading && categories.length === 0) && (
                     <div className="p-4 bg-white rounded-xl border border-neutral-100 text-sm text-neutral-500">Loading...</div>
@@ -196,7 +194,7 @@ export function Sidebar({ open, onClose, version = 1 }: OffcanvasSidebarProps) {
 
               {/* Navigation Links */}
               <nav className="p-6">
-                <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-[0.3em] mb-4">Navigation</p>
+                <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-[0.3em] mb-4">{t("navigation")}</p>
                 <div className="space-y-1">
                   {menuItems.map((item, i) => (
                     <motion.div
@@ -211,10 +209,10 @@ export function Sidebar({ open, onClose, version = 1 }: OffcanvasSidebarProps) {
                       >
                         <div className="flex items-center gap-4">
                           <item.icon className={cn("w-5 h-5", item.color || "text-neutral-700 dark:text-neutral-400")} />
-                          <span className="font-bold uppercase text-sm tracking-tight group-hover:text-red-600 transition-colors">{item.name}</span>
+                          <span className="font-bold uppercase text-sm tracking-tight group-hover:text-red-600 transition-colors">{t(item.name)}</span>
                         </div>
                         {item.label ? (
-                          <span className="bg-red-600 text-[8px] font-black text-white px-2 py-0.5 rounded-full shadow-sm">{item.label}</span>
+                          <span className="bg-red-600 text-[8px] font-black text-white px-2 py-0.5 rounded-full shadow-sm">{t(item.label)}</span>
                         ) : (
                           <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-1" />
                         )}
@@ -228,11 +226,11 @@ export function Sidebar({ open, onClose, version = 1 }: OffcanvasSidebarProps) {
               <div className="px-6 py-4 grid grid-cols-2 gap-4">
                  <Link href={`/${locale}/wishlist`} className="flex flex-col items-center justify-center p-4 bg-neutral-50 dark:bg-white/5 rounded-2xl gap-2 hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
                     <Heart className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
-                    <span className="text-[10px] font-bold uppercase">Wishlist</span>
+                    <span className="text-[10px] font-bold uppercase">{tCommon("wishlist")}</span>
                  </Link>
                  <Link href={`/${locale}/cart`} className="flex flex-col items-center justify-center p-4 bg-neutral-50 dark:bg-white/5 rounded-2xl gap-2 hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
                     <ShoppingBag className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
-                    <span className="text-[10px] font-bold uppercase">Cart</span>
+                    <span className="text-[10px] font-bold uppercase">{tCommon("cart")}</span>
                  </Link>
               </div>
             </div>

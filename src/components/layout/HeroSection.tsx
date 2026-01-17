@@ -110,7 +110,7 @@ export function HeroSection() {
                 1024: { slidesPerView: 4 },
                 1280: { slidesPerView: 5 },
               }}
-              className="px-1 py-4"
+              className="px-1 py-2"
             >
               {((brandsLoading ? Array.from({ length: 5 }).map((_, i) => ({ _id: `s-${i}` })) : (brands.length ? brands : []) ) as any[]).map((b) => (
                 <SwiperSlide key={b._id}>

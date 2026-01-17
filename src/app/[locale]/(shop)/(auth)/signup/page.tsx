@@ -8,12 +8,13 @@ import { AuthCard } from "@/components/auth/auth-card";
 import { useAuthStore } from "@/store/auth";
 import { Input } from "@/components/ui/input";
 import { User, Mail, Smartphone, Lock } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 export default function SignupPage() {
   const router = useRouter();
   const auth = useAuthStore();
   const t = useTranslations("Auth");
+  const locale = useLocale() as "en" | "ar";
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -54,14 +55,16 @@ export default function SignupPage() {
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               icon={User}
-              placeholder="Ex. John"
+              placeholder=""
+              locale={locale}
             />
             <Input
               label={t("lastName")}
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               icon={User}
-              placeholder="Ex. Doe"
+              placeholder=""
+              locale={locale}
             />
           </div>
           
@@ -71,7 +74,8 @@ export default function SignupPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             icon={Mail}
-            placeholder="you@example.com"
+            placeholder=""
+            locale={locale}
           />
           
           <Input
@@ -80,7 +84,8 @@ export default function SignupPage() {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             icon={Smartphone}
-            placeholder="+201234567890"
+            placeholder=""
+            locale={locale}
           />
           
           <Input
@@ -89,7 +94,8 @@ export default function SignupPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             icon={Lock}
-            placeholder="••••••••"
+            placeholder=""
+            locale={locale}
           />
           
           <Input
@@ -98,7 +104,8 @@ export default function SignupPage() {
             value={confirm}
             onChange={(e) => setConfirm(e.target.value)}
             icon={Lock}
-            placeholder="••••••••"
+            placeholder=""
+            locale={locale}
           />
 
           <button

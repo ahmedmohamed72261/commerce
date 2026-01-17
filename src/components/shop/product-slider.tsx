@@ -31,9 +31,8 @@ export function ProductSlider({ products, title, className }: ProductSliderProps
       {title && (
         <div className="flex items-end justify-between mb-10 px-6 md:px-0">
           <div>
-            <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tighter italic relative inline-block z-10">
+            <h3 className="text-xl sm:text-xl md:text-2xl lg:text-2xl font-black uppercase tracking-tighter italic relative inline-block z-10">
               {title}
-              <span className="absolute left-0 bottom-1 w-full h-3 bg-red-600/20 -z-10 skew-x-12"></span>
             </h3>
           </div>
           

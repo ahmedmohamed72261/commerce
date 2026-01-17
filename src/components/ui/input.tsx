@@ -11,10 +11,11 @@ export interface InputProps
   icon?: React.ElementType;
   error?: string;
   containerClassName?: string;
+  locale?: "en" | "ar";
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, label, icon: Icon, error, containerClassName, ...props }, ref) => {
+  ({ className, type, label, icon: Icon, error, containerClassName, locale = "en", ...props }, ref) => {
     const [focused, setFocused] = React.useState(false);
     const [showPassword, setShowPassword] = React.useState(false);
     const [hasValue, setHasValue] = React.useState(false);
@@ -42,7 +43,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
         >
           {/* Icon Section */}
-          <div className="pl-4 text-red-800 group-hover:text-red-800/70 transition-colors">
+          <div className="p-4 text-red-800 group-hover:text-red-800/70 transition-colors">
             <DetectedIcon size={20} />
           </div>
 
@@ -54,9 +55,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               className={cn(
                 "w-full h-14 bg-transparent px-4 text-base text-foreground placeholder-transparent outline-none",
                 "file:border-0 file:bg-transparent file:text-sm file:font-medium",
-                className
+                className,
+                locale === "ar" ? "text-right" : "text-left", // Align text
+                locale === "ar" ? "placeholder-right" : "placeholder-left" // Align placeholder
               )}
-              placeholder={label} // Placeholder needed for floating label trick
+              placeholder={props.placeholder || label} // Placeholder needed for floating label trick
+              dir={locale === "ar" ? "rtl" : "ltr"} // Important: makes placeholder align right in Arabic
               onFocus={(e) => {
                 setFocused(true);
                 props.onFocus?.(e);
@@ -77,9 +81,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {label && (
               <label
                 className={cn(
-                  "absolute left-4 pointer-events-none transition-all duration-200 ease-out origin-left rtl:origin-right",
-                  (focused || hasValue || props.value) 
-                    ? "-top-2.5 text-[10px] text-red-500 font-bold uppercase tracking-wider translate-y-2" 
+                  "absolute pointer-events-none transition-all duration-200 ease-out",
+                  locale === "ar"
+                    ? "right-4 origin-right" // RTL label
+                    : "left-4 origin-left",  // LTR label
+                  (focused || hasValue || props.value)
+                    ? " -top-3 text-[10px] text-red-500 font-bold uppercase tracking-wider translate-y-2"
                     : "top-1/2 -translate-y-1/2 text-muted-foreground/50"
                 )}
               >
@@ -93,7 +100,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="pr-4 text-white/40 hover:text-white transition-colors outline-none"
+              className="p-4 text-red-500 hover:text-red-700 transition-colors outline-none"
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>

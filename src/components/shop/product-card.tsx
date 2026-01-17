@@ -37,7 +37,7 @@ export function ProductCard({ variant = "v1", title, price, oldPrice = price * 1
       className="group relative w-full sm:w-[320px] rounded-2xl bg-white border border-neutral-100 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] transition-all duration-500 overflow-hidden"
     >
       {/* --- Image Section (White & Minimal) --- */}
-      <div className="relative md:h-[320px] h-[150px] w-full p-2 bg-white">
+      <div className="relative md:h-[320px] h-[200px] w-full p-2 bg-white">
         {/* Action Buttons (Floating White Glass) */}
         <div className="absolute top-6 right-6 z-20 flex flex-col gap-2 opacity-0 scale-90 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300">
           <button className="p-3 rounded-2xl bg-white/70 backdrop-blur-md border border-neutral-100 shadow-sm hover:bg-red-600 hover:text-white transition-all text-neutral-600">
@@ -97,8 +97,8 @@ export function ProductCard({ variant = "v1", title, price, oldPrice = price * 1
         <div className="mt-2">
           <button className="w-full group/btn relative h-10 overflow-hidden rounded-[1rem] bg-red-600 text-white transition-all hover:shadow-[0_15px_30px_-10px_rgba(220,38,38,0.4)] active:scale-95">
             <div className="absolute inset-0 w-full h-full bg-neutral-900 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
-            <span className="relative z-10 flex items-center justify-center gap-2 font-black uppercase text-xs tracking-widest">
-              <ShoppingCart size={14} /> Add Cart
+            <span className="relative z-10 flex items-center rtl:flex-row-reverse justify-center gap-2 font-black uppercase text-xs tracking-widest">
+              <ShoppingCart size={14} /> {t("addToCart")}
             </span>
           </button>
         </div>

@@ -14,8 +14,9 @@ import { http } from "@/services/http";
 import { useCart } from "@/store/cart";
 import { useWishlist } from "@/store/wishlist";
 
-export function CarneshopNav({ locale }: { locale: string }) {
+export function Navbar({ locale }: { locale: string }) {
   const t = useTranslations("Nav");
+  const tProfile = useTranslations("Common");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -84,13 +85,13 @@ export function CarneshopNav({ locale }: { locale: string }) {
               </Link>
             </li>
             <li>
-              <Link href={`/${locale}/products`} className="py-4 hover:text-red-600 transition">Shop</Link>
+              <Link href={`/${locale}/products`} className="py-4 hover:text-red-600 transition">{t("products")}</Link>
             </li>
             <li>
-              <Link href={`/${locale}/categories`} className="py-4 hover:text-red-600 transition">Categories</Link>
+              <Link href={`/${locale}/categories`} className="py-4 hover:text-red-600 transition">{t("categories")}</Link>
             </li>
             <li>
-              <Link href={`/${locale}/contact`} className="py-4 hover:text-red-600 transition">Contact</Link>
+              <Link href={`/${locale}/contact`} className="py-4 hover:text-red-600 transition">{t("contact")}</Link>
             </li>
           </ul>
         </nav>
@@ -124,15 +125,15 @@ export function CarneshopNav({ locale }: { locale: string }) {
                   <Link
                     href={`/${locale}/profile`}
                     onClick={() => setUserMenuOpen(false)}
-                    className="block px-3 py-2 text-sm hover:bg-neutral-100 rounded"
+                    className="block px-3 py-2 rtl:text-right text-sm hover:bg-neutral-100 rounded"
                   >
-                    Profile
+                    {tProfile("profile")}
                   </Link>
                   <button
                     onClick={() => { logout(); setUserMenuOpen(false); router.push(`/${locale}/login`); }}
-                    className="block w-full text-left px-3 py-2 text-sm hover:bg-neutral-100 rounded text-red-600"
+                    className="block text-left rtl:text-right px-3 py-2 text-sm hover:bg-neutral-100 rounded text-red-600"
                   >
-                    Logout
+                    {tProfile("logout")}
                   </button>
                 </div>
               )}

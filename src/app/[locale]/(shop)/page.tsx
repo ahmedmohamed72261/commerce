@@ -2,7 +2,7 @@
  "use client";
 
 import { useEffect } from "react";
-import { HeroSection } from "@/components/layout/hero.section";
+import { HeroSection } from "@/components/layout/HeroSection";
 import { CategoriesSlider } from "@/components/home/categories-slider";
 import { useProductsStore } from "@/store/products";
 import { ProductSlider } from "@/components/shop/product-slider";

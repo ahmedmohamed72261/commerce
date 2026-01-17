@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Filter, ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/utils/utils";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 export interface FilterOption {
   label: string;
@@ -20,18 +21,20 @@ export interface FilterGroup {
   max?: number;
 }
 
-interface ReusableSidebarProps {
+interface FilterProps {
   filters: FilterGroup[];
   onFilterChange?: (filters: Record<string, string[] | number>) => void;
   className?: string;
   initialFilters?: Record<string, string[] | number>;
 }
 
-export function ReusableSidebar({ filters, onFilterChange, className, initialFilters }: ReusableSidebarProps) {
+export function FilterSidebar({ filters, onFilterChange, className, initialFilters }: FilterProps) {
   const [activeFilters, setActiveFilters] = useState<Record<string, string[] | number>>(initialFilters || {});
   const [expanded, setExpanded] = useState<Record<string, boolean>>(() =>
     filters.reduce((acc, f) => ({ ...acc, [f.id]: true }), {})
   );
+
+  const t  = useTranslations("filters");
 
   const initialRef = useRef<Record<string, string[] | number> | null>(initialFilters || null);
   useEffect(() => {
@@ -70,7 +73,7 @@ export function ReusableSidebar({ filters, onFilterChange, className, initialFil
     <div className={cn("space-y-6", className)}>
       <div className="flex items-center gap-2 mb-6">
         <Filter className="w-5 h-5 text-red-600" />
-        <h2 className="text-xl font-bold text-foreground">Filters</h2>
+        <h2 className="text-xl font-bold text-foreground">{t("filters")}</h2>
       </div>
 
       {filters.map((group) => (
@@ -162,7 +165,7 @@ export function ReusableSidebar({ filters, onFilterChange, className, initialFil
       ))}
 
       <Button className="w-full bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-600/20">
-        Apply Filters
+        {t("applyFilters")}
       </Button>
     </div>
   );

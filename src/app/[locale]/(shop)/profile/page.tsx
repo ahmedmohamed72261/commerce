@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import { useWishlist } from "@/store/wishlist";
 import { useOrdersStore } from "@/store/orders";
 import { useLocale } from "next-intl";
+import { useIsRTL } from "@/utils/rtl";
 
 type Address = {
   _id?: string;
@@ -52,7 +53,7 @@ const pickString = (value: unknown): string | undefined =>
 
 const ProfilePage = () => {
   const locale = useLocale() as "en" | "ar";
-  const isAr = locale === "ar";
+  const isRTL = useIsRTL();
   const [activeTab, setActiveTab] = useState('My Profile');
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isEditAddressModalOpen, setIsEditAddressModalOpen] = useState(false);
@@ -124,7 +125,7 @@ const ProfilePage = () => {
   ];
 
   return (
-    <div dir={isAr ? "rtl" : "ltr"} className="min-h-screen bg-[#FDFDFD] text-slate-900 font-sans antialiased">
+    <div className="min-h-screen bg-[#FDFDFD] text-slate-900 font-sans antialiased">
       {/* HEADER BREADCRUMB */}
       <div className="border-b border-slate-100 bg-white">
         <div className="max-w-[1400px] mx-auto px-8 h-14 flex items-center gap-2 text-[11px] font-medium text-slate-400">

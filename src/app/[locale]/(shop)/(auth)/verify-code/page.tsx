@@ -7,7 +7,8 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { AuthCard } from "@/components/auth/auth-card";
 import { useAuthStore } from "@/store/auth";
 import { addToast } from "@/store/notifications";
-import { useTranslations } from "next-intl";
+import { useTranslations ,useLocale} from "next-intl";
+import { Input } from "@/components/ui/input";
 
 export default function VerifyCodePage() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function VerifyCodePage() {
   const email = params.get("email") || "";
   const auth = useAuthStore();
   const t = useTranslations("Auth");
+  const locale = useLocale() as "en" | "ar";
   const [digits, setDigits] = useState<string[]>(Array.from({ length: 6 }).map(() => ""));
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -101,7 +103,7 @@ export default function VerifyCodePage() {
         <form className="space-y-6" onSubmit={onVerify}>
           <div className="grid grid-cols-6 gap-3">
             {Array.from({ length: 6 }).map((_, i) => (
-              <input
+              <Input
                 key={i}
                 id={`pin-${i}`}
                 type="text"
@@ -111,28 +113,31 @@ export default function VerifyCodePage() {
                 onChange={(e) => onChangeDigit(i, e.target.value)}
                 onKeyDown={(e) => onKeyDown(i, e)}
                 onPaste={onPaste}
+                locale={locale}
                 className="h-12 rounded-xl border border-[var(--border)] bg-white/60 dark:bg-white/5 text-center text-lg font-bold outline-none backdrop-blur ring-1 ring-black/5 hover:ring-red-600/30 focus:ring-2 focus:ring-red-600/40 transition-all"
               />
             ))}
           </div>
           <div className="grid gap-2">
             <label className="text-sm font-medium text-foreground">{t("password")}</label>
-            <input
+            <Input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="h-11 rounded-md border border-[var(--border)] bg-white/60 dark:bg-white/5 px-3 text-sm outline-none backdrop-blur focus:ring-2 focus:ring-red-600/20"
-              placeholder="••••••••"
+              placeholder=""
+              locale={locale}
             />
           </div>
           <div className="grid gap-2">
             <label className="text-sm font-medium text-foreground">{t("confirm")}</label>
-            <input
+            <Input
               type="password"
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
               className="h-11 rounded-md border border-[var(--border)] bg-white/60 dark:bg-white/5 px-3 text-sm outline-none backdrop-blur focus:ring-2 focus:ring-red-600/20"
-              placeholder="••••••••"
+              placeholder=""
+              locale={locale}
             />
           </div>
           <button

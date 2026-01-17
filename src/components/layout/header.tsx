@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { TopBar } from "@/components/header/top-bar";
-import { CarneshopNav } from "@/components/header/carneshop-nav";
+import { Navbar } from "@/components/header/navbar";
 
 export function Header() {
   const params = useParams();
@@ -39,7 +39,7 @@ export function Header() {
         </div>
 
         {/* Combined Nav (always visible) */}
-        <CarneshopNav locale={locale} />
+        <Navbar locale={locale} />
       </header>
 
       {/* Spacer for content (dynamic) */}

@@ -8,7 +8,7 @@ import { AuthCard } from "@/components/auth/auth-card";
 import { useAuthStore } from "@/store/auth";
 import { Input } from "@/components/ui/input";
 import { Mail } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
@@ -17,6 +17,7 @@ export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const locale = useLocale() as "en" | "ar";
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -45,7 +46,8 @@ export default function ForgotPasswordPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             icon={Mail}
-            placeholder="you@example.com"
+            placeholder=""
+            locale={locale}
           />
           
           <button

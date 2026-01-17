@@ -9,7 +9,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { useProductsStore } from '@/store/products';
 import { ProductCard } from '@/components/products/ProductCard';
-import { ReusableSidebar, type FilterGroup } from '@/components/shop/reusable-sidebar';
+import { FilterSidebar, type FilterGroup } from '@/components/shop/Filter';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { getFilters } from '@/services/products.service';
 import { getCategories } from '@/services/categories.service';
@@ -17,7 +17,7 @@ import { useCart } from '@/store/cart';
 import { toast } from 'sonner';
 import { useParams } from 'next/navigation';
 import { cn } from '@/utils/utils';
-
+import { useTranslations } from 'next-intl';
 
 export default function ProductsPage() {
   const { locale } = useParams() as { locale: string };
@@ -31,6 +31,8 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
   const [sort, setSort] = useState<string>('-price');
   const [pageSize, setPageSize] = useState<number>(12);
   
+  const t = useTranslations("Common");
+
   const [filters, setFilters] = useState<FilterGroup[]>([]);
   const [filtersLoading, setFiltersLoading] = useState(true);
   const [initialFilters, setInitialFilters] = useState<Record<string, string[] | number>>({});
@@ -272,7 +274,7 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
                <div className="h-20 bg-slate-100 animate-pulse rounded" />
              </div>
           ) : (
-            <ReusableSidebar 
+            <FilterSidebar 
                key={filters.map((f) => f.id).join("|")}
                filters={filters}
                onFilterChange={handleFilterChange}
@@ -286,7 +288,7 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
           
           {/* Header Controls (Matching Image Toolbar) */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-            <h1 className="text-2xl font-black text-[#0F172A] tracking-tight">Products</h1>
+            <h1 className="text-2xl font-black text-[#0F172A] tracking-tight">{t("products")}</h1>
             
             <div className="flex flex-wrap justify-between items-center gap-3 w-full sm:w-auto">
               {/* View Switches */}
@@ -318,9 +320,9 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
                     value={sort}
                     onChange={(e) => setSort(e.target.value)}
                     className="appearance-none bg-white border border-slate-200 rounded-lg px-4 pr-10 h-11 text-xs font-bold text-[#0F172A] focus:ring-2 focus:ring-red-600/10 outline-none cursor-pointer shadow-sm">
-                    <option value="-price">Price: High to Low</option>
-                    <option value="price">Price: Low to High</option>
-                    <option value="-createdAt">Latest</option>
+                    <option value="-price">{t("priceDesc")}</option>
+                    <option value="price">{t("priceAsc")}</option>
+                    <option value="-createdAt">{t("latest")}</option>
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={14} />
                 </div>
@@ -423,7 +425,7 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
                 <div className="h-20 bg-slate-100 animate-pulse rounded" />
               </div>
             ) : (
-              <ReusableSidebar 
+              <Filter 
                 key={filters.map((f) => f.id).join("|")}
                 filters={filters}
                 onFilterChange={(f) => {
