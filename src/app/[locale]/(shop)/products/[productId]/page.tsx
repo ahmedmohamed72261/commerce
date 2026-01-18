@@ -53,11 +53,12 @@ const ProductDetailsClient = ({ locale, productId }: { locale: string; productId
   }
 
   const images =
-    productDetails.images?.length > 0
-      ? productDetails.images
-      : productDetails.image
-      ? [productDetails.image]
-      : [];
+  Array.isArray(productDetails.images) && productDetails.images.length > 0
+    ? productDetails.images
+    : productDetails.image
+    ? [productDetails.image]
+    : [];
+
 
   const relatedProducts = items
     .filter((p) => String(p.id) !== String(productDetails.id))
