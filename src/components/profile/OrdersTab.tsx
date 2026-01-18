@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useOrdersStore } from "@/store/orders";
 import { OrderCard } from "@/components/profile/OrderCard";
 
-export const OrdersTab = () => {
+export const OrdersTab: React.FC = () => {
   const { orders, loading, getOrders } = useOrdersStore();
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export const OrdersTab = () => {
       ) : (
         <div className="space-y-4">
           {orders.map((order) => (
-            <OrderCard key={order._id || order.orderId} order={order} />
+            <OrderCard key={order._id} order={order} />
           ))}
         </div>
       )}

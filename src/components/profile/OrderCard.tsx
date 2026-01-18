@@ -26,18 +26,37 @@ type OrderLite = {
   items: OrderItemLite[];
 };
 
+// Type guard to check if order is OrderLite
+function isOrderLite(order: OrderLite | Order): order is OrderLite {
+  return "orderId" in order;
+}
+
 export function OrderCard({ order }: { order: OrderLite | Order }) {
-  const id = order.orderId || order._id;
-  const createdAt = order.date || order.createdAt;
-  const items = Array.isArray(order.items) ? order.items : [];
+  const id = isOrderLite(order) ? order.orderId || order._id : order._id;
+  const createdAt = isOrderLite(order)
+    ? order.date || order.createdAt
+    : order.createdAt;
+
+  // Normalize items to OrderItemLite[]
+  const items: OrderItemLite[] = Array.isArray(order.items)
+    ? order.items.map((it) => ({
+        productId: (it as any).productId || (it as any)._id || undefined,
+        product: (it as any).product || undefined,
+        name: (it as any).name || "Product",
+        image: (it as any).image || undefined,
+        quantity: (it as any).quantity ?? 1,
+        price: (it as any).price ?? 0,
+      }))
+    : [];
 
   return (
     <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
-      
       {/* HEADER */}
       <div className="flex items-center justify-between px-4 py-3 bg-slate-50">
         <div>
-          <p className="text-xs text-slate-400 font-bold">Order #{String(id).slice(-6)}</p>
+          <p className="text-xs text-slate-400 font-bold">
+            Order #{String(id).slice(-6)}
+          </p>
           {createdAt && (
             <p className="text-[11px] text-slate-500">
               {new Date(createdAt).toLocaleDateString()}
@@ -86,4 +105,3 @@ export function OrderCard({ order }: { order: OrderLite | Order }) {
     </div>
   );
 }
-
