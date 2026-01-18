@@ -23,8 +23,8 @@ export const ProductHeader: React.FC<Props> = ({ product }) => {
               <Star
                 key={i}
                 size={16}
-                fill={i < Math.floor(product.rating) ? "currentColor" : "none"}
-                className={i < Math.floor(product.rating) ? "" : "text-slate-300"}
+                fill={i < Math.floor(product.rating ?? 0) ? "currentColor" : "none"}
+                className={i < Math.floor(product.rating ?? 0) ? "" : "text-slate-300"}
               />
             ))}
           </div>
