@@ -24,8 +24,10 @@ type Theme = {
   card: string;
   img: string;
   btn: string;
+  badge: string;
   icon: string;
 };
+
 /* -------------------- THEMES LOGIC) -------------------- */
 const themes: Record<number, Theme> = {
     1: { card: "rounded-3xl border-neutral-100 shadow-2xl bg-white", img: "bg-neutral-50", btn: "rounded-full bg-[#C40000]", badge: "bg-[#C40000] text-white rounded-full", icon: "text-[#C40000]" },
