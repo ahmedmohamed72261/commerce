@@ -31,9 +31,9 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ images, productN
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-[300px] sm:w-auto m-auto md:w-[400px]">
       {/* Main Image */}
-      <div className="relative aspect-square rounded-2xl overflow-hidden bg-slate-50 border border-slate-100 group">
+      <div className="relative aspect-square rounded-xl overflow-hidden bg-slate-50 border border-slate-100 group">
         <Image 
           src={images[selectedImg]} 
           alt={`${productName} - Image ${selectedImg + 1}`} 
@@ -49,13 +49,13 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ images, productN
               onClick={handlePrevious}
               className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-all opacity-0 group-hover:opacity-100"
             >
-              <ChevronLeft size={20} className="text-slate-900" />
+              <ChevronLeft size={15} className="text-slate-900" />
             </button>
             <button
               onClick={handleNext}
               className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-all opacity-0 group-hover:opacity-100"
             >
-              <ChevronRight size={20} className="text-slate-900" />
+              <ChevronRight size={15} className="text-slate-900" />
             </button>
           </>
         )}

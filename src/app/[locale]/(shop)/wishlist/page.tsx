@@ -8,7 +8,7 @@ import { useLocale, useTranslations } from "next-intl";
 import {
   CheckCircle,
   Trash2,
-  ShoppingBag,
+  ShoppingCart,
   Zap,
   ChevronRight,
   Heart,
@@ -124,9 +124,9 @@ export default function WishlistPage() {
                 <div className="flex flex-col md:flex-row gap-2">
                   <Button
                     size="sm"
-                    className="h-9 px-3 md:px-6"
+                    className="h-9 px-2 md:px-6"
                   >
-                    <ShoppingBag size={16} />
+                    <ShoppingCart size={16} />
                     <span className="hidden md:inline ms-2">
                       {t("addToCart")}
                     </span>

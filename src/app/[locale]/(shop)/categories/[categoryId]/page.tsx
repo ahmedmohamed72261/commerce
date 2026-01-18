@@ -13,6 +13,7 @@ import { useProductsStore } from '@/store/products';
 import { ProductCard } from '@/components/products/ProductCard';
 import { useCart } from '@/store/cart';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { cn } from '@/utils/utils';
 
@@ -28,6 +29,7 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
   const [sort, setSort] = useState<string>('-price');
   const [pageSize, setPageSize] = useState<number>(12);
   const [filterOpen, setFilterOpen] = useState(false);
+  const t = useTranslations('Common');
 
   const [filters, setFilters] = useState<FilterGroup[]>([]);
   const [filtersLoading, setFiltersLoading] = useState(true);
@@ -237,8 +239,8 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
                 <h1 className="text-sm md:text-4xl font-black uppercase italic tracking-tighter text-slate-950 mb-2">
                   {categoryProducts.category.name}
                 </h1>
-                <p className="text-slate-400 font-bold text-sm">
-                  {pagination.total} Products Available
+                <p className="text-slate-400 font-bold flex gap-2 text-sm">
+                  <span>{t("productsAvailable")} : </span> <span>{pagination.total}</span> 
                 </p>
               </div>
             </div>
@@ -282,7 +284,7 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
                 onClick={() => setFilterOpen(true)} 
                 className="lg:hidden h-10 px-4 rounded-lg bg-red-600 text-white text-xs font-black uppercase tracking-widest"
               >
-                Filter
+                {t("filter")}
               </Button>
             </div>
 

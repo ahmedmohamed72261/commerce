@@ -310,7 +310,7 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
                 onClick={() => setFilterOpen(true)} 
                 className="lg:hidden h-11 px-4 rounded-lg bg-red-600 text-white text-xs font-black uppercase tracking-widest"
               >
-                Filter
+                {t("filter")}
               </Button>
 
               {/* Sort & Limit Dropdowns (As seen in reference image) */}
@@ -415,7 +415,9 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
           )}
         >
           <DialogHeader>
-            <DialogTitle className="text-lg font-black uppercase tracking-widest">Filters</DialogTitle>
+            <DialogTitle className="text-lg font-black uppercase tracking-widest">
+              {t("filter")}
+            </DialogTitle>
           </DialogHeader>
           <div className="max-h-[80vh] overflow-y-auto pr-2">
             {filtersLoading ? (

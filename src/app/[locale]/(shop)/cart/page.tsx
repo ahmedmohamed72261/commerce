@@ -171,19 +171,22 @@ const CartPageClient = ({ locale }: { locale: string }) => {
                 onSubmit={handlePlaceOrder}
                 loading={orderLoading}
                 paymentMethods={paymentMethods}
+                summary={{ totalAmount: totalPrice(), itemCount: totalItems() }}
               />
             )}
           </div>
 
           {/* Cart Summary */}
-          <div className="lg:col-span-1">
-            <CartSummary
-              totalAmount={totalPrice()}
-              itemCount={totalItems()}
-              onCheckout={handleCheckout}
-              onClearCart={handleClearCart}
-            />
-          </div>
+          {!showCheckout && (
+            <div className="lg:col-span-1">
+              <CartSummary
+                totalAmount={totalPrice()}
+                itemCount={totalItems()}
+                onCheckout={handleCheckout}
+                onClearCart={handleClearCart}
+              />
+            </div>
+          )}
         </div>
         <ConfirmDialog
           open={confirmOpen}

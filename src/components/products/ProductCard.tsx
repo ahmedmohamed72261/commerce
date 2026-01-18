@@ -7,6 +7,7 @@ import { ShoppingCart, Heart, Star, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Product } from '@/store/products';
 import { useWishlist } from '@/store/wishlist';
+import { toast } from 'sonner';
 
 interface ProductCardProps {
   product: Product;
@@ -27,7 +28,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (onAddToCart) onAddToCart(product.id);
+    if (onAddToCart) {
+      onAddToCart(product.id);
+      toast.success('Added to cart!');
+    }
   };
 
   const handleWishlist = (e: React.MouseEvent) => {
@@ -35,6 +39,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     e.stopPropagation();
     if (isWishlisted) {
       removeItem(product.id);
+      toast.info('Removed from wishlist');
     } else {
       addItem({
         id: product.id,
@@ -43,6 +48,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         image: product.image,
         salePrice: product.salePrice
       });
+      toast.success('Added to wishlist!');
     }
   };
 

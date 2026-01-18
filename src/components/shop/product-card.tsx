@@ -3,11 +3,17 @@ import { ShoppingCart, Heart, Eye, ArrowUpRight, Star, Plus, Zap, Shield, Layers
 import { cn } from "@/utils/utils";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { useWishlist } from "@/store/wishlist";
+import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
+import { toast } from "sonner";
+import { Button } from "../ui/button";
 
 type CardVariant = "v1" | "v2" | "v3" | "v4" | "v5" | "v6" | "v7" | "v8" | "v9" | "v10" | "v11" | "v12" | "v13" | "v14" | "v15" | "v16" | "v17" | "v18" | "v19" | "v20" | "v21" | "v22" | "v23" | "v24" | "v25" | "v26" | "v27" | "v28" | "v29" | "v30" | "v31" | "v32" | "v33" | "v34" | "v35" | "v36" | "v37" | "v38" | "v39" | "v40";
 
 interface ProductCardProps {
   variant?: CardVariant;
+  productId?: string | number;
   title: string;
   price: number;
   oldPrice?: number;
@@ -20,8 +26,11 @@ interface ProductCardProps {
   salePrice?: number;
 }
 
-export function ProductCard({ variant = "v1", title, price, oldPrice = price * 1.2, image, rating = 4, category, brand, stock, condition, salePrice }: ProductCardProps) {
+export function ProductCard({ variant = "v1", productId, title, price, oldPrice = price * 1.2, image, rating = 4, category, brand, stock, condition, salePrice }: ProductCardProps) {
   const t = useTranslations("Shop");
+  const { addItem } = useWishlist();
+  const router = useRouter();
+  const locale = useLocale() as "en" | "ar";
   // GLOBAL TRANSITION: 1000ms
   const common = "relative w-full sm:w-[280px] md:w-[320px] h-[320px] sm:h-[420px] overflow-hidden transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group select-none flex flex-col text-foreground rtl:text-right";
 
@@ -40,25 +49,40 @@ export function ProductCard({ variant = "v1", title, price, oldPrice = price * 1
       <div className="relative md:h-[320px] h-[200px] w-full p-2 bg-white">
         {/* Action Buttons (Floating White Glass) */}
         <div className="absolute top-6 right-6 z-20 flex flex-col gap-2 opacity-0 scale-90 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300">
-          <button className="p-3 rounded-2xl bg-white/70 backdrop-blur-md border border-neutral-100 shadow-sm hover:bg-red-600 hover:text-white transition-all text-neutral-600">
+          <Button
+            className="p-3 rounded-2xl rounded-full bg-white/70 backdrop-blur-md border border-neutral-100 shadow-sm hover:bg-red-600 hover:text-white transition-all text-neutral-600"
+            onClick={(e) => {
+              e.preventDefault();
+              addItem({ id: productId ?? title, title, price, image, salePrice });
+              toast.success(locale === "ar" ? "تمت الإضافة للمفضلة" : "Added to wishlist");
+            }}
+          >
             <Heart size={18} />
-          </button>
-          <button className="p-3 rounded-2xl bg-white/70 backdrop-blur-md border border-neutral-100 shadow-sm hover:bg-red-600 hover:text-white transition-all text-neutral-600">
+          </Button>  
+          <Button
+            className="p-3 rounded-full bg-white/70 backdrop-blur-md border border-neutral-100 shadow-sm hover:bg-red-600 hover:text-white transition-all text-neutral-600"
+            onClick={(e) => {
+              e.preventDefault();
+              if (productId !== undefined) {
+                router.push(`/${locale}/products/${productId}`);
+              }
+            }}
+          >
             <Eye size={18} />
-          </button>
-        </div>
+          </Button>
+            </div>
 
-        {/* Product Image */}
-        <div className="w-full h-full flex items-center justify-center p-2 ">
-          <motion.img
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            src={image}
-            alt={title}
-            className="w-full h-full object-cover rounded-lg"
-          />
-        </div>
-      </div>
+            {/* Product Image */}
+            <div className="w-full h-full flex items-center justify-center p-2 ">
+              <motion.img
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                src={image}
+                alt={title}
+                className="w-full h-full object-cover rounded-lg"
+              />
+            </div>
+          </div>
 
       {/* --- Information Section --- */}
       <div className="px-3 pb-3 pt-2 bg-white">

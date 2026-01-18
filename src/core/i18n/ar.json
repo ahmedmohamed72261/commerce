@@ -15,7 +15,11 @@
     "priceAsc": "السعر: من الأقل إلى الأعلى",
     "latest": "الأحدث",
     "favorites": "الأعجاب",
-    "totalItems": "إجمالي العناصر"
+    "totalItems": "إجمالي العناصر" ,
+    "list": "قائمة",
+    "category": "تصنيف",
+    "filter": "تصفية",
+    "productsAvailable": "منتجات متاحة"
   },
   "Nav": {
     "navigation": "التنقل",
@@ -25,6 +29,28 @@
     "categories": "التصنيفات",
     "contact": "اتصل",
     "search": "بحث..."
+  },
+  "Profile": {
+    "title": "حسابي",
+    "addresses": "عنواني",
+    "savedAddresses": "عنواني المحفوظة",
+    "defaultAddress": "عنوان افتراضي",
+    "addAddress": "إضافة عنوان",
+    "editAddress": "تعديل عنوان",
+    "deleteAddress": "حذف عنوان",
+    "saveChanges": "حفظ التغييرات",
+    "basicInfo": "معلومات أساسية",
+    "profileInfo":{
+      "firstName": "الاسم الأول",
+      "lastName": "الاسم الأخير",
+      "email": "البريد الإلكتروني",
+      "phone": "رقم الهاتف"
+    },
+    "securityAccess": {
+      "title": "الأمان",
+      "currentPassword": "كلمة المرور الحالية",
+      "newPassword": "كلمة المرور الجديدة"
+    }
   },
   "Home": {
     "heroTitle": "مستقبل التسوق",

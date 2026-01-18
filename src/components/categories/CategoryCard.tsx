@@ -30,7 +30,7 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
     >
       {/* IMAGE / PREVIEW */}
       <div className={`relative overflow-hidden bg-slate-100 rounded-2xl shrink-0
-        ${viewMode === 'grid' ? 'md:h-60 h-40 w-full mb-8' : 'h-36 w-56'}`}>
+        ${viewMode === 'grid' ? 'md:h-60 h-40 w-full mb-2' : 'h-15 w-15'}`}>
         {category.image && (
           <Image 
             src={category.image} 
@@ -50,7 +50,7 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
 
       {/* TEXT CONTENT */}
       <div className="flex-1 flex flex-col px-1">
-        <div className="flex justify-between items-start mb-4">
+        <div className="flex justify-between items-start">
           <div className="space-y-2">
             <h3 className="md:text-2xl text-sm font-black uppercase italic tracking-tighter group-hover:text-red-600 transition-colors duration-300">
               {category.name}
@@ -74,9 +74,9 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
           {/* <span className="text-[9px] font-black uppercase px-3 py-1.5 rounded-full bg-slate-100 text-slate-500 border border-slate-200/50 flex items-center gap-1.5 group-hover:bg-white transition-colors">
             <ShieldCheck size={10} className="text-slate-400" /> Certified
           </span> */}
-          <span className="text-[9px] font-black uppercase px-3 py-1.5 rounded-full border flex items-center gap-1.5 shadow-sm transition-all bg-green-50 text-green-600 border-green-100">
+          {/* <span className="text-[9px] font-black uppercase px-3 py-1.5 rounded-full border flex items-center gap-1.5 shadow-sm transition-all bg-green-50 text-green-600 border-green-100">
             <Zap size={10} fill="currentColor" className="animate-pulse" /> In Stock
-          </span>
+          </span> */}
         </div>
 
         {/* ACTION BUTTON */}

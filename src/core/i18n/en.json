@@ -15,7 +15,11 @@
     "priceAsc": "Price: Low to High",
     "latest": "Latest",
     "favorites": "Favorites",
-    "totalItems": "Total Items"
+    "totalItems": "Total Items",
+    "list": "List",
+    "category": "Category",
+    "filter": "Filter",
+    "productsAvailable": "Products Available"
   },
   "Nav": {
     "navigation": "Navigation",
@@ -25,6 +29,28 @@
     "categories": "Categories",
     "contact": "Contact",
     "search": "Search..."
+  },
+  "Profile": {
+    "title": "Profile",
+    "addresses": "Addresses",
+    "savedAddresses": "Saved Addresses",
+    "defaultAddress": "Default Address",
+    "basicInfo": "Basic Info",
+    "addAddress": "Add Address",
+    "editAddress": "Edit Address",
+    "deleteAddress": "Delete Address",
+    "saveChanges": "Save Changes",
+    "profileInfo":{
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phone": "Phone"
+    },
+    "securityAccess": {
+      "title": "Security Access",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password"
+    }
   },
   "Home": {
     "heroTitle": "The Future of Shopping",

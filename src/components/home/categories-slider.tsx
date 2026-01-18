@@ -12,6 +12,7 @@ import type { Swiper as SwiperType } from "swiper";
 import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import { Button } from "../ui/button";
 
 function CategoryCard({ cat }: { cat: Category }) {
   return (
@@ -103,7 +104,7 @@ export function CategoriesSlider() {
       <div className=" mx-auto px-6 md:px-12">
         
         {/* HEADER SECTION */}
-        <div className="flex md:flex-row md:items-end justify-between mb-5 gap-5">
+        <div className="flex md:flex-row items-center justify-between mb-5 gap-5">
           <div className="max-w-2xl">
             <h2 className="text-lg sm:text-xl md:text-xl lg:text-2xl font-black tracking-tighter text-[--color-foreground] leading-none uppercase">
               {t("categories")}
@@ -111,15 +112,22 @@ export function CategoriesSlider() {
           </div>
 
         <div className="flex gap-4">
+          <Button>
+            <Link
+              href={`/${locale}/categories`}
+            >
+              View More
+            </Link>
+          </Button>
           <button
             onClick={() => swiperRef.current?.slidePrev()}
-            className="h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10 rounded-full border border-[--color-border] flex items-center justify-center hover:bg-[--color-foreground] hover:text-[--color-background] transition-all active:scale-90"
+            className="h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10 rounded-full border border-[--color-border] hidden sm:flex items-center justify-center hover:bg-[--color-foreground] hover:text-[--color-background] transition-all active:scale-90"
           >
             <ChevronLeft className="w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8" />
           </button>
           <button
             onClick={() => swiperRef.current?.slideNext()}
-            className="h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10 rounded-full border border-[--color-border] flex items-center justify-center hover:bg-[--color-foreground] hover:text-[--color-background] transition-all active:scale-90"
+            className="h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10 rounded-full border border-[--color-border] hidden sm:flex items-center justify-center hover:bg-[--color-foreground] hover:text-[--color-background] transition-all active:scale-90"
           >
             <ChevronRight className="w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8" />
           </button>

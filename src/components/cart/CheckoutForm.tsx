@@ -9,9 +9,10 @@ interface CheckoutFormProps {
   onSubmit: (shippingAddress: ShippingAddress, paymentMethod: string, notes?: string) => void;
   loading?: boolean;
   paymentMethods?: Array<{ _id: string; name: string; icon?: string; instructions?: Record<string,string>; isActive?: boolean }>;
+  summary?: { totalAmount: number; itemCount: number };
 }
 
-export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, paymentMethods }) => {
+export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, paymentMethods, summary }) => {
   type Address = {
     _id?: string;
     city?: string;
@@ -94,6 +95,19 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, p
       <h2 className="text-2xl font-black uppercase tracking-tighter mb-6 border-b border-slate-100 pb-4">
         Shipping Information
       </h2>
+      {summary && (
+        <div className="mb-6 grid grid-cols-2 gap-4">
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Items</p>
+            <p className="text-lg font-black">{summary.itemCount}</p>
+          </div>
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Total</p>
+            <p className="text-lg font-black">${summary.totalAmount.toFixed(2)}</p>
+          </div>
+        </div>
+      )
+      }
 
       <div className="mb-6">
         <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3 block">

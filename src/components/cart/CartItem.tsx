@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { Minus, Plus, X } from "lucide-react";
+import { Minus, Plus, Trash2 } from "lucide-react";
 import { CartItem as CartItemType } from "@/store/cart";
 import { useIsRTL } from "@/utils/rtl";
 import { cn } from "@/utils/utils";
@@ -49,7 +49,7 @@ export const CartItem: React.FC<CartItemProps> = ({
           "bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-red-600 transition"
         )}
       >
-        <X size={16} />
+        <Trash2 size={16} />
       </button>
 
       {/* MAIN GRID */}

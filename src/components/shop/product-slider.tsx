@@ -9,6 +9,7 @@ import "swiper/css/navigation";
 import { cn } from "@/utils/utils";
 import Link from "next/link";
 import { useLocale } from "next-intl";
+import { Button } from "../ui/button";
 
 interface Product {
   id: string | number;
@@ -29,18 +30,25 @@ export function ProductSlider({ products, title, className }: ProductSliderProps
   return (
     <div className={cn("relative py-12", className)}>
       {title && (
-        <div className="flex items-end justify-between mb-10 px-6 md:px-0">
+        <div className="flex items-end justify-between items-center mb-10 px-6 md:px-0">
           <div>
             <h3 className="text-xl sm:text-xl md:text-2xl lg:text-2xl font-black uppercase tracking-tighter italic relative inline-block z-10">
               {title}
             </h3>
           </div>
           
-          <div className="flex gap-3">
-            <button className="slider-prev w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-neutral-200 dark:border-white/10 flex items-center justify-center hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all active:scale-90 shadow-lg backdrop-blur-sm bg-white/20">
+          <div className="flex gap-3 items-center ">
+            <Button>
+              <Link
+                  href={`/${locale}/products`}
+                >
+                  View More
+              </Link>
+            </Button>
+            <button className="slider-prev w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-neutral-200 dark:border-white/10 hidden sm:flex items-center justify-center hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all active:scale-90 shadow-lg backdrop-blur-sm bg-white/20">
               <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
-            <button className="slider-next w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-neutral-200 dark:border-white/10 flex items-center justify-center hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all active:scale-90 shadow-lg backdrop-blur-sm bg-white/20">
+            <button className="slider-next w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-neutral-200 dark:border-white/10 hidden sm:flex items-center justify-center hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all active:scale-90 shadow-lg backdrop-blur-sm bg-white/20">
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>
@@ -84,11 +92,12 @@ export function ProductSlider({ products, title, className }: ProductSliderProps
             <SwiperSlide key={p.id} className="h-auto">
               {p.title ? (
                 <Link
-                  href={`/${locale}/products/${String(p.id)}`}
+                  href={`/${locale}/products/${p.id}`}
                   className="block h-full"
                   aria-label={p.title ? `View ${p.title}` : "View product"}
                 >
                   <ProductCard
+                    productId={p.id}
                     key={p.id}
                     title={p.title}
                     price={p.price}
