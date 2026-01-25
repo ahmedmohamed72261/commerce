@@ -13,6 +13,6 @@ export const createPaymentMethod = async (formData: FormData) => {
 };
 
 export const togglePaymentMethod = async (id: string, isActive: boolean) => {
-  const res = await http.patch(`/payment-methods/${id}`, { isActive });
+  const res = await http.put(`/payment-methods/${id}`, { isActive });
   return res.data?.data ?? res.data;
 };

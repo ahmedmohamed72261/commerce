@@ -258,7 +258,7 @@ export function BannerCard({
 
   // --- CASE 15: THE KINETIC SPLIT (REDESIGNED) ---
   if (variant === 15) return (
-    <Wrapper href={href as string} className={cn(common, "bg-zinc-100 rounded-2xl border border-neutral-200")}>
+    <Wrapper href={href as string} className={cn(common, "bg-zinc-100 dark:bg-card rounded-2xl border border-neutral-200 dark:border-border")}>
       <div className="absolute inset-0 flex flex-col">
         {/* Top Section: Dynamic Image with "Slide-in" Mask */}
         <div className="relative h-[65%] w-full overflow-hidden rounded-t-[1rem]">
@@ -268,23 +268,23 @@ export function BannerCard({
             alt={title} 
           />
           <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors" />
-          <div className="absolute top-4 left-4 rtl:left-auto rtl:right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-2">
-            <Activity size={12} className="text-red-600" />
-            <span className="text-[10px] font-black uppercase tracking-tighter text-black">Live Stock</span>
+          <div className="absolute top-4 left-4 rtl:left-auto rtl:right-4 bg-white/90 dark:bg-card/90 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-2">
+            <Activity size={12} className="text-red-600 dark:text-primary" />
+            <span className="text-[10px] font-black uppercase tracking-tighter text-black dark:text-foreground">Live Stock</span>
           </div>
         </div>
         
         {/* Bottom Section: Clean Info with Offset Action */}
         <div className="w-full px-4 pt-2 pb-2 flex items-end justify-between rtl:flex-row-reverse">
           <div className="space-y-1 pt-2 w-full rtl:text-right">
-            <h3 className="text-black text-lg sm:text-xl md:text-xl lg:text-2xl font-black leading-none tracking-tighter uppercase">
+            <h3 className="text-black dark:text-foreground text-lg sm:text-xl md:text-xl lg:text-2xl font-black leading-none tracking-tighter uppercase">
               {title}
             </h3>
             <div className="flex justify-end  w-full">
               {/* <p className="text-neutral-400 text-xs font-medium uppercase tracking-widest">
                 {t("catalog")} — {count}
               </p> */}
-              <div className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 bg-red-600 text-white rounded-2xl flex items-center justify-center -rotate-12 group-hover:rotate-0 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-red-600/20">
+              <div className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 bg-red-600 dark:bg-primary text-white rounded-2xl flex items-center justify-center -rotate-12 group-hover:rotate-0 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-red-600/20 dark:shadow-primary/20">
                 <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-5 md:w-5 md:h-5" />
               </div>
             </div>

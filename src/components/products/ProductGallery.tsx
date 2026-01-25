@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface ProductGalleryProps {
   images: string[];
@@ -11,12 +12,13 @@ interface ProductGalleryProps {
 
 export const ProductGallery: React.FC<ProductGalleryProps> = ({ images, productName }) => {
   const [selectedImg, setSelectedImg] = useState(0);
+  const t = useTranslations('Product');
 
   if (!images || images.length === 0) {
     return (
-      <div className="relative aspect-square rounded-2xl overflow-hidden bg-slate-100 border border-slate-200">
-        <div className="flex items-center justify-center h-full text-slate-400">
-          No image available
+      <div className="relative aspect-square rounded-2xl overflow-hidden bg-muted border border-border">
+        <div className="flex items-center justify-center h-full text-muted-foreground">
+          {t('noImage')}
         </div>
       </div>
     );
@@ -31,14 +33,14 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ images, productN
   };
 
   return (
-    <div className="space-y-6 w-[300px] sm:w-auto m-auto md:w-[400px]">
+    <div className="space-y-6 w-full">
       {/* Main Image */}
-      <div className="relative aspect-square rounded-xl overflow-hidden bg-slate-50 border border-slate-100 group">
+      <div className="relative aspect-square md:aspect-[4/3] max-h-[500px] rounded-xl overflow-hidden bg-muted border border-border group w-full mx-auto">
         <Image 
           src={images[selectedImg]} 
           alt={`${productName} - Image ${selectedImg + 1}`} 
           fill 
-          className="object-cover transition-transform duration-700 group-hover:scale-105" 
+          className="object-contain transition-transform duration-700 group-hover:scale-105" 
           priority
         />
         
@@ -47,22 +49,22 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ images, productN
           <>
             <button
               onClick={handlePrevious}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-all opacity-0 group-hover:opacity-100"
+              className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-card/90 dark:bg-black/50 hover:bg-card dark:hover:bg-black/70 p-2 sm:p-3 rounded-full shadow-lg transition-all opacity-0 group-hover:opacity-100 backdrop-blur-sm"
             >
-              <ChevronLeft size={15} className="text-slate-900" />
+              <ChevronLeft size={15} className="text-foreground dark:text-white" />
             </button>
             <button
               onClick={handleNext}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-all opacity-0 group-hover:opacity-100"
+              className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-card/90 dark:bg-black/50 hover:bg-card dark:hover:bg-black/70 p-2 sm:p-3 rounded-full shadow-lg transition-all opacity-0 group-hover:opacity-100 backdrop-blur-sm"
             >
-              <ChevronRight size={15} className="text-slate-900" />
+              <ChevronRight size={15} className="text-foreground dark:text-white" />
             </button>
           </>
         )}
 
         {/* Image Counter */}
         {images.length > 1 && (
-          <div className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-md text-white text-xs font-black px-3 py-1.5 rounded-full">
+          <div className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-md text-white text-[10px] sm:text-xs font-black px-2 sm:px-3 py-1 sm:py-1.5 rounded-full">
             {selectedImg + 1} / {images.length}
           </div>
         )}
@@ -70,15 +72,15 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ images, productN
 
       {/* Thumbnail Grid */}
       {images.length > 1 && (
-        <div className="grid grid-cols-5 gap-4">
+        <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2 sm:gap-4">
           {images.map((img, index) => (
             <button 
               key={index}
               onClick={() => setSelectedImg(index)}
-              className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${
+              className={`relative aspect-square rounded-lg sm:rounded-xl overflow-hidden border-2 transition-all ${
                 selectedImg === index 
-                  ? 'border-red-600 scale-105 shadow-md ring-2 ring-red-600/20' 
-                  : 'border-slate-100 opacity-60 hover:opacity-100 hover:border-slate-300'
+                  ? 'border-red-600 dark:border-primary scale-105 shadow-md ring-2 ring-red-600/20 dark:ring-primary/20' 
+                  : 'border-border opacity-60 hover:opacity-100 hover:border-muted-foreground'
               }`}
             >
               <Image 

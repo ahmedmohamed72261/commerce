@@ -10,4 +10,14 @@ export const createOrder = async (orderData: unknown) => {
   return response.data;
 };
 
+export const getOrderDetails = async (orderId: string) => {
+  const response = await http.get(`/orders/${orderId}`);
+  return response.data;
+};
+
+export const cancelOrder = async (orderId: string) => {
+  const response = await http.put(`/orders/${orderId}/cancel`, {});
+  return response.data;
+};
+
 

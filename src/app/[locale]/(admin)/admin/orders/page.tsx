@@ -1,120 +1,231 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { WhiteCard } from '@/components/admin/ui/cards';
-import { getOrders } from '@/services/orders.service';
+import { getOrders, cancelOrder } from '@/services/orders.service';
 import { updateOrderStatus, bulkUpdateOrdersStatus } from '@/services/admin-orders.service';
-import { Search, Filter, Eye, CheckCircle } from 'lucide-react';
+import { Search, Filter, Eye, CheckCircle, XCircle, AlertCircle, Clock, Package } from 'lucide-react';
+import Link from 'next/link';
+import { useLocale, useTranslations } from 'next-intl';
+import { cn } from '@/utils/utils';
+import { toast } from 'sonner';
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const locale = useLocale();
+  const t = useTranslations('AdminOrders');
+  const tTable = useTranslations('AdminTable');
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await getOrders();
-        // API response structure based on code.txt: { success: true, count: 5, data: [...] }
-        setOrders(response.data || []);
-      } catch (error) {
-        console.error("Failed to fetch orders", error);
-      } finally {
-        setLoading(false);
-      }
-    }
     fetchData();
   }, []);
 
-  const refresh = async () => {
-    setLoading(true);
+  async function fetchData() {
     try {
+      setLoading(true);
       const response = await getOrders();
       setOrders(response.data || []);
+    } catch (error) {
+      console.error("Failed to fetch orders", error);
     } finally {
       setLoading(false);
     }
+  }
+
+  const refresh = fetchData;
+
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'completed':
+      case 'delivered':
+        return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-900';
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 border border-yellow-200 dark:border-yellow-900';
+      case 'processing':
+        return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border border-blue-200 dark:border-blue-900';
+      case 'cancelled':
+        return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border border-red-200 dark:border-red-900';
+      default:
+        return 'bg-gray-100 text-gray-700 dark:bg-muted/50 dark:text-muted-foreground border border-gray-200 dark:border-border';
+    }
   };
+
+  const getStatusIcon = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'completed':
+      case 'delivered':
+        return <CheckCircle size={14} className="mr-1" />;
+      case 'pending':
+        return <Clock size={14} className="mr-1" />;
+      case 'processing':
+        return <Package size={14} className="mr-1" />;
+      case 'cancelled':
+        return <XCircle size={14} className="mr-1" />;
+      default:
+        return <AlertCircle size={14} className="mr-1" />;
+    }
+  };
+
   return (
     <div className="space-y-6">
-       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-800">Orders</h1>
-       </div>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-foreground">{t('title')}</h1>
+          <p className="text-sm text-gray-500 dark:text-muted-foreground mt-1">{t('subtitle')}</p>
+        </div>
+      </div>
 
        <WhiteCard noPadding headerAction={
-         <div className="flex gap-2">
-           <div className="relative">
-             <input type="text" placeholder="Search orders..." className="pl-8 pr-3 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-500 w-64" />
-             <Search size={14} className="absolute left-2.5 top-2.5 text-gray-400" />
+         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+           <div className="relative flex-1 sm:flex-initial">
+             <input 
+               type="text" 
+               placeholder={t('searchPlaceholder')} 
+               className="w-full sm:w-64 pl-10 pr-4 py-2 text-sm bg-gray-50 dark:bg-muted/50 border border-gray-200 dark:border-border rounded-lg focus:bg-white dark:focus:bg-card focus:border-red-500 dark:focus:border-primary focus:ring-2 focus:ring-red-100 dark:focus:ring-primary/20 outline-none transition-all text-gray-800 dark:text-foreground placeholder:text-gray-400 dark:placeholder:text-muted-foreground" 
+             />
+             <Search size={18} className="absolute left-3 top-2.5 text-gray-400 dark:text-muted-foreground" />
            </div>
-           <button className="p-1.5 border border-gray-300 rounded text-gray-500 hover:bg-gray-50"><Filter size={16} /></button>
-           <button
-             className="p-1.5 border border-green-600 text-green-700 rounded hover:bg-green-50 flex items-center gap-1 text-sm"
-             onClick={async () => {
-               await bulkUpdateOrdersStatus('delivered');
-               await refresh();
-             }}
-           >
-             <CheckCircle size={16} /> Mark all delivered
+           <button className="px-3 py-2 border border-gray-200 dark:border-border rounded-lg text-gray-600 dark:text-muted-foreground hover:bg-gray-50 dark:hover:bg-muted transition-colors flex items-center justify-center gap-2 text-sm font-medium">
+             <Filter size={16} /> <span>{t('filter')}</span>
            </button>
          </div>
        }>
-         <table className="w-full text-left text-sm text-gray-600">
-           <thead className="bg-gray-50 text-gray-500 font-semibold uppercase text-xs">
-             <tr>
-               <th className="px-5 py-3 w-10"><input type="checkbox" /></th>
-               <th className="px-5 py-3">Order ID</th>
-               <th className="px-5 py-3">Date</th>
-               <th className="px-5 py-3">Customer</th>
-               <th className="px-5 py-3">Payment Status</th>
-               <th className="px-5 py-3">Total</th>
-               <th className="px-5 py-3 text-right">Action</th>
-             </tr>
-           </thead>
-           <tbody className="divide-y divide-gray-100">
-             {loading ? (
-               <tr><td colSpan={7} className="px-5 py-10 text-center">Loading orders...</td></tr>
-             ) : orders.length === 0 ? (
-               <tr><td colSpan={7} className="px-5 py-10 text-center">No orders found.</td></tr>
-             ) : (
-               orders.map((order: any) => (
-                 <tr key={order.orderId || order._id} className="hover:bg-gray-50/50 transition-colors">
-                   <td className="px-5 py-3"><input type="checkbox" /></td>
-                   <td className="px-5 py-3 font-medium text-gray-800">#{(order.orderId || order._id || '').toString().substring(0, 8)}</td>
-                   <td className="px-5 py-3 text-xs text-gray-500">
-                     {(order.date || order.createdAt) ? new Date(order.date || order.createdAt).toLocaleDateString() : 'N/A'}
-                   </td>
-                   <td className="px-5 py-3">
-                     <div className="font-medium text-gray-800">{order.customer?.name}</div>
-                     <div className="text-[10px] text-gray-400">{order.customer?.email}</div>
-                   </td>
-                   <td className="px-5 py-3">
-                     <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
-                       order.status === 'completed' ? 'bg-green-100 text-green-700' : 
-                       order.status === 'pending' ? 'bg-yellow-100 text-yellow-700' : 
-                       'bg-gray-100 text-gray-700'
-                     }`}>
-                       {order.status}
-                     </span>
-                   </td>
-                   <td className="px-5 py-3 font-bold text-gray-800">${Number(order.totalAmount || 0).toFixed(2)}</td>
-                   <td className="px-5 py-3 text-right">
-                     <button className="text-gray-400 hover:text-blue-600 transition-colors mr-2"><Eye size={18} /></button>
-                     <button
-                       className="text-green-600 hover:text-green-800 transition-colors text-xs font-bold uppercase"
-                       onClick={async () => {
-                         const id = (order._id || order.orderId || '').toString();
-                         if (!id) return;
-                         await updateOrderStatus(id, 'delivered');
-                         await refresh();
-                       }}
-                     >
-                       Mark delivered
-                     </button>
-                   </td>
-                 </tr>
-               ))
-             )}
-           </tbody>
-         </table>
+         <div className="overflow-x-auto">
+           <table className="w-full text-left text-sm text-gray-600 dark:text-muted-foreground">
+             <thead className="bg-gray-50/50 dark:bg-muted/50 border-b border-gray-100 dark:border-border">
+               <tr>
+                 <th className="px-6 py-4 w-10">
+                   <div className="flex items-center">
+                     <input type="checkbox" className="w-4 h-4 rounded border-gray-300 dark:border-border text-red-600 focus:ring-red-500 bg-white dark:bg-card" />
+                   </div>
+                 </th>
+                <th className="px-6 py-4 font-semibold text-gray-900 dark:text-foreground text-xs uppercase tracking-wider">{tTable('orderId')}</th>
+                <th className="px-6 py-4 font-semibold text-gray-900 dark:text-foreground text-xs uppercase tracking-wider">{tTable('date')}</th>
+                <th className="px-6 py-4 font-semibold text-gray-900 dark:text-foreground text-xs uppercase tracking-wider">{tTable('customer')}</th>
+                <th className="px-6 py-4 font-semibold text-gray-900 dark:text-foreground text-xs uppercase tracking-wider">{tTable('status')}</th>
+                <th className="px-6 py-4 font-semibold text-gray-900 dark:text-foreground text-xs uppercase tracking-wider">{tTable('total')}</th>
+                <th className="px-6 py-4 font-semibold text-gray-900 dark:text-foreground text-xs uppercase tracking-wider text-right">{tTable('actions')}</th>
+               </tr>
+             </thead>
+             <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+              {loading ? (
+                <tr><td colSpan={7} className="px-6 py-12 text-center text-gray-400">{t('loading')}</td></tr>
+              ) : orders.length === 0 ? (
+                <tr><td colSpan={7} className="px-6 py-12 text-center text-gray-400">{t('empty')}</td></tr>
+               ) : (
+                 orders.map((order: any) => (
+                   <tr key={order.orderId || order._id} className="group hover:bg-gray-50 dark:hover:bg-muted/30 transition-colors">
+                     <td className="px-6 py-4">
+                       <div className="flex items-center">
+                        <input type="checkbox" className="w-4 h-4 rounded border-gray-300 dark:border-border text-red-600 focus:ring-red-500 bg-white dark:bg-card" />
+                      </div>
+                     </td>
+                     <td className="px-6 py-4">
+                       <span className="font-medium text-gray-900 dark:text-foreground font-mono">
+                         #{(order.orderId || order._id || '').toString().substring(0, 8)}
+                       </span>
+                     </td>
+                     <td className="px-6 py-4 text-xs">
+                       {(order.date || order.createdAt) ? new Date(order.date || order.createdAt).toLocaleDateString() : 'N/A'}
+                       <div className="text-[10px] text-gray-400">
+                         {(order.date || order.createdAt) ? new Date(order.date || order.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}
+                       </div>
+                     </td>
+                     <td className="px-6 py-4">
+                       <div className="flex items-center gap-3">
+                         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase">
+                           {(order.customer?.name || 'U').charAt(0)}
+                         </div>
+                         <div>
+                           <div className="font-medium text-gray-900 dark:text-foreground text-sm">{order.customer?.name || 'Guest User'}</div>
+                           <div className="text-xs text-gray-400">{order.customer?.email}</div>
+                         </div>
+                       </div>
+                     </td>
+                     <td className="px-6 py-4">
+                       <span className={cn(
+                         "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize",
+                         getStatusColor(order.status || 'pending')
+                       )}>
+                         {getStatusIcon(order.status || 'pending')}
+                         {order.status || 'Pending'}
+                       </span>
+                     </td>
+                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-foreground">
+                       ${Number(order.totalAmount || 0).toFixed(2)}
+                     </td>
+                     <td className="px-6 py-4 text-right">
+                       <div className="flex items-center justify-end gap-2">
+                         <Link 
+                           href={`/${locale}/admin/orders/${order._id || order.orderId}`}
+                           className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+                           title={t('viewOrder')}
+                         >
+                           <Eye size={18} />
+                         </Link>
+                         
+                         {order.status !== 'delivered' && order.status !== 'completed' && order.status !== 'cancelled' && (
+                           <button
+                             className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+                             title={t('markDelivered')}
+                             onClick={async () => {
+                               const id = (order._id || order.orderId || '').toString();
+                               if (!id) return;
+                               try {
+                                 await updateOrderStatus(id, 'delivered');
+                                 toast.success(t('deliveredSuccess'))
+                                 await refresh();
+                               } catch {
+                                 toast.error(t('updateFailed'))
+                               }
+                             }}
+                           >
+                             <CheckCircle size={18} />
+                           </button>
+                         )}
+
+                         {order.status !== 'cancelled' && order.status !== 'delivered' && order.status !== 'completed' && (
+                           <button
+                             className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+                             title={t('cancelOrder')}
+                             onClick={async () => {
+                               const id = (order._id || order.orderId || '').toString();
+                               if (!id) return;
+                               if (confirm(t('confirmCancel'))) {
+                                 try {
+                                   await cancelOrder(id);
+                                   toast.success(t('cancelSuccess'))
+                                  await refresh();
+                                 } catch (error) {
+                                   toast.error(t('cancelFailed'))
+                                 }
+                               }
+                             }}
+                           >
+                             <XCircle size={18} />
+                           </button>
+                         )}
+                       </div>
+                     </td>
+                   </tr>
+                 ))
+               )}
+             </tbody>
+           </table>
+         </div>
+         
+         {/* Pagination (Static for now, can be connected to API) */}
+         {orders.length > 0 && (
+           <div className="px-6 py-4 border-t border-gray-100 dark:border-border flex items-center justify-between">
+             <div className="text-xs text-gray-500 dark:text-muted-foreground">
+               Showing <span className="font-medium text-gray-900 dark:text-foreground">1</span> to <span className="font-medium text-gray-900 dark:text-foreground">{orders.length}</span> of <span className="font-medium text-gray-900 dark:text-foreground">{orders.length}</span> results
+             </div>
+             <div className="flex gap-2">
+              <button className="px-3 py-1 border border-gray-200 dark:border-border rounded text-xs font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-muted disabled:opacity-50" disabled>Previous</button>
+              <button className="px-3 py-1 border border-gray-200 dark:border-border rounded text-xs font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-muted disabled:opacity-50" disabled>Next</button>
+            </div>
+           </div>
+         )}
        </WhiteCard>
     </div>
   );

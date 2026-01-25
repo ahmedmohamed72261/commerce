@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { getFilters } from '@/services/products.service';
 import { useProductsStore } from '@/store/products';
 import { ProductCard } from '@/components/products/ProductCard';
+import { ProductCardSkeleton } from '@/components/products/ProductCardSkeleton';
 import { useCart } from '@/store/cart';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
@@ -210,23 +211,23 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F5F7] text-slate-900 font-sans antialiased">
+    <div className="min-h-screen bg-[#F4F5F7] dark:bg-background text-slate-900 dark:text-foreground font-sans antialiased">
       <div className="max-w-[1600px] mx-auto px-2 sm:pt-9">
         
         {/* CATEGORY HEADER */}
         {categoryProductsLoading ? (
-          <div className="bg-white rounded-2xl p-3 mb-10 border border-slate-200 shadow-sm flex items-center justify-center">
-            <Loader2 className="w-8 h-8 animate-spin text-red-600" />
+          <div className="bg-white dark:bg-card rounded-2xl p-3 mb-10 border border-slate-200 dark:border-border shadow-sm flex items-center justify-center">
+            <Loader2 className="w-8 h-8 animate-spin text-red-600 dark:text-primary" />
           </div>
         ) : error ? (
           <div className="bg-red-50 border border-red-200 rounded-2xl p-8 text-center mb-10">
             <p className="text-red-600 font-bold text-lg">{error}</p>
           </div>
         ) : categoryProducts ? (
-          <div className="bg-white rounded-2xl p-3 mb-10 border border-slate-200 shadow-sm">
+          <div className="bg-white dark:bg-card rounded-2xl p-3 mb-10 border border-slate-200 dark:border-border shadow-sm">
             <div className="flex items-center gap-6">
               {categoryProducts.category.image && (
-                <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-slate-100 shrink-0">
+                <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-slate-100 dark:bg-muted shrink-0">
                   <Image 
                     src={categoryProducts.category.image} 
                     alt={categoryProducts.category.name}
@@ -236,10 +237,10 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
                 </div>
               )}
               <div className="flex-1">
-                <h1 className="text-sm md:text-4xl font-black uppercase italic tracking-tighter text-slate-950 mb-2">
+                <h1 className="text-sm md:text-4xl font-black uppercase italic tracking-tighter text-slate-950 dark:text-foreground mb-2">
                   {categoryProducts.category.name}
                 </h1>
-                <p className="text-slate-400 font-bold flex gap-2 text-sm">
+                <p className="text-slate-400 dark:text-muted-foreground font-bold flex gap-2 text-sm">
                   <span>{t("productsAvailable")} : </span> <span>{pagination.total}</span> 
                 </p>
               </div>
@@ -250,11 +251,7 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
         <div className="flex flex-col relative lg:flex-row gap-10">
           <aside className="hidden lg:block lg:w-[280px] shrink-0 space-y-10">
             {filtersLoading ? (
-              <div className="space-y-4">
-                <div className="h-10 bg-slate-100 animate-pulse rounded" />
-                <div className="h-40 bg-slate-100 animate-pulse rounded" />
-                <div className="h-20 bg-slate-100 animate-pulse rounded" />
-              </div>
+              <FilterSidebar isLoading={true} />
             ) : (
               <FilterSidebar 
                 key={filters.map((f) => f.id).join("|")}
@@ -266,15 +263,15 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
 
           <main className="flex-1">
             <div className="flex items-center justify-between gap-3 w-full sm:w-auto mb-2 px-3">
-              <div className="flex items-center border border-slate-200 rounded-lg overflow-hidden bg-white shadow-sm">
+              <div className="flex items-center border border-slate-200 dark:border-border rounded-lg overflow-hidden bg-white dark:bg-card shadow-sm">
                 <button 
-                  className="p-2.5 transition-all bg-[#0F172A] text-white"
+                  className="p-2.5 transition-all bg-[#0F172A] dark:bg-primary text-white"
                   disabled
                 >
                   <LayoutGrid size={18}/>
                 </button>
                 <button 
-                  className="p-2.5 transition-all border-l border-slate-200 text-slate-400"
+                  className="p-2.5 transition-all border-l border-slate-200 dark:border-border text-slate-400 dark:text-muted-foreground"
                   disabled
                 >
                   <List size={18}/>
@@ -282,16 +279,39 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
               </div>
               <Button 
                 onClick={() => setFilterOpen(true)} 
-                className="lg:hidden h-10 px-4 rounded-lg bg-red-600 text-white text-xs font-black uppercase tracking-widest"
+                className="lg:hidden h-10 px-4 rounded-lg bg-red-600 dark:bg-primary text-white text-xs font-black uppercase tracking-widest"
               >
                 {t("filter")}
               </Button>
             </div>
 
             {loading && items.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-24 bg-white rounded-[2rem] border border-dashed border-slate-200">
-                <RefreshCcw className="w-10 h-10 animate-spin text-red-600 mb-4" />
-                <p className="text-slate-400 font-bold text-sm uppercase tracking-widest">Fetching_Categories...</p>
+              <div className="bg-white dark:bg-card rounded-[2rem] border border-slate-200 dark:border-border px-4 py-8">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="h-9 w-9 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                      <RefreshCcw className="w-4 h-4 animate-spin text-red-600 dark:text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-[0.25em] text-slate-400 dark:text-muted-foreground">
+                        Fetching_Categories
+                      </p>
+                      <p className="text-xs text-slate-400 dark:text-muted-foreground">
+                        Loading category products and filters
+                      </p>
+                    </div>
+                  </div>
+                  <div className="hidden md:flex items-center gap-2 text-xs text-slate-400">
+                    <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                    <span>Live inventory sync</span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2 gap-y-4">
+                  {Array.from({ length: 8 }).map((_, index) => (
+                    <ProductCardSkeleton key={index} viewMode="grid" />
+                  ))}
+                </div>
               </div>
             ) : (
               <>
@@ -308,16 +328,16 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
                 </div>
 
                 {pagination.page < pagination.totalPages && (
-                  <div className="mt-12 p-1 bg-[#0F172A] rounded-[2.5rem] overflow-hidden shadow-2xl">
-                    <div className="bg-white rounded-[2.4rem] p-12 text-center relative">
-                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-red-600 rounded-b-full shadow-[0_4px_10px_rgba(220,38,38,0.3)]" />
+                  <div className="mt-12 p-1 bg-[#0F172A] dark:bg-card rounded-[2.5rem] overflow-hidden shadow-2xl">
+                    <div className="bg-white dark:bg-muted rounded-[2.4rem] p-12 text-center relative">
+                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-red-600 dark:bg-primary rounded-b-full shadow-[0_4px_10px_rgba(220,38,38,0.3)]" />
                       
                       <div className="flex flex-col items-center gap-6">
                         <div className="space-y-1">
-                          <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">
+                          <h4 className="text-[11px] font-black text-slate-400 dark:text-muted-foreground uppercase tracking-[0.3em]">
                             Registry_Sync_Status
                           </h4>
-                          <p className="text-sm font-bold text-[#0F172A]">
+                          <p className="text-sm font-bold text-[#0F172A] dark:text-foreground">
                             Displayed: {items.length} <span className="text-slate-300">/</span> Total: {pagination.total}
                           </p>
                         </div>
@@ -325,7 +345,7 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
                         <Button 
                           onClick={handleLoadMore}
                           disabled={loading}
-                          className="h-16 px-16 rounded-2xl bg-[#0F172A] text-white font-black text-xs tracking-[0.2em] uppercase hover:bg-red-600 hover:shadow-[0_20px_40px_-12px_rgba(220,38,38,0.4)] transition-all flex gap-4 active:scale-95 disabled:opacity-50"
+                          className="h-16 px-16 rounded-2xl bg-[#0F172A] dark:bg-primary text-white font-black text-xs tracking-[0.2em] uppercase hover:bg-red-600 dark:hover:bg-red-700 hover:shadow-[0_20px_40px_-12px_rgba(220,38,38,0.4)] transition-all flex gap-4 active:scale-95 disabled:opacity-50"
                         >
                           {loading ? <RefreshCcw size={18} className="animate-spin" /> : "Load More"}
                         </Button>
@@ -342,7 +362,7 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
             rounded="none"
             className={cn(
               /* Remove centering from base */
-              "fixed inset-y-0 z-50 w-[85vw] max-w-[420px] bg-white",
+              "fixed inset-y-0 z-50 w-[85vw] max-w-[420px] bg-white dark:bg-card",
               "p-6 border-none shadow-2xl",
               "transition-all duration-1000 ease-out",
               "data-[state=open]:translate-x-0",
@@ -358,11 +378,7 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
             </DialogHeader>
             <div className="max-h-[80vh] overflow-y-auto pr-2">
               {filtersLoading ? (
-                <div className="space-y-4">
-                  <div className="h-10 bg-slate-100 animate-pulse rounded" />
-                  <div className="h-40 bg-slate-100 animate-pulse rounded" />
-                  <div className="h-20 bg-slate-100 animate-pulse rounded" />
-                </div>
+                <FilterSidebar isLoading={true} />
               ) : (
                 <FilterSidebar 
                   key={filters.map((f) => f.id).join("|")}

@@ -34,14 +34,14 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({
               onClick={() => setActiveTab(item.id)}
               className={`w-full flex items-center gap-3 px-6 py-3 rounded-2xl transition-all duration-200 font-semibold text-sm justify-start shadow-sm hover:shadow-md ${
                 activeTab === item.id
-                  ? "bg-red-50 text-red-600 shadow-md border border-red-100"
-                  : "text-slate-600 hover:bg-slate-50"
+                  ? "bg-red-50 dark:bg-primary/20 text-red-600 dark:text-primary shadow-md border border-red-100 dark:border-primary/30"
+                  : "text-slate-600 dark:text-foreground hover:bg-slate-50 dark:hover:bg-muted"
               }`}
             >
               <item.icon
                 size={20}
                 className={`${
-                  activeTab === item.id ? "text-red-600" : "text-slate-400"
+                  activeTab === item.id ? "text-red-600 dark:text-primary" : "text-slate-400 dark:text-muted-foreground"
                 }`}
               />
               <span className="truncate">{item.label}</span>
@@ -61,8 +61,8 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({
                 onClick={() => setActiveTab(item.id)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wide snap-start transition-all duration-200 shadow-sm hover:shadow-md ${
                   activeTab === item.id
-                    ? "bg-red-600 text-white border-red-600 shadow-lg"
-                    : "bg-white text-slate-600 border border-slate-200 hover:bg-red-50"
+                    ? "bg-red-600 dark:bg-primary text-white border-red-600 dark:border-primary shadow-lg"
+                    : "bg-white dark:bg-card text-slate-600 dark:text-foreground border border-slate-200 dark:border-border hover:bg-red-50 dark:hover:bg-primary/20"
                 }`}
               >
                 <item.icon size={16} />

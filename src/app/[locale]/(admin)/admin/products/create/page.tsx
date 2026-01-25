@@ -5,8 +5,10 @@ import { WhiteCard } from '@/components/admin/ui/cards';
 import { createProduct } from '@/services/products.service';
 import { getCategories } from '@/services/categories.service';
 import { getBrands } from '@/services/brands.service';
-import { Upload, X, Save } from 'lucide-react';
+import { Save, X } from 'lucide-react';
 import { toast } from 'sonner';
+import { ImageUploader } from '@/components/admin/ui/ImageUploader';
+import { useLocale, useTranslations } from 'next-intl';
 
 export default function CreateProductPage() {
   const router = useRouter();
@@ -20,17 +22,18 @@ export default function CreateProductPage() {
     descEn: '',
     descAr: '',
     price: '',
-    salePrice: '',
     brand: '',
     category: '',
     stock: '',
     condition: 'new',
-    isFeatured: false,
   });
 
   const [attributes, setAttributes] = useState<{key: string, value: string}[]>([{ key: '', value: '' }]);
   const [images, setImages] = useState<File[]>([]);
-  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const locale = useLocale() as "en" | "ar";
+  const tForm = useTranslations('AdminForm');
+  const tSidebar = useTranslations('AdminSidebar');
+  
 
   useEffect(() => {
     async function fetchOptions() {
@@ -64,20 +67,7 @@ export default function CreateProductPage() {
   const addAttribute = () => setAttributes([...attributes, { key: '', value: '' }]);
   const removeAttribute = (index: number) => setAttributes(attributes.filter((_, i) => i !== index));
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const files = Array.from(e.target.files);
-      setImages(prev => [...prev, ...files]);
-      
-      const newPreviews = files.map(file => URL.createObjectURL(file));
-      setImagePreviews(prev => [...prev, ...newPreviews]);
-    }
-  };
-
-  const removeImage = (index: number) => {
-    setImages(prev => prev.filter((_, i) => i !== index));
-    setImagePreviews(prev => prev.filter((_, i) => i !== index));
-  };
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,12 +78,10 @@ export default function CreateProductPage() {
       data.append('name', JSON.stringify({ en: formData.nameEn, ar: formData.nameAr }));
       data.append('description', JSON.stringify({ en: formData.descEn, ar: formData.descAr }));
       data.append('price', formData.price);
-      if (formData.salePrice) data.append('salePrice', formData.salePrice);
       data.append('brand', formData.brand);
       data.append('category', formData.category);
       data.append('stock', formData.stock);
       data.append('condition', formData.condition);
-      data.append('isFeatured', String(formData.isFeatured));
 
       const attrObj = attributes.reduce((acc, curr) => {
         if (curr.key && curr.value) acc[curr.key] = curr.value;
@@ -119,135 +107,108 @@ export default function CreateProductPage() {
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-w-5xl mx-auto">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-800">Create Product</h1>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-foreground">{tSidebar('createProduct')}</h1>
         <div className="flex gap-3">
-          <button type="button" onClick={() => router.back()} className="px-4 py-2 border border-gray-300 rounded text-gray-600 hover:bg-gray-50">Cancel</button>
-          <button type="submit" disabled={loading} className="px-6 py-2 bg-[#e30613] text-white rounded shadow hover:bg-red-700 flex items-center gap-2">
-            {loading ? 'Saving...' : <><Save size={18} /> Save Product</>}
+          <button type="button" onClick={() => router.back()} className="px-4 py-2 border border-gray-300 dark:border-border rounded text-gray-600 dark:text-muted-foreground hover:bg-gray-50 dark:hover:bg-muted transition-colors">{tForm('cancel')}</button>
+          <button type="submit" disabled={loading} className="px-6 py-2 bg-[#e30613] text-white rounded shadow hover:bg-red-700 flex items-center gap-2 transition-colors">
+            {loading ? tForm('saving') : <><Save size={18} /> {tForm('save')}</>}
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
-          <WhiteCard title="Basic Information">
+          <WhiteCard title={tForm('basicInfo')}>
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Name (EN)</label>
-                  <input required name="nameEn" value={formData.nameEn} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#e30613]" />
+                  <label className="block text-sm font-medium text-gray-700 dark:text-muted-foreground mb-1">{tForm('nameEn')}</label>
+                  <input required name="nameEn" value={formData.nameEn} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 dark:border-border bg-white dark:bg-background rounded focus:outline-none focus:border-[#e30613] text-gray-900 dark:text-foreground" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Name (AR)</label>
-                  <input required name="nameAr" value={formData.nameAr} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#e30613]" dir="rtl" />
+                  <label className="block text-sm font-medium text-gray-700 dark:text-muted-foreground mb-1">{tForm('nameAr')}</label>
+                  <input required name="nameAr" value={formData.nameAr} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 dark:border-border bg-white dark:bg-background rounded focus:outline-none focus:border-[#e30613] text-gray-900 dark:text-foreground" dir="rtl" />
                 </div>
               </div>
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Description (EN)</label>
-                  <textarea required name="descEn" value={formData.descEn} onChange={handleInputChange} rows={4} className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#e30613]" />
+                  <label className="block text-sm font-medium text-gray-700 dark:text-muted-foreground mb-1">{tForm('descriptionEn')}</label>
+                  <textarea required name="descEn" value={formData.descEn} onChange={handleInputChange} rows={4} className="w-full px-3 py-2 border border-gray-300 dark:border-border bg-white dark:bg-background rounded focus:outline-none focus:border-[#e30613] text-gray-900 dark:text-foreground" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Description (AR)</label>
-                  <textarea required name="descAr" value={formData.descAr} onChange={handleInputChange} rows={4} className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#e30613]" dir="rtl" />
+                  <label className="block text-sm font-medium text-gray-700 dark:text-muted-foreground mb-1">{tForm('descriptionAr')}</label>
+                  <textarea required name="descAr" value={formData.descAr} onChange={handleInputChange} rows={4} className="w-full px-3 py-2 border border-gray-300 dark:border-border bg-white dark:bg-background rounded focus:outline-none focus:border-[#e30613] text-gray-900 dark:text-foreground" dir="rtl" />
                 </div>
               </div>
             </div>
           </WhiteCard>
 
-          <WhiteCard title="Pricing & Inventory">
+          <WhiteCard title={tForm('pricingInventory')}>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Price</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-muted-foreground mb-1">{tForm('price')}</label>
                 <div className="relative">
                   <span className="absolute left-3 top-2 text-gray-500">$</span>
-                  <input required type="number" name="price" value={formData.price} onChange={handleInputChange} className="w-full pl-7 pr-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#e30613]" />
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Sale Price</label>
-                <div className="relative">
-                  <span className="absolute left-3 top-2 text-gray-500">$</span>
-                  <input type="number" name="salePrice" value={formData.salePrice} onChange={handleInputChange} className="w-full pl-7 pr-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#e30613]" />
+                  <input required type="number" name="price" value={formData.price} onChange={handleInputChange} className="w-full pl-7 pr-3 py-2 border border-gray-300 dark:border-border bg-white dark:bg-background rounded focus:outline-none focus:border-[#e30613] text-gray-900 dark:text-foreground" />
                 </div>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Stock Quantity</label>
-                <input required type="number" name="stock" value={formData.stock} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#e30613]" />
+                <label className="block text-sm font-medium text-gray-700 dark:text-muted-foreground mb-1">{tForm('stockQuantity')}</label>
+                <input required type="number" name="stock" value={formData.stock} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 dark:border-border bg-white dark:bg-background rounded focus:outline-none focus:border-[#e30613] text-gray-900 dark:text-foreground" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Condition</label>
-                <select name="condition" value={formData.condition} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#e30613]">
-                  <option value="new">New</option>
-                  <option value="used">Used</option>
-                  <option value="refurbished">Refurbished</option>
+                <label className="block text-sm font-medium text-gray-700 dark:text-muted-foreground mb-1">{tForm('condition')}</label>
+                <select name="condition" value={formData.condition} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 dark:border-border bg-white dark:bg-background rounded focus:outline-none focus:border-[#e30613] text-gray-900 dark:text-foreground">
+                  <option value="new">{tForm('conditionNew')}</option>
+                  <option value="used">{tForm('conditionUsed')}</option>
                 </select>
               </div>
             </div>
           </WhiteCard>
 
-          <WhiteCard title="Attributes">
+          <WhiteCard title={tForm('attributes')}>
             <div className="space-y-3">
               {attributes.map((attr, index) => (
                 <div key={index} className="flex gap-3">
-                  <input placeholder="Key (e.g. Color)" value={attr.key} onChange={(e) => handleAttributeChange(index, 'key', e.target.value)} className="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#e30613]" />
-                  <input placeholder="Value (e.g. Red)" value={attr.value} onChange={(e) => handleAttributeChange(index, 'value', e.target.value)} className="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#e30613]" />
-                  <button type="button" onClick={() => removeAttribute(index)} className="p-2 text-red-500 hover:bg-red-50 rounded"><X size={18} /></button>
+                  <input placeholder={tForm('attributeKey')} value={attr.key} onChange={(e) => handleAttributeChange(index, 'key', e.target.value)} className="flex-1 px-3 py-2 border border-gray-300 dark:border-border bg-white dark:bg-background rounded focus:outline-none focus:border-[#e30613] text-gray-900 dark:text-foreground" />
+                  <input placeholder={tForm('attributeValue')} value={attr.value} onChange={(e) => handleAttributeChange(index, 'value', e.target.value)} className="flex-1 px-3 py-2 border border-gray-300 dark:border-border bg-white dark:bg-background rounded focus:outline-none focus:border-[#e30613] text-gray-900 dark:text-foreground" />
+                  <button type="button" onClick={() => removeAttribute(index)} className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"><X size={18} /></button>
                 </div>
               ))}
-              <button type="button" onClick={addAttribute} className="text-sm text-[#e30613] font-medium hover:underline">+ Add Attribute</button>
+              <button type="button" onClick={addAttribute} className="text-sm text-[#e30613] font-medium hover:underline">{tForm('addAttribute')}</button>
             </div>
           </WhiteCard>
         </div>
 
         <div className="space-y-6">
-          <WhiteCard title="Organization">
+          <WhiteCard title={tForm('organization')}>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                <select required name="category" value={formData.category} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#e30613]">
-                  <option value="">Select Category</option>
+                <label className="block text-sm font-medium text-gray-700 dark:text-muted-foreground mb-1">{tForm('category')}</label>
+                <select required name="category" value={formData.category} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 dark:border-border bg-white dark:bg-background rounded focus:outline-none focus:border-[#e30613] text-gray-900 dark:text-foreground">
+                  <option value="">{tForm('selectCategory')}</option>
                   {categories.map((cat: any) => (
                     <option key={cat._id || cat.id} value={cat._id || cat.id}>{cat.name?.en || cat.name}</option>
                   ))}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Brand</label>
-                <select required name="brand" value={formData.brand} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#e30613]">
-                  <option value="">Select Brand</option>
+                <label className="block text-sm font-medium text-gray-700 dark:text-muted-foreground mb-1">{tForm('brand')}</label>
+                <select required name="brand" value={formData.brand} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 dark:border-border bg-white dark:bg-background rounded focus:outline-none focus:border-[#e30613] text-gray-900 dark:text-foreground">
+                  <option value="">{tForm('selectBrand')}</option>
                   {brands.map((brand: any) => (
                     <option key={brand._id || brand.id} value={brand._id || brand.id}>{brand.name?.en || brand.name}</option>
                   ))}
                 </select>
               </div>
-              <div className="flex items-center gap-2">
-                <input type="checkbox" id="isFeatured" name="isFeatured" checked={formData.isFeatured} onChange={handleInputChange} className="rounded text-[#e30613] focus:ring-[#e30613]" />
-                <label htmlFor="isFeatured" className="text-sm text-gray-700">Featured Product</label>
-              </div>
             </div>
           </WhiteCard>
 
-          <WhiteCard title="Media">
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition-colors cursor-pointer relative">
-              <input type="file" multiple accept="image/*" onChange={handleImageChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
-              <Upload className="mx-auto text-gray-400 mb-2" size={32} />
-              <p className="text-sm text-gray-500">Click to upload images</p>
-            </div>
-            
-            <div className="grid grid-cols-3 gap-2 mt-4">
-              {imagePreviews.map((src, index) => (
-                <div key={index} className="relative group aspect-square border rounded overflow-hidden">
-                  <img src={src} alt="" className="w-full h-full object-cover" />
-                  <button type="button" onClick={() => removeImage(index)} className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <X size={12} />
-                  </button>
-                </div>
-              ))}
-            </div>
+          <WhiteCard title={tForm('media')}>
+            <ImageUploader files={images} onChange={setImages} multiple gridCols={3} />
           </WhiteCard>
         </div>
       </div>

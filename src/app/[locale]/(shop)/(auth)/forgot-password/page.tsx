@@ -48,6 +48,8 @@ export default function ForgotPasswordPage() {
             icon={Mail}
             placeholder=""
             locale={locale}
+            appearance="white"
+            showIcon={false}
           />
           
           <button

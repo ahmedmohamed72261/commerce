@@ -30,7 +30,7 @@ export function TopBar() {
 
       {/* Red Background with angled cut */}
       <div 
-        className={`absolute top-0 h-full bg-red-600 w-[65%] md:w-[65%] lg:w-[75%] ${isRtl ? 'left-0' : 'right-0'}`}
+        className={`absolute top-0 h-full bg-red-600 dark:bg-primary w-[65%] md:w-[65%] lg:w-[75%] ${isRtl ? 'left-0' : 'right-0'}`}
         style={{ 
           clipPath: isRtl 
             ? "polygon(0 0, calc(100% - 40px) 0, 100% 100%, 0% 100%)" 

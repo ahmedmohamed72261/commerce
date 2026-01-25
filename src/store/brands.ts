@@ -1,7 +1,7 @@
 "use client";
 
 import { create } from "zustand";
-import { http } from "@/services/http";
+import { getBrands as svcGetBrands } from "@/services/brands.service";
 
 export type Brand = {
   _id: string;
@@ -31,8 +31,7 @@ export const useBrandsStore = create<BrandsState>((set) => ({
   async fetchBrands(locale = "en") {
     set({ loading: true, error: null });
     try {
-      const res = await http.get("/brands");
-      const raw = res.data;
+      const raw = await svcGetBrands();
       const arr: unknown[] = Array.isArray(raw)
         ? raw
         : Array.isArray(raw?.data)

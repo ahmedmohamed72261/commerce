@@ -33,7 +33,7 @@ export const CartItem: React.FC<CartItemProps> = ({
   return (
     <div
       className={cn(
-        "relative bg-white border border-slate-200 rounded-2xl",
+        "relative bg-white dark:bg-card border border-slate-200 dark:border-border rounded-2xl",
         "p-3 sm:p-4",
         "hover:shadow-md transition-all"
       )}
@@ -46,7 +46,7 @@ export const CartItem: React.FC<CartItemProps> = ({
           "absolute top-2 sm:top-3",
           isRTL ? "left-2 sm:left-3" : "right-2 sm:right-3",
           "h-8 w-8 rounded-full flex items-center justify-center",
-          "bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-red-600 transition"
+          "bg-slate-50 dark:bg-muted hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 dark:text-muted-foreground hover:text-red-600 dark:hover:text-red-500 transition"
         )}
       >
         <Trash2 size={16} />
@@ -55,7 +55,7 @@ export const CartItem: React.FC<CartItemProps> = ({
       {/* MAIN GRID */}
       <div className="grid grid-cols-[72px_1fr] sm:grid-cols-[96px_1fr_auto] gap-3 sm:gap-5 items-center">
         {/* IMAGE */}
-        <div className="relative w-18 h-18 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-slate-100">
+        <div className="relative w-18 h-18 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-slate-100 dark:bg-muted">
           {image && (
             <Image
               src={image}
@@ -68,16 +68,16 @@ export const CartItem: React.FC<CartItemProps> = ({
 
         {/* INFO */}
         <div className="min-w-0">
-          <h3 className="font-black text-sm sm:text-base uppercase truncate">
+          <h3 className="font-black text-sm sm:text-base uppercase truncate dark:text-foreground">
             {name}
           </h3>
 
-          <p className="text-xs sm:text-sm text-slate-400 font-bold mt-1">
+          <p className="text-xs sm:text-sm text-slate-400 dark:text-muted-foreground font-bold mt-1">
             ${item.price.toFixed(2)}
           </p>
 
           {/* MOBILE TOTAL */}
-          <p className="sm:hidden mt-2 text-base font-black text-red-600">
+          <p className="sm:hidden mt-2 text-base font-black text-red-600 dark:text-primary">
             ${total}
           </p>
         </div>
@@ -85,12 +85,12 @@ export const CartItem: React.FC<CartItemProps> = ({
         {/* DESKTOP ACTIONS */}
         <div className="hidden sm:flex items-center gap-4">
           {/* QTY */}
-          <div className="flex items-center bg-slate-50 border border-slate-200 rounded-xl px-1">
+          <div className="flex items-center bg-slate-50 dark:bg-muted border border-slate-200 dark:border-border rounded-xl px-1">
             <button
               onClick={() =>
                 onUpdateQuantity(item._id, Math.max(1, item.quantity - 1))
               }
-              className="h-8 w-8 flex items-center justify-center hover:bg-white rounded-lg"
+              className="h-8 w-8 flex items-center justify-center hover:bg-white dark:hover:bg-card rounded-lg"
             >
               <Minus size={14} />
             </button>
@@ -103,14 +103,14 @@ export const CartItem: React.FC<CartItemProps> = ({
               onClick={() =>
                 onUpdateQuantity(item._id, item.quantity + 1)
               }
-              className="h-8 w-8 flex items-center justify-center hover:bg-white rounded-lg"
+              className="h-8 w-8 flex items-center justify-center hover:bg-white dark:hover:bg-card rounded-lg"
             >
               <Plus size={14} />
             </button>
           </div>
 
           {/* PRICE */}
-          <div className="min-w-[80px] text-right font-black text-lg">
+          <div className="min-w-[80px] text-right font-black text-lg dark:text-foreground">
             ${total}
           </div>
         </div>
@@ -118,12 +118,12 @@ export const CartItem: React.FC<CartItemProps> = ({
 
       {/* MOBILE QTY BAR */}
       <div className="sm:hidden mt-4">
-        <div className="flex items-center justify-between bg-slate-50 border border-slate-200 rounded-xl px-3 py-2">
+        <div className="flex items-center justify-between bg-slate-50 dark:bg-muted border border-slate-200 dark:border-border rounded-xl px-3 py-2">
           <button
             onClick={() =>
               onUpdateQuantity(item._id, Math.max(1, item.quantity - 1))
             }
-            className="h-9 w-9 rounded-lg bg-white flex items-center justify-center"
+            className="h-9 w-9 rounded-lg bg-white dark:bg-card flex items-center justify-center"
           >
             <Minus size={16} />
           </button>
@@ -136,7 +136,7 @@ export const CartItem: React.FC<CartItemProps> = ({
             onClick={() =>
               onUpdateQuantity(item._id, item.quantity + 1)
             }
-            className="h-9 w-9 rounded-lg bg-white flex items-center justify-center"
+            className="h-9 w-9 rounded-lg bg-white dark:bg-card flex items-center justify-center"
           >
             <Plus size={16} />
           </button>

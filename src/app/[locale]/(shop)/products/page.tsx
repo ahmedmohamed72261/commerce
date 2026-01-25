@@ -9,6 +9,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { useProductsStore } from '@/store/products';
 import { ProductCard } from '@/components/products/ProductCard';
+import { ProductCardSkeleton } from '@/components/products/ProductCardSkeleton';
 import { FilterSidebar, type FilterGroup } from '@/components/shop/Filter';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { getFilters } from '@/services/products.service';
@@ -18,6 +19,7 @@ import { toast } from 'sonner';
 import { useParams } from 'next/navigation';
 import { cn } from '@/utils/utils';
 import { useTranslations } from 'next-intl';
+import { Breadcrumb } from '@/components/ui/breadcrumb';
 
 export default function ProductsPage() {
   const { locale } = useParams() as { locale: string };
@@ -241,38 +243,21 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFDFD] text-[#0F172A] font-sans antialiased">
+    <div className="min-h-screen bg-[#FDFDFD] dark:bg-background text-[#0F172A] dark:text-foreground font-sans antialiased">
       
-      {/* 1. BREADCRUMB NAVIGATOR */}
-      <div className="bg-white border-b border-slate-100 sm:pt-9">
-        <div className="max-w-[1600px] mx-auto px-6 h-14 flex items-center justify-between">
-          <nav className="flex items-center gap-3">
-            <div className="flex items-center gap-2 text-slate-400 hover:text-red-600 transition-colors cursor-pointer">
-              <Home size={14} />
-              <span className="text-[10px] font-bold uppercase tracking-widest">Home</span>
-            </div>
-            <ChevronsRight size={12} className="text-slate-300" />
-            <span className="text-[10px] font-black uppercase tracking-widest text-[#0F172A]">Shop</span>
-          </nav>
-          
-          <div className="flex items-center gap-4">
-             <span className="text-[10px] font-bold text-green-500 flex items-center gap-1.5 bg-green-50 px-3 py-1 rounded-full">
-                <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" /> Live_Inventory
-             </span>
-          </div>
-        </div>
-      </div>
+      {/* Unified Breadcrumb */}
+      <Breadcrumb
+        items={[
+          { label: t("products") }
+        ]}
+      />
 
       <div className="max-w-[1600px] mx-auto px-6 py-8 flex flex-col lg:flex-row gap-10">
         
         {/* 2. SIDEBAR FILTERS (Styled like image_8a566e) */}
         <aside className="hidden lg:block lg:w-[280px] shrink-0 space-y-10">
           {filtersLoading ? (
-             <div className="space-y-4">
-               <div className="h-10 bg-slate-100 animate-pulse rounded" />
-               <div className="h-40 bg-slate-100 animate-pulse rounded" />
-               <div className="h-20 bg-slate-100 animate-pulse rounded" />
-             </div>
+            <FilterSidebar isLoading={true} />
           ) : (
             <FilterSidebar 
                key={filters.map((f) => f.id).join("|")}
@@ -288,27 +273,27 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
           
           {/* Header Controls (Matching Image Toolbar) */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-            <h1 className="text-2xl font-black text-[#0F172A] tracking-tight">{t("products")}</h1>
+            <h1 className="text-2xl font-black text-[#0F172A] dark:text-foreground tracking-tight">{t("products")}</h1>
             
             <div className="flex flex-wrap justify-between items-center gap-3 w-full sm:w-auto">
               {/* View Switches */}
-              <div className="flex items-center border border-slate-200 rounded-lg overflow-hidden bg-white shadow-sm">
+              <div className="flex items-center border border-slate-200 dark:border-border rounded-lg overflow-hidden bg-white dark:bg-card shadow-sm">
                 <button 
                   onClick={() => setViewMode('grid')} 
-                  className={`p-2.5 transition-all ${viewMode === 'grid' ? 'bg-[#0F172A] text-white' : 'text-slate-400 hover:bg-slate-50'}`}
+                  className={`p-2.5 transition-all ${viewMode === 'grid' ? 'bg-[#0F172A] dark:bg-primary text-white' : 'text-slate-400 dark:text-muted-foreground hover:bg-slate-50 dark:hover:bg-muted'}`}
                 >
                   <LayoutGrid size={18}/>
                 </button>
                 <button 
                   onClick={() => setViewMode('list')} 
-                  className={`p-2.5 transition-all border-l border-slate-200 ${viewMode === 'list' ? 'bg-[#0F172A] text-white' : 'text-slate-400 hover:bg-slate-50'}`}
+                  className={`p-2.5 transition-all border-l border-slate-200 dark:border-border ${viewMode === 'list' ? 'bg-[#0F172A] dark:bg-primary text-white' : 'text-slate-400 dark:text-muted-foreground hover:bg-slate-50 dark:hover:bg-muted'}`}
                 >
                   <List size={18}/>
                 </button>
               </div>
               <Button 
                 onClick={() => setFilterOpen(true)} 
-                className="lg:hidden h-11 px-4 rounded-lg bg-red-600 text-white text-xs font-black uppercase tracking-widest"
+                className="lg:hidden h-11 px-4 rounded-lg bg-red-600 dark:bg-primary text-white text-xs font-black uppercase tracking-widest"
               >
                 {t("filter")}
               </Button>
@@ -319,7 +304,7 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
                   <select 
                     value={sort}
                     onChange={(e) => setSort(e.target.value)}
-                    className="appearance-none bg-white border border-slate-200 rounded-lg px-4 pr-10 h-11 text-xs font-bold text-[#0F172A] focus:ring-2 focus:ring-red-600/10 outline-none cursor-pointer shadow-sm">
+                    className="appearance-none bg-white dark:bg-card border border-slate-200 dark:border-border rounded-lg px-4 pr-10 h-11 text-xs font-bold text-[#0F172A] dark:text-foreground focus:ring-2 focus:ring-red-600/10 dark:focus:ring-primary/10 outline-none cursor-pointer shadow-sm">
                     <option value="-price">{t("priceDesc")}</option>
                     <option value="price">{t("priceAsc")}</option>
                     <option value="-createdAt">{t("latest")}</option>
@@ -331,7 +316,7 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
                   <select 
                     value={pageSize}
                     onChange={(e) => setPageSize(Number(e.target.value))}
-                    className="appearance-none bg-white border border-slate-200 rounded-lg px-4 pr-10 h-11 text-xs font-bold text-[#0F172A] focus:ring-2 focus:ring-red-600/10 outline-none cursor-pointer shadow-sm">
+                    className="appearance-none bg-white dark:bg-card border border-slate-200 dark:border-border rounded-lg px-4 pr-10 h-11 text-xs font-bold text-[#0F172A] dark:text-foreground focus:ring-2 focus:ring-red-600/10 dark:focus:ring-primary/10 outline-none cursor-pointer shadow-sm">
                     <option value={12}>12</option>
                     <option value={20}>20</option>
                     <option value={40}>40</option>
@@ -342,15 +327,42 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
             </div>
           </div>
 
-          {/* DYNAMIC PRODUCT DISPLAY */}
           {loading && items.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-32 bg-white rounded-[2rem] border border-dashed border-slate-200">
-              <RefreshCcw className="w-10 h-10 animate-spin text-red-600 mb-4" />
-              <p className="text-slate-400 font-bold text-sm uppercase tracking-widest">Fetching_Assets...</p>
+            <div className="bg-white dark:bg-card rounded-[2rem] border border-slate-200 dark:border-border px-4 py-8">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="h-9 w-9 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                    <RefreshCcw className="w-4 h-4 animate-spin text-red-600" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.25em] text-slate-400 dark:text-muted-foreground">
+                      Fetching_Assets
+                    </p>
+                    <p className="text-xs text-slate-400 dark:text-muted-foreground">
+                      Preparing your personalized product grid
+                    </p>
+                  </div>
+                </div>
+                <div className="hidden md:flex items-center gap-2 text-xs text-slate-400">
+                  <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                  <span>Live inventory sync</span>
+                </div>
+              </div>
+
+              <div
+                className={
+                  viewMode === 'grid'
+                    ? 'grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2'
+                    : 'flex flex-col gap-2'
+                }
+              >
+                {Array.from({ length: 8 }).map((_, index) => (
+                  <ProductCardSkeleton key={index} viewMode={viewMode} />
+                ))}
+              </div>
             </div>
           ) : (
             <>
-              {/* Product Cards Layout */}
               <div className={viewMode === 'grid' 
                 ? "grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2" 
                 : "flex flex-col gap-2"}>
@@ -368,16 +380,16 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
 
               {/* ENHANCED LOAD MORE (Command Center Style) */}
               {pagination.page < pagination.totalPages && (
-                <div className="mt-12 p-1 bg-[#0F172A] rounded-[2.5rem] overflow-hidden shadow-2xl">
-                  <div className="bg-white rounded-[2.4rem] p-12 text-center relative">
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-red-600 rounded-b-full shadow-[0_4px_10px_rgba(220,38,38,0.3)]" />
+                <div className="mt-12 p-1 bg-[#0F172A] dark:bg-card rounded-[2.5rem] overflow-hidden shadow-2xl">
+                  <div className="bg-white dark:bg-muted rounded-[2.4rem] p-12 text-center relative">
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-red-600 dark:bg-primary rounded-b-full shadow-[0_4px_10px_rgba(220,38,38,0.3)]" />
                     
                     <div className="flex flex-col items-center gap-6">
                       <div className="space-y-1">
-                        <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">
+                        <h4 className="text-[11px] font-black text-slate-400 dark:text-muted-foreground uppercase tracking-[0.3em]">
                           Registry_Sync_Status
                         </h4>
-                        <p className="text-sm font-bold text-[#0F172A]">
+                        <p className="text-sm font-bold text-[#0F172A] dark:text-foreground">
                           Displayed: {items.length} <span className="text-slate-300">/</span> Total: {pagination.total}
                         </p>
                       </div>
@@ -385,7 +397,7 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
                       <Button 
                         onClick={handleLoadMore}
                         disabled={loading}
-                        className="h-16 px-16 rounded-2xl bg-[#0F172A] text-white font-black text-xs tracking-[0.2em] uppercase hover:bg-red-600 hover:shadow-[0_20px_40px_-12px_rgba(220,38,38,0.4)] transition-all flex gap-4 active:scale-95 disabled:opacity-50"
+                        className="h-16 px-16 rounded-2xl bg-[#0F172A] dark:bg-primary text-white font-black text-xs tracking-[0.2em] uppercase hover:bg-red-600 dark:hover:bg-red-700 hover:shadow-[0_20px_40px_-12px_rgba(220,38,38,0.4)] transition-all flex gap-4 active:scale-95 disabled:opacity-50"
                       >
                         {loading ? <RefreshCcw size={18} className="animate-spin" /> : <SlidersHorizontal size={18} />}
                         Sync_Next_Data_Cluster
@@ -403,7 +415,7 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
           rounded="none"
           className={cn(
             /* Remove centering from base */
-            "fixed inset-y-0 z-50 w-[85vw] max-w-[420px] bg-white",
+            "fixed inset-y-0 z-50 w-[85vw] max-w-[420px] bg-white dark:bg-card",
             "p-6 border-none shadow-2xl",
             "transition-all duration-1000 ease-out",
             "data-[state=open]:translate-x-0",
@@ -421,11 +433,7 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
           </DialogHeader>
           <div className="max-h-[80vh] overflow-y-auto pr-2">
             {filtersLoading ? (
-              <div className="space-y-4">
-                <div className="h-10 bg-slate-100 animate-pulse rounded" />
-                <div className="h-40 bg-slate-100 animate-pulse rounded" />
-                <div className="h-20 bg-slate-100 animate-pulse rounded" />
-              </div>
+              <FilterSidebar isLoading={true} />
             ) : (
               <FilterSidebar
                 key={filters.map((f) => f.id).join("|")}

@@ -15,6 +15,7 @@ import {
   ArrowRight
 } from "lucide-react";
 import { useWishlist } from "@/store/wishlist";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
 
 export default function WishlistPage() {
   const { items, loading, fetchWishlist, removeItem, totalItems } = useWishlist();
@@ -34,32 +35,23 @@ export default function WishlistPage() {
   return (
     <div
       dir={isRTL ? "rtl" : "ltr"}
-      className="min-h-screen bg-[#f8f9fa] pb-20"
+      className="min-h-screen bg-[#f8f9fa] dark:bg-background p-6"
     >
-      {/* Breadcrumb */}
-      <div className="bg-white border-b">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-          <nav className="flex items-center gap-2 text-xs font-bold uppercase text-slate-400">
-            <Link href="/" className="hover:text-red-600">
-              Home
-            </Link>
-            <ChevronRight
-              size={12}
-              className={isRTL ? "rotate-180" : ""}
-            />
-            <span className="text-slate-900">{t("title")}</span>
-          </nav>
-        </div>
-      </div>
+      {/* Unified Breadcrumb */}
+      <Breadcrumb
+        items={[
+          { label: t("title") }
+        ]}
+      />
 
       <div className="max-w-6xl mx-auto px-4 mt-10">
         {/* Header */}
         <header className="flex flex-col md:flex-row justify-between gap-6 mb-10">
-          <h1 className="text-3xl md:text-6xl font-black italic">
+          <h1 className="text-3xl md:text-6xl font-black italic dark:text-foreground">
             {t("title")}
           </h1>
 
-          <div className="bg-slate-900 text-white rounded-2xl px-6 py-4 text-center">
+          <div className="bg-slate-900 dark:bg-card dark:border dark:border-border text-white rounded-2xl px-6 py-4 text-center">
             <p className="text-xs uppercase opacity-60">
               {t("totalItems")}
             </p>
@@ -71,11 +63,11 @@ export default function WishlistPage() {
         {loading ? (
           <div className="grid gap-4">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-40 bg-white rounded-2xl animate-pulse" />
+              <div key={i} className="h-40 bg-white dark:bg-card rounded-2xl animate-pulse" />
             ))}
           </div>
         ) : items.length === 0 ? (
-          <div className="bg-white rounded-2xl p-10 text-center font-bold text-slate-500">
+          <div className="bg-white dark:bg-card rounded-2xl p-10 text-center font-bold text-slate-500 dark:text-muted-foreground">
             {t("empty")}
           </div>
         ) : (
@@ -83,12 +75,12 @@ export default function WishlistPage() {
             {items.map((item) => (
               <div
               key={item.id}
-              className="bg-white rounded-xl border border-slate-200 hover:shadow-md transition"
+              className="bg-white dark:bg-card rounded-xl border border-slate-200 dark:border-border hover:shadow-md transition"
             >
               <div className="flex items-center gap-3 p-3 md:p-6">
                 
                 {/* Image */}
-                <div className="relative w-20 h-20 md:w-40 md:h-40 bg-slate-100 rounded-lg overflow-hidden shrink-0">
+                <div className="relative w-20 h-20 md:w-40 md:h-40 bg-slate-100 dark:bg-muted rounded-lg overflow-hidden shrink-0">
                   {item.image ? (
                     <Image
                       src={item.image}
@@ -105,7 +97,7 @@ export default function WishlistPage() {
 
                 {/* Info */}
                 <div className="flex-1 min-w-0 space-y-1">
-                  <h2 className="text-sm md:text-xl font-black truncate">
+                  <h2 className="text-sm md:text-xl font-black truncate dark:text-foreground">
                     { item.title}
                   </h2>
 
@@ -114,7 +106,7 @@ export default function WishlistPage() {
                       <CheckCircle size={12} />
                       {t("saved")}
                     </span>
-                    <span className="text-slate-400">
+                    <span className="text-slate-400 dark:text-muted-foreground">
                       ${((item.salePrice ?? item.price) || 0).toFixed(2)}
                     </span>
                   </div>
@@ -134,7 +126,7 @@ export default function WishlistPage() {
 
                   <button
                     onClick={() => removeItem(item.id)}
-                    className="h-9 w-9 flex items-center justify-center rounded-lg border text-slate-400 hover:text-red-600"
+                    className="h-9 w-9 flex items-center justify-center rounded-lg border dark:border-border text-slate-400 dark:text-muted-foreground hover:text-red-600 dark:hover:text-red-500"
                   >
                     <Trash2 size={16} />
                   </button>
@@ -147,10 +139,10 @@ export default function WishlistPage() {
         )}
 
         {/* Footer */}
-        <div className="mt-12 bg-white rounded-2xl p-6 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="mt-12 bg-white dark:bg-card rounded-2xl p-6 flex flex-col md:flex-row justify-between items-center gap-6">
           <Link
             href="/"
-            className="text-xs uppercase font-bold text-slate-400 hover:text-red-600 flex items-center gap-2"
+            className="text-xs uppercase font-bold text-slate-400 dark:text-muted-foreground hover:text-red-600 dark:hover:text-primary flex items-center gap-2"
           >
             <ArrowRight className={isRTL ? "" : "rotate-180"} size={14} />
             {t("back")}
@@ -158,15 +150,15 @@ export default function WishlistPage() {
 
           <div className="flex items-center gap-6">
             <div className="text-end hidden md:block">
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-400 dark:text-muted-foreground">
                 {t("totalValue")}
               </p>
-              <p className="text-2xl font-black italic">
+              <p className="text-2xl font-black italic dark:text-foreground">
                 ${totalValue.toFixed(2)}
               </p>
             </div>
 
-            <Button className="h-14 px-10 bg-red-600">
+            <Button className="h-14 px-10 bg-red-600 dark:bg-primary">
               {t("deployAll")}
               <Zap className="ms-2 w-4 h-4" />
             </Button>

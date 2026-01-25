@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import { http } from "@/services/http";
+import { getFilteredProducts, getProduct } from "@/services/products.service";
 
 export type Product = {
   id: string | number;
@@ -10,6 +11,8 @@ export type Product = {
   image?: string;
   images?: string[];
   rating?: number;
+  averageRating?: number;
+  ratingsCount?: number;
   category?: string;
   categoryId?: string;
   salePrice?: number;
@@ -80,13 +83,15 @@ function mapRawProduct(p: unknown, locale: "en" | "ar"): Product {
   
   const brandObj = (obj?.brand as { name?: unknown } | undefined);
   const brand = pickLocaleString(brandObj?.name, locale);
-  const rating = typeof obj?.rating === "number" ? (obj.rating as number) : undefined;
+  const averageRating = typeof obj?.averageRating === "number" ? (obj.averageRating as number) : undefined;
+  const ratingsCount = typeof obj?.ratingsCount === "number" ? (obj.ratingsCount as number) : undefined;
+  const rating = typeof obj?.rating === "number" ? (obj.rating as number) : averageRating;
   const stock = typeof obj?.stock === "number" ? (obj.stock as number) : undefined;
   const condition = typeof obj?.condition === "string" ? String(obj.condition) : undefined;
   const description = pickLocaleString(obj?.description, locale) || (typeof obj?.description === "string" ? String(obj.description) : undefined);
   const createdAt = typeof obj?.createdAt === "string" ? String(obj.createdAt) : undefined;
   
-  return { id, title, price, image, images, rating, category, categoryId, salePrice, stock, brand, condition, description, createdAt };
+  return { id, title, price, image, images, rating, averageRating, ratingsCount, category, categoryId, salePrice, stock, brand, condition, description, createdAt };
 }
 
 function normalizeProductsResponse(raw: unknown, locale: "en" | "ar"): { items: Product[]; total?: number } {
@@ -138,10 +143,8 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
         }
       });
 
-      const res = await http.get("/products", {
-        params,
-      });
-      const { items, total } = normalizeProductsResponse(res.data, locale);
+      const res = await getFilteredProducts(params as Record<string, string | number | boolean | undefined>);
+      const { items, total } = normalizeProductsResponse(res.data ?? res, locale);
       const t = typeof total === "number" ? total : items.length;
       set({
         items,
@@ -190,8 +193,7 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
   async getProductDetails(productId: string, locale = "en") {
     set({ productDetailsLoading: true, error: null });
     try {
-      const res = await http.get(`/products/${productId}`);
-      const raw = res.data;
+      const raw = await getProduct(productId);
       const data = raw?.data || raw;
       const mapped = mapRawProduct(data, locale);
       set({ productDetails: mapped, productDetailsLoading: false });

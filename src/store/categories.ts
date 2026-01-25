@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import { http } from "@/services/http";
+import { getCategories as svcGetCategories, getCategoryProducts as svcGetCategoryProducts } from "@/services/categories.service";
 
 export type Category = {
   id: string | number;
@@ -52,8 +53,7 @@ export const useCategoriesStore = create<CategoriesState>((set) => ({
   async fetchCategories(locale = "en") {
     set({ loading: true, error: null });
     try {
-      const res = await http.get("/categories");
-      const raw = res.data;
+      const raw = await svcGetCategories();
       const arr: any[] = Array.isArray(raw)
         ? raw
         : Array.isArray(raw?.data)
@@ -89,8 +89,7 @@ export const useCategoriesStore = create<CategoriesState>((set) => ({
   async getCategoryProducts(categoryId: string, locale = "en") {
     set({ categoryProductsLoading: true, error: null });
     try {
-      const res = await http.get(`/categories/${categoryId}`);
-      const raw = res.data;
+      const raw = await svcGetCategoryProducts(categoryId);
       const data = raw?.data || raw;
       
       const categoryData = {
@@ -131,4 +130,3 @@ export const useCategoriesStore = create<CategoriesState>((set) => ({
     }
   },
 }));
-

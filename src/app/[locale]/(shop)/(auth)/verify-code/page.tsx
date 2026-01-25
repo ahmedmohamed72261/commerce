@@ -9,6 +9,7 @@ import { useAuthStore } from "@/store/auth";
 import { addToast } from "@/store/notifications";
 import { useTranslations ,useLocale} from "next-intl";
 import { Input } from "@/components/ui/input";
+import { Lock } from "lucide-react";
 
 export default function VerifyCodePage() {
   const router = useRouter();
@@ -127,6 +128,7 @@ export default function VerifyCodePage() {
               className="h-11 rounded-md border border-[var(--border)] bg-white/60 dark:bg-white/5 px-3 text-sm outline-none backdrop-blur focus:ring-2 focus:ring-red-600/20"
               placeholder=""
               locale={locale}
+              icon={Lock}
             />
           </div>
           <div className="grid gap-2">
@@ -138,6 +140,7 @@ export default function VerifyCodePage() {
               className="h-11 rounded-md border border-[var(--border)] bg-white/60 dark:bg-white/5 px-3 text-sm outline-none backdrop-blur focus:ring-2 focus:ring-red-600/20"
               placeholder=""
               locale={locale}
+              icon={Lock}
             />
           </div>
           <button

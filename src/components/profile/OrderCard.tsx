@@ -50,11 +50,11 @@ export function OrderCard({ order }: { order: OrderLite | Order }) {
     : [];
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+    <div className="bg-white dark:bg-card border border-slate-200 dark:border-border rounded-xl overflow-hidden">
       {/* HEADER */}
-      <div className="flex items-center justify-between px-4 py-3 bg-slate-50">
+      <div className="flex items-center justify-between px-4 py-3 bg-slate-50 dark:bg-muted">
         <div>
-          <p className="text-xs text-slate-400 font-bold">
+          <p className="text-xs text-slate-400 dark:text-muted-foreground font-bold">
             Order #{String(id).slice(-6)}
           </p>
           {createdAt && (
@@ -65,7 +65,7 @@ export function OrderCard({ order }: { order: OrderLite | Order }) {
         </div>
 
         <div className="text-right">
-          <p className="text-sm font-black">${order.totalAmount.toFixed(2)}</p>
+          <p className="text-sm font-black dark:text-foreground">${order.totalAmount.toFixed(2)}</p>
           {order.status && (
             <span className="text-[10px] font-bold text-slate-500 uppercase">
               {order.status}
@@ -79,9 +79,9 @@ export function OrderCard({ order }: { order: OrderLite | Order }) {
         {items.map((it, idx) => (
           <div
             key={idx}
-            className="flex items-center gap-3 border border-slate-100 rounded-lg p-2"
+            className="flex items-center gap-3 border border-slate-100 dark:border-border rounded-lg p-2"
           >
-            <div className="w-14 h-14 bg-slate-100 rounded-lg overflow-hidden">
+            <div className="w-14 h-14 bg-slate-100 dark:bg-muted rounded-lg overflow-hidden">
               {it.image && (
                 <Image
                   src={it.image}
@@ -94,8 +94,8 @@ export function OrderCard({ order }: { order: OrderLite | Order }) {
             </div>
 
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-bold truncate">{it.name}</p>
-              <p className="text-[11px] text-slate-400">
+              <p className="text-xs font-bold truncate dark:text-foreground">{it.name}</p>
+              <p className="text-[11px] text-slate-400 dark:text-muted-foreground">
                 Qty {it.quantity} · ${it.price}
               </p>
             </div>

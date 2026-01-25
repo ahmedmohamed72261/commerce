@@ -2,7 +2,8 @@
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
-import { ProductCard } from "@/components/shop/product-card";
+import { ProductCard } from '@/components/shop/product-card';
+import { ProductCardSkeleton } from '@/components/products/ProductCardSkeleton';
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -103,10 +104,11 @@ export function ProductSlider({ products, title, className }: ProductSliderProps
                     price={p.price}
                     image={p.image ?? "/images/a.jpg"}
                     rating={p.rating ?? 4}
+                    reviewsCount={0}
                   />
                 </Link>
               ) : (
-                <div className="rounded-[2rem] bg-neutral-100 animate-pulse h-[320px] sm:h-[420px]" />
+                <ProductCardSkeleton viewMode="grid" />
               )}
             </SwiperSlide>
           ));

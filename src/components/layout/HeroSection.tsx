@@ -13,7 +13,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-
+import { BrandSliderCardSkeleton } from "./BrandSliderCardSkeleton";
 export function HeroSection() {
   const t = useTranslations("Home");
   const brandRed = "#C40000";
@@ -123,7 +123,7 @@ export function HeroSection() {
                       href="#"
                     />
                   ) : (
-                    <div className="h-[180px] md:h-[220px] rounded-3xl bg-neutral-100 animate-pulse" />
+                    <BrandSliderCardSkeleton />
                   )}
                 </SwiperSlide>
               ))}

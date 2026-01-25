@@ -3,64 +3,73 @@
 import * as React from "react";
 import { cn } from "@/utils/utils";
 import { motion, AnimatePresence } from "framer-motion";
-import { Eye, EyeOff, Lock, User, Mail, Smartphone } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  icon?: React.ElementType;
   error?: string;
   containerClassName?: string;
   locale?: "en" | "ar";
+  appearance?: "glass" | "white";
+  showIcon?: boolean;
+  icon?: React.ElementType;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, label, icon: Icon, error, containerClassName, locale = "en", ...props }, ref) => {
+  (
+    {
+      className,
+      type,
+      label,
+      error,
+      containerClassName,
+      locale = "en",
+      appearance = "glass",
+      showIcon = true,
+      icon,
+      ...props
+    },
+    ref
+  ) => {
     const [focused, setFocused] = React.useState(false);
+    const [hasValue, setHasValue] = React.useState(!!props.value);
     const [showPassword, setShowPassword] = React.useState(false);
-    const [hasValue, setHasValue] = React.useState(false);
 
-    const inputType = type === "password" && showPassword ? "text" : type;
-    
-    // Auto-detect icon based on type/label if not provided
-    const DetectedIcon = Icon || (type === "password" ? Lock : type === "email" ? Mail : type === "tel" ? Smartphone : User);
+    const inputType =
+      type === "password" && showPassword ? "text" : type;
+
+    const float = focused || hasValue;
 
     return (
-      <div className={cn("relative group", containerClassName)}>
-        <motion.div
-          animate={focused ? "focused" : "idle"}
-          variants={{
-            idle: { scale: 1 },
-            focused: { scale: 1.02 }
-          }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      <div className={cn("relative w-full", containerClassName)}>
+        <div
           className={cn(
-            "relative flex items-center w-full rounded-2xl border transition-all duration-300 overflow-hidden",
-            "bg-white/5 backdrop-blur-md shadow-lg", // Glassmorphic base
-            "border-white/10 dark:border-white/5", // Subtle border
-            focused ? "ring-2 ring-red-500/50 border-red-500/50 shadow-red-500/10" : "hover:border-white/30",
-            error ? "border-red-500 ring-1 ring-red-500" : ""
+            "relative w-full rounded-xl border transition-colors duration-200",
+            appearance === "glass"
+              ? "bg-[--glass-bg] backdrop-blur-md"
+              : "bg-[--color-card]",
+            error
+              ? "border-red-500"
+              : focused
+              ? "border-[--color-primary]"
+              : "border-[--color-border]",
+            "hover:border-[--color-primary]/40"
           )}
         >
-          {/* Icon Section */}
-          <div className="p-4 text-red-800 group-hover:text-red-800/70 transition-colors">
-            <DetectedIcon size={20} />
-          </div>
-
-          {/* Input Field */}
-          <div className="relative flex-1">
+          <div className="relative">
             <input
               ref={ref}
               type={inputType}
+              dir={locale === "ar" ? "rtl" : "ltr"}
+              placeholder=" "
               className={cn(
-                "w-full h-14 bg-transparent px-4 text-base text-foreground placeholder-transparent outline-none",
-                "file:border-0 file:bg-transparent file:text-sm file:font-medium",
-                className,
-                locale === "ar" ? "text-right" : "text-left", // Align text
-                locale === "ar" ? "placeholder-right" : "placeholder-left" // Align placeholder
+                "peer w-full h-12 bg-transparent text-sm outline-none",
+                "text-[--color-foreground]",
+                locale === "ar" ? "text-right" : "text-left",
+                icon ? (locale === "ar" ? "pr-9 pl-4" : "pl-9 pr-4") : "px-4",
+                className
               )}
-              placeholder={props.placeholder || label} // Placeholder needed for floating label trick
-              dir={locale === "ar" ? "rtl" : "ltr"} // Important: makes placeholder align right in Arabic
               onFocus={(e) => {
                 setFocused(true);
                 props.onFocus?.(e);
@@ -76,58 +85,70 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               }}
               {...props}
             />
-            
+
             {/* Floating Label */}
             {label && (
               <label
                 className={cn(
-                  "absolute pointer-events-none transition-all duration-200 ease-out",
-                  locale === "ar"
-                    ? "right-4 origin-right" // RTL label
-                    : "left-4 origin-left",  // LTR label
-                  (focused || hasValue || props.value)
-                    ? " -top-3 text-[10px] text-red-500 font-bold uppercase tracking-wider translate-y-2"
-                    : "top-1/2 -translate-y-1/2 text-muted-foreground/50"
+                  "absolute pointer-events-none transition-all duration-200",
+                  locale === "ar" ? "right-4" : "left-4",
+                  float
+                    ? "-top-1 text-[11px] font-semibold text-[--color-primary]"
+                    : "top-1/2 -translate-y-1/2 text-sm text-[--color-muted-foreground]"
                 )}
               >
                 {label}
               </label>
             )}
+
+            {/* Leading Icon */}
+            {icon && (
+              <span
+                className={cn(
+                  "absolute top-1/2 -translate-y-1/2 text-[--color-muted-foreground]",
+                  locale === "ar" ? "right-3" : "left-3"
+                )}
+              >
+                {React.createElement(icon as React.ElementType, { size: 16 })}
+              </span>
+            )}
+
+            {/* Password Toggle */}
+            {type === "password" && showIcon && (
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                className="absolute top-1/2 -translate-y-1/2 right-3 text-[--color-muted-foreground] hover:text-[--color-primary]"
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            )}
+
+            {/* Underline */}
+            <motion.span
+              className="absolute bottom-0 left-0 h-[2px] bg-[--color-primary]"
+              animate={{ width: focused ? "100%" : "0%" }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+            />
           </div>
+        </div>
 
-          {/* Password Toggle */}
-          {type === "password" && (
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="p-4 text-red-500 hover:text-red-700 transition-colors outline-none"
-            >
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-            </button>
-          )}
-
-          {/* Active Indicator Line */}
-          <div className={cn(
-            "absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-red-600 to-transparent transition-all duration-500",
-            focused ? "w-full opacity-100" : "w-0 opacity-0"
-          )} />
-        </motion.div>
-
-        {/* Error Message */}
+        {/* Error */}
         <AnimatePresence>
           {error && (
-            <motion.span
-              initial={{ opacity: 0, y: -10 }}
+            <motion.p
+              initial={{ opacity: 0, y: -4 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="absolute -bottom-5 left-2 text-[10px] text-red-500 font-bold uppercase tracking-wider"
+              exit={{ opacity: 0, y: -4 }}
+              className="mt-1 text-[11px] font-semibold text-red-500"
             >
               {error}
-            </motion.span>
+            </motion.p>
           )}
         </AnimatePresence>
       </div>
     );
   }
 );
+
 Input.displayName = "Input";

@@ -12,6 +12,7 @@ import { ProfileSecurity } from "@/components/profile/ProfileSecurity";
 import { OrdersTab } from "@/components/profile/OrdersTab";
 import { WishlistTab } from "@/components/profile/WishlistTab";
 import { AddressesTab, type Address } from "@/components/profile/AddressesTab";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
 
 type UserProfile = {
   _id?: string;
@@ -76,14 +77,13 @@ const ProfilePage = () => {
   const addresses = useMemo(() => profile?.addresses ?? [], [profile]);
 
   return (
-    <div className="min-h-screen bg-[#FDFDFD] text-slate-900 font-sans antialiased" dir={isRTL ? "rtl" : "ltr"}>
-      {/* HEADER BREADCRUMB */}
-      <div className="border-b border-slate-100 bg-white">
-        <div className="max-w-[1400px] mx-auto px-8 h-14 flex items-center gap-2 text-[11px] font-medium text-slate-400">
-          <span>Home</span> <ChevronRight size={12} />
-          <span className="text-red-600 font-bold uppercase tracking-widest">{activeTab}</span>
-        </div>
-      </div>
+    <div className="min-h-screen bg-[#FDFDFD] dark:bg-background text-slate-900 dark:text-foreground font-sans antialiased" dir={isRTL ? "rtl" : "ltr"}>
+      {/* Unified Breadcrumb */}
+      <Breadcrumb
+        items={[
+          { label: activeTab }
+        ]}
+      />
 
       <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-8 flex flex-col lg:flex-row gap-6 lg:gap-10">
         
@@ -92,7 +92,7 @@ const ProfilePage = () => {
 
         {/* MAIN CONTENT */}
         <main className="flex-1">
-          <div className="bg-white border border-slate-200 rounded-[2rem] shadow-sm min-h-[600px]">
+          <div className="bg-white dark:bg-card border border-slate-200 dark:border-border rounded-[2rem] shadow-sm min-h-[600px]">
             
             {/* 1. PROFILE TAB */}
             {activeTab === 'My Profile' && (

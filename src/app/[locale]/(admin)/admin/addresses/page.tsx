@@ -157,9 +157,9 @@ export default function AddressesPage() {
               control={form.control}
               name="isDefault"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-gray-200 dark:border-border p-4">
                   <FormControl>
-                    <input type="checkbox" checked={field.value} onChange={field.onChange} />
+                    <input type="checkbox" className="w-4 h-4 rounded border-gray-300 dark:border-border text-red-600 focus:ring-red-500 bg-white dark:bg-card" checked={field.value} onChange={field.onChange} />
                   </FormControl>
                   <div className="space-y-1 leading-none">
                     <FormLabel>

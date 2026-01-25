@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/core/providers/theme.provider";
 import { I18nProvider } from "@/core/providers/i18n.provider";
 import { siteConfig } from "@/config/site";
 import { getDictionary } from "@/core/i18n/dictionaries";
+import InitialLoadingWrapper from "@/components/layout/ClientAppWrapper";
 import "@/styles/globals.css";
 
 const geistSans = Geist({
@@ -47,16 +48,18 @@ export default async function RootLayout({
   return (
     <html lang={locale} dir={dir} suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <InitialLoadingWrapper>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <I18nProvider locale={locale} messages={messages}>
             <AuthGuard>
               {children}
             </AuthGuard>
           </I18nProvider>
-          {/* <ToastProvider /> */}
+          <ToastProvider />
         </ThemeProvider>
+        </InitialLoadingWrapper>
       </body>
     </html>
   );

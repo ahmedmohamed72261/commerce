@@ -5,6 +5,7 @@ import { Filter, ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/utils/utils";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
+import { FilterSkeleton } from "./FilterSkeleton";
 
 export interface FilterOption {
   label: string;
@@ -22,16 +23,17 @@ export interface FilterGroup {
 }
 
 interface FilterProps {
-  filters: FilterGroup[];
+  filters?: FilterGroup[];
   onFilterChange?: (filters: Record<string, string[] | number>) => void;
   className?: string;
   initialFilters?: Record<string, string[] | number>;
+  isLoading?: boolean;
 }
 
-export function FilterSidebar({ filters, onFilterChange, className, initialFilters }: FilterProps) {
+export function FilterSidebar({ filters, onFilterChange, className, initialFilters, isLoading = false }: FilterProps) {
   const [activeFilters, setActiveFilters] = useState<Record<string, string[] | number>>(initialFilters || {});
   const [expanded, setExpanded] = useState<Record<string, boolean>>(() =>
-    filters.reduce((acc, f) => ({ ...acc, [f.id]: true }), {})
+    filters?.reduce((acc, f) => ({ ...acc, [f.id]: true }), {}) || {}
   );
 
   const t  = useTranslations("filters");
@@ -69,23 +71,32 @@ export function FilterSidebar({ filters, onFilterChange, className, initialFilte
     });
   };
 
+  if (isLoading) {
+    return <FilterSkeleton />;
+  }
+
+  // Only render the filter UI if filters exist
+  if (!filters || filters.length === 0) {
+    return null;
+  }
+
   return (
     <div className={cn("space-y-6", className)}>
       <div className="flex items-center gap-2 mb-6">
-        <Filter className="w-5 h-5 text-red-600" />
+        <Filter className="w-5 h-5 text-red-600 dark:text-primary" />
         <h2 className="text-xl font-bold text-foreground">{t("filters")}</h2>
       </div>
 
       {filters.map((group) => (
         <div 
           key={group.id} 
-          className="glass-panel rounded-lg p-5 border border-border bg-card dark:bg-card/50"
+          className="glass-panel rounded-lg p-5 border border-border bg-card "
         >
           <button 
             onClick={() => toggleSection(group.id)}
             className="flex items-center justify-between w-full mb-4 group"
           >
-            <h3 className="font-bold text-foreground group-hover:text-red-600 transition-colors">
+            <h3 className="font-bold text-foreground group-hover:text-red-600 dark:group-hover:text-primary transition-colors">
               {group.title}
             </h3>
             {expanded[group.id] ? (
@@ -104,7 +115,7 @@ export function FilterSidebar({ filters, onFilterChange, className, initialFilte
                       <div className="relative flex items-center">
                         <input
                           type="checkbox"
-                          className="peer h-5 w-5 rounded border-border bg-muted checked:bg-red-600 checked:border-red-600 transition-all focus:ring-2 focus:ring-red-600/20"
+                          className="peer h-5 w-5 rounded border-border bg-muted checked:bg-red-600 dark:checked:bg-primary checked:border-red-600 dark:checked:border-primary transition-all focus:ring-2 focus:ring-red-600/20 dark:focus:ring-primary/20"
                           checked={Array.isArray(activeFilters[group.id]) ? (activeFilters[group.id] as string[]).includes(opt.value) : false}
                           onChange={() => handleCheckboxChange(group.id, opt.value)}
                         />
@@ -126,7 +137,7 @@ export function FilterSidebar({ filters, onFilterChange, className, initialFilte
                 <div className="pt-2">
                       <div className="flex items-center justify-between mb-4">
                          <span className="text-sm font-medium text-muted-foreground">${group.min || 0}</span>
-                         <span className="text-sm font-bold text-red-600">
+                         <span className="text-sm font-bold text-red-600 dark:text-primary">
                        ${typeof activeFilters[group.id] === "number" ? (activeFilters[group.id] as number) : (group.max || 1000)}
                          </span>
                       </div>
@@ -136,7 +147,7 @@ export function FilterSidebar({ filters, onFilterChange, className, initialFilte
                         max={group.max || 1000}
                         value={typeof activeFilters[group.id] === "number" ? (activeFilters[group.id] as number) : (group.max || 1000)}
                         onChange={(e) => handleRangeChange(group.id, Number(e.target.value))}
-                        className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-red-600 hover:accent-red-500 transition-all"
+                        className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-red-600 dark:accent-primary hover:accent-red-500 transition-all"
                       />
                     </div>
                   )}
@@ -150,8 +161,8 @@ export function FilterSidebar({ filters, onFilterChange, className, initialFilte
                       className={cn(
                         "px-3 py-1.5 text-xs font-medium rounded-full border transition-all",
                         Array.isArray(activeFilters[group.id]) && (activeFilters[group.id] as string[]).includes(opt.value)
-                          ? "bg-red-600 text-white border-red-600 shadow-md"
-                          : "bg-background border-border text-muted-foreground hover:border-red-600 hover:text-red-600"
+                          ? "bg-red-600 dark:bg-primary text-white border-red-600 dark:border-primary shadow-md"
+                          : "bg-background border-border text-muted-foreground hover:border-red-600 dark:hover:border-primary hover:text-red-600 dark:hover:text-primary"
                       )}
                     >
                       {opt.label}
@@ -164,7 +175,7 @@ export function FilterSidebar({ filters, onFilterChange, className, initialFilte
         </div>
       ))}
 
-      <Button className="w-full bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-600/20">
+      <Button className="w-full bg-red-600 dark:bg-primary hover:bg-red-700 dark:hover:bg-red-700 text-white shadow-lg shadow-red-600/20 dark:shadow-primary/20">
         {t("applyFilters")}
       </Button>
     </div>

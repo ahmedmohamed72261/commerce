@@ -4,6 +4,7 @@ import { cn } from "@/utils/utils";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useWishlist } from "@/store/wishlist";
+import { useCart } from "@/store/cart";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import { toast } from "sonner";
@@ -19,6 +20,7 @@ interface ProductCardProps {
   oldPrice?: number;
   image: string;
   rating?: number;
+  reviewsCount?: number;
   category?: string;
   brand?: string;
   stock?: number;
@@ -26,9 +28,10 @@ interface ProductCardProps {
   salePrice?: number;
 }
 
-export function ProductCard({ variant = "v1", productId, title, price, oldPrice = price * 1.2, image, rating = 4, category, brand, stock, condition, salePrice }: ProductCardProps) {
+export function ProductCard({ variant = "v1", productId, title, price, oldPrice = price * 1.2, image, rating = 4, reviewsCount = 0, category, brand, stock, condition, salePrice }: ProductCardProps) {
   const t = useTranslations("Shop");
-  const { addItem } = useWishlist();
+  const { addItem, removeItem, isInWishlist } = useWishlist();
+  const { addToCart } = useCart();
   const router = useRouter();
   const locale = useLocale() as "en" | "ar";
   // GLOBAL TRANSITION: 1000ms
@@ -43,24 +46,31 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -8 }}
-      className="group relative w-full sm:w-[320px] rounded-2xl bg-white border border-neutral-100 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] transition-all duration-500 overflow-hidden"
+      className="group relative w-full sm:w-[320px] rounded-2xl bg-white dark:bg-card border border-neutral-100 dark:border-border shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.5)] transition-all duration-500 overflow-hidden"
     >
       {/* --- Image Section (White & Minimal) --- */}
-      <div className="relative md:h-[320px] h-[200px] w-full p-2 bg-white">
+      <div className="relative md:h-[320px] h-[200px] w-full p-2 bg-white dark:bg-muted">
         {/* Action Buttons (Floating White Glass) */}
         <div className="absolute top-6 right-6 z-20 flex flex-col gap-2 opacity-0 scale-90 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300">
           <Button
-            className="p-3 rounded-2xl rounded-full bg-white/70 backdrop-blur-md border border-neutral-100 shadow-sm hover:bg-red-600 hover:text-white transition-all text-neutral-600"
+            className="p-3 rounded-2xl rounded-full bg-white/70 dark:bg-card/70 backdrop-blur-md border border-neutral-100 dark:border-border shadow-sm hover:bg-red-600 hover:text-white transition-all text-neutral-600 dark:text-foreground"
             onClick={(e) => {
               e.preventDefault();
-              addItem({ id: productId ?? title, title, price, image, salePrice });
-              toast.success(locale === "ar" ? "تمت الإضافة للمفضلة" : "Added to wishlist");
+              if (productId !== undefined) {
+                const isWishlisted = isInWishlist(productId);
+                const wishlistItem = { id: productId, title, price, image, salePrice };
+                if (isWishlisted) {
+                  removeItem(productId);
+                } else {
+                  addItem(wishlistItem);
+                }
+              }
             }}
           >
-            <Heart size={18} />
+            <Heart size={18} fill={productId !== undefined && isInWishlist(productId) ? "currentColor" : "none"} />
           </Button>  
           <Button
-            className="p-3 rounded-full bg-white/70 backdrop-blur-md border border-neutral-100 shadow-sm hover:bg-red-600 hover:text-white transition-all text-neutral-600"
+            className="p-3 rounded-full bg-white/70 dark:bg-card/70 backdrop-blur-md border border-neutral-100 dark:border-border shadow-sm hover:bg-red-600 hover:text-white transition-all text-neutral-600 dark:text-foreground"
             onClick={(e) => {
               e.preventDefault();
               if (productId !== undefined) {
@@ -85,33 +95,34 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
           </div>
 
       {/* --- Information Section --- */}
-      <div className="px-3 pb-3 pt-2 bg-white">
+      <div className="px-3 pb-3 pt-2 bg-white dark:bg-card">
         <div className="flex justify-between items-center mb-1">
           {brand && (
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 dark:text-muted-foreground">
               {brand}
             </span>
           )}
-          <div className="flex gap-0.5">
+          <div className="flex gap-0.5 items-center">
             {[...Array(5)].map((_, i) => (
-              <Star key={i} size={12} className={cn(i < rating ? "fill-amber-400 text-amber-400" : "text-neutral-200")} />
+              <Star key={i} size={12} className={cn(i < Math.round(rating) ? "fill-amber-400 text-amber-400" : "text-neutral-200")} />
             ))}
+            <span className="text-[10px] text-neutral-400 dark:text-muted-foreground ml-1">({reviewsCount || 0})</span>
           </div>
         </div>
 
         <div className="space-y-1 flex justify-between">
           <div>
-            <h3 className="md:text-2xl text-md font-bold tracking-tight text-neutral-900 group-hover:text-red-600 transition-colors">
+            <h3 className="md:text-2xl text-md font-bold tracking-tight text-neutral-900 dark:text-foreground group-hover:text-red-600 dark:group-hover:text-primary transition-colors">
             {title}
           </h3>
           {stock && (
-            <div className="flex items-center gap-1.5 text-[9px] font-bold text-neutral-400 uppercase">
+            <div className="flex items-center gap-1.5 text-[9px] font-bold text-neutral-400 dark:text-muted-foreground uppercase">
               <Box size={10} /> {stock} Units Left
             </div>
           )}
           </div>
           <div className="flex flex-col">
-            <span className="md:text-2xl text-md font-black tracking-tighter text-neutral-900">
+            <span className="md:text-2xl text-md font-black tracking-tighter text-neutral-900 dark:text-foreground">
               ${salePrice || price}
             </span>
           </div>
@@ -119,7 +130,20 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
 
         {/* --- Primary Action --- */}
         <div className="mt-2">
-          <button className="w-full group/btn relative h-10 overflow-hidden rounded-[1rem] bg-red-600 text-white transition-all hover:shadow-[0_15px_30px_-10px_rgba(220,38,38,0.4)] active:scale-95">
+          <button 
+            className="w-full group/btn relative h-10 overflow-hidden rounded-[1rem] bg-red-600 text-white transition-all hover:shadow-[0_15px_30px_-10px_rgba(220,38,38,0.4)] active:scale-95"
+            onClick={async (e) => {
+              e.preventDefault();
+              if (productId !== undefined) {
+                const success = await addToCart(String(productId), 1);
+                if (success) {
+                  toast.success(locale === "ar" ? "تمت إضافة المنتج إلى السلة" : "Product added to cart");
+                } else {
+                  toast.error(locale === "ar" ? "فشل في إضافة المنتج إلى السلة" : "Failed to add product to cart");
+                }
+              }
+            }}
+          >
             <div className="absolute inset-0 w-full h-full bg-neutral-900 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
             <span className="relative z-10 flex items-center rtl:flex-row-reverse justify-center gap-2 font-black uppercase text-xs tracking-widest">
               <ShoppingCart size={14} /> {t("addToCart")}

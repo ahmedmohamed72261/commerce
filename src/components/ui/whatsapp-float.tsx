@@ -4,7 +4,7 @@ import { Phone } from "lucide-react";
 
 export function WhatsAppFloat() {
   return (
-    <div className="fixed bottom-2 right-2 z-50">
+    <div className="fixed bottom-2 right-2 z-50 print:hidden">
       <a
         href="https://wa.me/+201155624668" // Replace with actual number
         target="_blank"

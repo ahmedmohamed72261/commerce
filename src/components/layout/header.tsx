@@ -25,7 +25,7 @@ export function Header() {
         className={`
           fixed top-0 left-0 right-0 z-50
           transition-all duration-300
-          ${scrolled ? "bg-background/95 backdrop-blur shadow-md dark:bg-background/95" : "bg-transparent"}
+          ${scrolled ? "bg-background/95 dark:bg-background/95 backdrop-blur shadow-md dark:shadow-border/20" : "bg-transparent"}
         `}
       >
         {/* TopBar (hide on scroll) */}
@@ -42,8 +42,8 @@ export function Header() {
         <Navbar locale={locale} />
       </header>
 
-      {/* Spacer for content (dynamic) */}
-      <div className="h-8" />
+      {/* Spacer for content - matches header height */}
+      <div className={`transition-all duration-300 ${scrolled ? "h-20" : "h-[140px]"}`} />
     </>
   );
 }

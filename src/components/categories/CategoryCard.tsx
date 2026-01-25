@@ -22,14 +22,14 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
   return (
     <Link 
       href={`/${locale}/categories/${category.id}`}
-      className={`group bg-white border border-slate-200/60 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]
+      className={`group bg-white dark:bg-card border border-slate-200/60 dark:border-border transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]
         ${viewMode === 'grid' 
-          ? 'rounded-2xl p-2 flex flex-col hover:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] hover:-translate-y-2 hover:border-red-600/20' 
-          : 'rounded-2xl p-2 flex items-center gap-10 hover:shadow-xl hover:border-red-600/20'
+          ? 'rounded-2xl p-2 flex flex-col hover:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.5)] hover:-translate-y-2 hover:border-red-600/20 dark:hover:border-primary/20' 
+          : 'rounded-2xl p-2 flex items-center gap-10 hover:shadow-xl dark:hover:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.5)] hover:border-red-600/20 dark:hover:border-primary/20'
         }`}
     >
       {/* IMAGE / PREVIEW */}
-      <div className={`relative overflow-hidden bg-slate-100 rounded-2xl shrink-0
+      <div className={`relative overflow-hidden bg-slate-100 dark:bg-muted rounded-2xl shrink-0
         ${viewMode === 'grid' ? 'md:h-60 h-40 w-full mb-2' : 'h-15 w-15'}`}>
         {category.image && (
           <Image 
@@ -42,8 +42,8 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         
         {viewMode === 'grid' && category.count && (
-          <div className="absolute bottom-2 left-4 bg-slate-950/80 backdrop-blur-md text-white text-[9px] font-black px-3 py-1.5 rounded-full flex items-center gap-2 uppercase tracking-tighter border border-white/10 shadow-2xl">
-            <Activity size={10} className="text-red-500" /> {category.count} Products
+          <div className="absolute bottom-2 left-4 bg-slate-950/80 dark:bg-black/80 backdrop-blur-md text-white text-[9px] font-black px-3 py-1.5 rounded-full flex items-center gap-2 uppercase tracking-tighter border border-white/10 shadow-2xl">
+            <Activity size={10} className="text-red-500 dark:text-primary" /> {category.count} Products
           </div>
         )}
       </div>
@@ -52,19 +52,19 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
       <div className="flex-1 flex flex-col px-1">
         <div className="flex justify-between items-start">
           <div className="space-y-2">
-            <h3 className="md:text-2xl text-sm font-black uppercase italic tracking-tighter group-hover:text-red-600 transition-colors duration-300">
+            <h3 className="md:text-2xl text-sm font-black uppercase italic tracking-tighter group-hover:text-red-600 dark:group-hover:text-primary transition-colors duration-300">
               {category.name}
             </h3>
             {category.tag && (
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2 group-hover:text-slate-600 transition-colors">
-                <Cpu size={12} className="text-red-500/50" /> {category.tag}
+              <p className="text-[10px] font-bold text-slate-400 dark:text-muted-foreground uppercase tracking-widest flex items-center gap-2 group-hover:text-slate-600 dark:group-hover:text-foreground transition-colors">
+                <Cpu size={12} className="text-red-500/50 dark:text-primary/50" /> {category.tag}
               </p>
             )}
           </div>
           {viewMode === 'list' && category.count && (
             <div className="text-right">
-              <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] mb-1 leading-none">Products</p>
-              <p className="text-3xl font-black italic text-slate-900 leading-none tracking-tighter">{category.count}</p>
+              <p className="text-[10px] font-black text-slate-300 dark:text-muted-foreground uppercase tracking-[0.3em] mb-1 leading-none">Products</p>
+              <p className="text-3xl font-black italic text-slate-900 dark:text-foreground leading-none tracking-tighter">{category.count}</p>
             </div>
           )}
         </div>
@@ -81,15 +81,15 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
 
         {/* ACTION BUTTON */}
         <div className={`mt-auto py-2 flex items-center justify-between 
-          ${viewMode === 'grid' ? 'border-t border-slate-100' : 'hidden md:flex'}`}>
+          ${viewMode === 'grid' ? 'border-t border-slate-100 dark:border-border' : 'hidden md:flex'}`}>
           {viewMode === 'grid' && (
-            <div className="flex items-center gap-1 bg-slate-50 px-2 py-1 rounded-lg">
+            <div className="flex items-center gap-1 bg-slate-50 dark:bg-muted px-2 py-1 rounded-lg">
               <Star size={10} fill="#facc15" className="text-yellow-400" />
-              <span className="text-[10px] font-black text-slate-600">4.9</span>
+              <span className="text-[10px] font-black text-slate-600 dark:text-foreground">4.9</span>
             </div>
           )}
-          <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-950 group-hover:text-red-600 transition-all duration-300">
-            <div className="bg-slate-100 p-2 rounded-full group-hover:bg-red-600 group-hover:text-white transition-all duration-300">
+          <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-950 dark:text-foreground group-hover:text-red-600 dark:group-hover:text-primary transition-all duration-300">
+            <div className="bg-slate-100 dark:bg-muted p-2 rounded-full group-hover:bg-red-600 dark:group-hover:bg-primary group-hover:text-white transition-all duration-300">
               <ArrowRight size={14} className="group-hover:translate-x-0.5" />
             </div>
           </div>

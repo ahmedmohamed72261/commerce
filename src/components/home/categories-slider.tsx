@@ -13,6 +13,7 @@ import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Button } from "../ui/button";
+import React from "react";
 
 function CategoryCard({ cat }: { cat: Category }) {
   return (
@@ -85,6 +86,21 @@ function CategoryCard({ cat }: { cat: Category }) {
   );
 }
 
+const CategorySliderCardSkeleton: React.FC = () => {
+  return (
+    <div className="relative h-[220px] sm:h-[320px] md:h-[380px] w-full rounded-3xl bg-neutral-100 dark:bg-slate-800 overflow-hidden">
+      <div className="absolute inset-0 animate-pulse">
+        <div className="h-full w-full bg-gradient-to-t from-neutral-200 to-neutral-100 dark:from-slate-700 dark:to-slate-800" />
+        <div className="absolute bottom-0 left-0 right-0 p-4 space-y-2">
+          <div className="h-4 bg-neutral-200 dark:bg-slate-700 rounded w-3/4" />
+          <div className="h-6 bg-neutral-200 dark:bg-slate-700 rounded w-1/2" />
+        </div>
+        <div className="absolute top-4 left-4 rtl:left-auto rtl:right-4 p-2 bg-neutral-200 dark:bg-slate-700 rounded-full" />
+      </div>
+    </div>
+  );
+};
+
 export function CategoriesSlider() {
   const { categories, fetchCategories, loading } = useCategoriesStore();
   const t = useTranslations("Common");
@@ -154,7 +170,7 @@ export function CategoriesSlider() {
             {(loading ? Array.from({ length: 4 }).map((_, i) => ({ id: `s-${i}` })) : data).map((cat: any) => (
               <SwiperSlide key={(cat.key ?? cat.id) as React.Key}>
                 {loading ? (
-                  <div className="relative h-[260px] sm:h-[320px] md:h-[420px] w-full rounded-3xl bg-neutral-100 animate-pulse" />
+                  <CategorySliderCardSkeleton />
                 ) : (
                   <Link href={`/${locale}/categories/${encodeURIComponent((cat as Category).key ?? String(cat.id))}`}>
                     <CategoryCard cat={cat} />

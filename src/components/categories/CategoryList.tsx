@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { useCategoriesStore } from '@/store/categories';
 import { CategoryCard } from '@/components/categories/CategoryCard';
-import { Loader2 } from 'lucide-react';
+import { CategoryCardSkeleton } from '@/components/categories/CategoryCardSkeleton';
 
 interface CategoryListProps {
   viewMode: 'grid' | 'list';
@@ -19,8 +19,13 @@ export const CategoryList: React.FC<CategoryListProps> = ({ viewMode, locale = '
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-8 h-8 animate-spin text-red-600" />
+      <div className={viewMode === 'grid'
+        ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-2"
+        : "flex flex-col gap-2"
+      }>
+        {Array.from({ length: viewMode === 'grid' ? 8 : 6 }).map((_, index) => (
+          <CategoryCardSkeleton key={index} viewMode={viewMode} />
+        ))}
       </div>
     );
   }

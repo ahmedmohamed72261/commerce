@@ -109,7 +109,7 @@ const CartPageClient = ({ locale }: { locale: string }) => {
 
   if (loading && !cart) {
     return (
-      <div className="min-h-screen bg-[#F4F5F7] flex items-center justify-center">
+      <div className="min-h-screen bg-[#F4F5F7] dark:bg-background flex items-center justify-center">
         <Loader2 className="w-12 h-12 animate-spin text-red-600" />
       </div>
     );
@@ -117,7 +117,7 @@ const CartPageClient = ({ locale }: { locale: string }) => {
 
   if (!cart || !cart.items || cart.items.length === 0) {
     return (
-      <div className="min-h-screen bg-[#F4F5F7] flex items-center justify-center p-6">
+      <div className="min-h-screen bg-[#F4F5F7] dark:bg-background flex items-center justify-center p-6">
         <div className="text-center">
           <ShoppingBag className="w-24 h-24 text-slate-300 mx-auto mb-6" />
           <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter mb-4">{t('emptyTitle')}</h2>
@@ -134,7 +134,7 @@ const CartPageClient = ({ locale }: { locale: string }) => {
   }
 
   return (
-    <div className="min-h-screen bg-[#F4F5F7]  p-6 md:py-10">
+    <div className="min-h-screen bg-[#F4F5F7] dark:bg-background  p-6">
       <div className="mx-auto w-full max-w-[1600px]">
         <Breadcrumb
           items={[
@@ -143,7 +143,7 @@ const CartPageClient = ({ locale }: { locale: string }) => {
           ]}
         />
         <header className="my-6 md:my-10">
-          <h1 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter leading-none text-indigo-950 mb-2">
+          <h1 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter leading-none text-indigo-950 dark:text-foreground mb-2">
             {t('title')}
           </h1>
           <p className="text-slate-400 dark:text-slate-300 font-bold">

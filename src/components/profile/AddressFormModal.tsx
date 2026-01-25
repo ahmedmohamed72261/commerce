@@ -10,6 +10,10 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { type AddressPayload } from "@/services/user.service";
+import { useLocale } from "next-intl";
+import { getAllGovernorates } from "@/services/governorates.service";
+import { Select } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 type AddressFormModalProps = {
   open: boolean;
@@ -30,11 +34,27 @@ export const AddressFormModal: React.FC<AddressFormModalProps> = ({
 }) => {
   const [formData, setFormData] = React.useState<AddressPayload>(initialData);
   const [loading, setLoading] = React.useState(false);
+  const locale = useLocale() as "en" | "ar";
+  const dir = locale === "ar" ? "rtl" : "ltr";
+  const [governorates, setGovernorates] = React.useState<Array<{ id?: string | number; name: string | { en: string; ar: string } }>>([]);
 
   React.useEffect(() => {
     if (open) setFormData(initialData);
   }, [open, initialData]);
 
+  React.useEffect(() => {
+    if (!open) return;
+    let mounted = true;
+    getAllGovernorates()
+      .then((res) => {
+        const list = Array.isArray(res?.data) ? res.data : Array.isArray(res) ? res : [];
+        if (mounted) setGovernorates(list);
+      })
+      .catch(() => {});
+    return () => {
+      mounted = false;
+    };
+  }, [open]);
   const handleSubmit = async () => {
     try {
       setLoading(true);
@@ -47,7 +67,7 @@ export const AddressFormModal: React.FC<AddressFormModalProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[92vw] sm:max-w-lg rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-xl">
+      <DialogContent className="w-[92vw] sm:max-w-lg rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-border shadow-xl bg-white dark:bg-card" dir={dir}>
         <DialogHeader className="mb-4">
           <DialogTitle className="text-lg font-semibold text-slate-900">
             {title}
@@ -58,19 +78,25 @@ export const AddressFormModal: React.FC<AddressFormModalProps> = ({
         </DialogHeader>
 
         <div className="grid grid-cols-2 gap-4">
-          {/* City */}
+          {/* City (Governorate) */}
           <div className="col-span-2">
-            <label className="block text-xs font-medium text-slate-600 mb-1">
-              City
-            </label>
-            <input
+            <Select
+              label={locale === "ar" ? "المحافظة" : "Governorate"}
               value={formData.city}
-              onChange={(e) =>
-                setFormData((p) => ({ ...p, city: e.target.value }))
-              }
-              placeholder="Cairo"
-              className="w-full h-11 rounded-lg border border-slate-200 px-3 text-sm focus:ring-2 focus:ring-red-500 outline-none"
-            />
+              onChange={(e) => setFormData((p) => ({ ...p, city: e.target.value }))}
+              appearance="white"
+              locale={locale}
+            >
+              <option value="">{locale === "ar" ? "اختر محافظة" : "Select governorate"}</option>
+              {governorates.map((g, idx) => {
+                const label = typeof g.name === "string" ? g.name : locale === "ar" ? (g.name as any).ar : (g.name as any).en;
+                return (
+                  <option key={String(g.id ?? idx)} value={label}>
+                    {label}
+                  </option>
+                );
+              })}
+            </Select>
           </div>
 
           {/* Street */}
@@ -84,7 +110,8 @@ export const AddressFormModal: React.FC<AddressFormModalProps> = ({
                 setFormData((p) => ({ ...p, street: e.target.value }))
               }
               placeholder="Tahrir Street"
-              className="w-full h-11 rounded-lg border border-slate-200 px-3 text-sm focus:ring-2 focus:ring-red-500 outline-none"
+              className="w-full h-11 rounded-lg border border-slate-200 dark:border-border bg-white dark:bg-muted px-3 text-sm focus:ring-2 focus:ring-red-500 outline-none"
+              dir={dir}
             />
           </div>
 
@@ -99,7 +126,8 @@ export const AddressFormModal: React.FC<AddressFormModalProps> = ({
                 setFormData((p) => ({ ...p, building: e.target.value }))
               }
               placeholder="12B"
-              className="w-full h-11 rounded-lg border border-slate-200 px-3 text-sm focus:ring-2 focus:ring-red-500 outline-none"
+              className="w-full h-11 rounded-lg border border-slate-200 dark:border-border bg-white dark:bg-muted px-3 text-sm focus:ring-2 focus:ring-red-500 outline-none"
+              dir={dir}
             />
           </div>
 
@@ -114,7 +142,8 @@ export const AddressFormModal: React.FC<AddressFormModalProps> = ({
                 setFormData((p) => ({ ...p, apartment: e.target.value }))
               }
               placeholder="402"
-              className="w-full h-11 rounded-lg border border-slate-200 px-3 text-sm focus:ring-2 focus:ring-red-500 outline-none"
+              className="w-full h-11 rounded-lg border border-slate-200 dark:border-border bg-white dark:bg-muted px-3 text-sm focus:ring-2 focus:ring-red-500 outline-none"
+              dir={dir}
             />
           </div>
 
@@ -129,7 +158,8 @@ export const AddressFormModal: React.FC<AddressFormModalProps> = ({
                 setFormData((p) => ({ ...p, floor: e.target.value }))
               }
               placeholder="4"
-              className="w-full h-11 rounded-lg border border-slate-200 px-3 text-sm focus:ring-2 focus:ring-red-500 outline-none"
+              className="w-full h-11 rounded-lg border border-slate-200 dark:border-border bg-white dark:bg-muted px-3 text-sm focus:ring-2 focus:ring-red-500 outline-none"
+              dir={dir}
             />
           </div>
 
@@ -138,16 +168,13 @@ export const AddressFormModal: React.FC<AddressFormModalProps> = ({
             <label className="block text-xs font-medium text-slate-600 mb-1">
               Delivery Notes
             </label>
-            <textarea
+            <Textarea
               value={formData.additionalInfo}
-              onChange={(e) =>
-                setFormData((p) => ({
-                  ...p,
-                  additionalInfo: e.target.value,
-                }))
-              }
+              onChange={(e) => setFormData((p) => ({ ...p, additionalInfo: e.target.value }))}
               placeholder="Ring bell twice..."
-              className="w-full h-24 rounded-lg border border-slate-200 px-3 py-2 text-sm resize-none focus:ring-2 focus:ring-red-500 outline-none"
+              appearance="white"
+              locale={locale}
+              rows={4}
             />
           </div>
         </div>
