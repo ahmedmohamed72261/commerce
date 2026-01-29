@@ -37,7 +37,7 @@ export function AdminHeader({ onMenuClick }: { onMenuClick?: () => void }) {
   };
 
   return (
-    <header className="h-16 bg-white/95 dark:bg-card/95 backdrop-blur-sm border-b border-gray-100 dark:border-border flex items-center justify-between px-3 sm:px-6 sticky top-0 z-20">
+    <header className="h-16 container bg-white/95 dark:bg-card/95 backdrop-blur-sm border-b border-gray-100 dark:border-border flex items-center justify-between px-3 sm:px-6 sticky top-0 z-20">
       
       {/* Left Section: Toggle and Store Link */}
       <div className="flex items-center gap-4">
@@ -104,10 +104,10 @@ export function AdminHeader({ onMenuClick }: { onMenuClick?: () => void }) {
           <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-card"></span>
         </button>
 
-        <div className="h-7 w-px bg-gray-200 dark:bg-border hidden sm:block"></div>
+        {/* <div className="h-7 w-px bg-gray-200 dark:bg-border hidden sm:block"></div> */}
 
         {/* User Profile Dropdown */}
-        <div className="relative">
+        {/* <div className="relative">
           <button 
              onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
              className="flex items-center gap-2 sm:gap-3 cursor-pointer group outline-none"
@@ -162,7 +162,7 @@ export function AdminHeader({ onMenuClick }: { onMenuClick?: () => void }) {
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+        </div> */}
       </div>
     </header>
   );

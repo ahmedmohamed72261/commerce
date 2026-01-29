@@ -43,13 +43,13 @@ export default function CreateBrandPage() {
 
       const res = await createBrand(fd);
       if (res?.success || res?._id || res?.id) {
-        toast.success("Brand created successfully");
-        router.push("/admin/brands");
+        toast.success(locale === "ar" ? "تم إنشاء العلامة التجارية بنجاح" : "Brand created successfully");
+        router.push(`/${locale}/admin/brands`);
       } else {
-        toast.error("Failed to create brand");
+        toast.error(locale === "ar" ? "فشل إنشاء العلامة التجارية" : "Failed to create brand");
       }
     } catch (err) {
-      toast.error("Failed to create brand");
+      toast.error(locale === "ar" ? "فشل إنشاء العلامة التجارية" : "Failed to create brand");
     } finally {
       setLoading(false);
     }

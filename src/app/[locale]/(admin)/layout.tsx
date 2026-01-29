@@ -42,14 +42,14 @@ export default function AdminLayout({
 
         <div
           className={cn(
-            'flex-1 flex flex-col min-h-0 transition-all duration-300',
+            'flex-1 flex flex-col overflow-auto min-h-0 transition-all duration-300',
             // sidebar offset
             isRTL ? 'md:mr-64' : 'md:ml-64'
           )}
         >
           <AdminHeader onMenuClick={() => setSidebarOpen(true)} />
 
-          <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+          <main className="flex-1  p-4 md:p-6 lg:p-8 max-w-7xl w-full mx-auto">
             {children}
           </main>
         </div>

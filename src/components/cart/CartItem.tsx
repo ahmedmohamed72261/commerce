@@ -1,11 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { CartItem as CartItemType } from "@/store/cart";
 import { useIsRTL } from "@/utils/rtl";
-import { cn } from "@/utils/utils";
+import { cn, formatCurrency } from "@/utils/utils";
 
 interface CartItemProps {
   item: CartItemType;
@@ -28,7 +28,8 @@ export const CartItem: React.FC<CartItemProps> = ({
       : item.product.name;
 
   const image = item.product.images?.[0];
-  const total = (item.price * item.quantity).toFixed(2);
+  const [qty, setQty] = useState<number>(item.quantity);
+  const total = item.price * qty;
 
   return (
     <div
@@ -73,12 +74,12 @@ export const CartItem: React.FC<CartItemProps> = ({
           </h3>
 
           <p className="text-xs sm:text-sm text-slate-400 dark:text-muted-foreground font-bold mt-1">
-            ${item.price.toFixed(2)}
+            {formatCurrency(item.price, locale)}
           </p>
 
           {/* MOBILE TOTAL */}
           <p className="sm:hidden mt-2 text-base font-black text-red-600 dark:text-primary">
-            ${total}
+            {formatCurrency(total, locale)}
           </p>
         </div>
 
@@ -87,22 +88,18 @@ export const CartItem: React.FC<CartItemProps> = ({
           {/* QTY */}
           <div className="flex items-center bg-slate-50 dark:bg-muted border border-slate-200 dark:border-border rounded-xl px-1">
             <button
-              onClick={() =>
-                onUpdateQuantity(item._id, Math.max(1, item.quantity - 1))
-              }
+              onClick={() => setQty((q) => Math.max(1, q - 1))}
               className="h-8 w-8 flex items-center justify-center hover:bg-white dark:hover:bg-card rounded-lg"
             >
               <Minus size={14} />
             </button>
 
             <span className="px-3 font-black text-sm">
-              {item.quantity}
+              {qty}
             </span>
 
             <button
-              onClick={() =>
-                onUpdateQuantity(item._id, item.quantity + 1)
-              }
+              onClick={() => setQty((q) => q + 1)}
               className="h-8 w-8 flex items-center justify-center hover:bg-white dark:hover:bg-card rounded-lg"
             >
               <Plus size={14} />
@@ -111,8 +108,16 @@ export const CartItem: React.FC<CartItemProps> = ({
 
           {/* PRICE */}
           <div className="min-w-[80px] text-right font-black text-lg dark:text-foreground">
-            ${total}
+            {formatCurrency(total, locale)}
           </div>
+
+          {/* UPDATE BUTTON */}
+          <button
+            onClick={() => onUpdateQuantity(item._id, qty)}
+            className="h-8 px-3 rounded-lg bg-slate-900 dark:bg-primary text-white text-xs font-black uppercase tracking-widest hover:bg-red-600 dark:hover:bg-red-700 transition-colors"
+          >
+            {isRTL ? "تحديث" : "Update"}
+          </button>
         </div>
       </div>
 
@@ -120,25 +125,29 @@ export const CartItem: React.FC<CartItemProps> = ({
       <div className="sm:hidden mt-4">
         <div className="flex items-center justify-between bg-slate-50 dark:bg-muted border border-slate-200 dark:border-border rounded-xl px-3 py-2">
           <button
-            onClick={() =>
-              onUpdateQuantity(item._id, Math.max(1, item.quantity - 1))
-            }
+            onClick={() => setQty((q) => Math.max(1, q - 1))}
             className="h-9 w-9 rounded-lg bg-white dark:bg-card flex items-center justify-center"
           >
             <Minus size={16} />
           </button>
 
           <span className="font-black text-base">
-            {item.quantity}
+            {qty}
           </span>
 
           <button
-            onClick={() =>
-              onUpdateQuantity(item._id, item.quantity + 1)
-            }
+            onClick={() => setQty((q) => q + 1)}
             className="h-9 w-9 rounded-lg bg-white dark:bg-card flex items-center justify-center"
           >
             <Plus size={16} />
+          </button>
+        </div>
+        <div className="mt-2 flex justify-end">
+          <button
+            onClick={() => onUpdateQuantity(item._id, qty)}
+            className="h-9 px-4 rounded-lg bg-slate-900 dark:bg-primary text-white text-xs font-black uppercase tracking-widest hover:bg-red-600 dark:hover:bg-red-700 transition-colors"
+          >
+            {isRTL ? "تحديث" : "Update"}
           </button>
         </div>
       </div>

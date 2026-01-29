@@ -212,9 +212,9 @@ const ProductsPageClient = ({ locale }: { locale: string }) => {
   const handleAddToCart = async (productId: string | number) => {
     const success = await addToCart(String(productId), 1);
     if (success) {
-      toast.success('Added to cart!');
+      toast.success(locale === "ar" ? "تمت الإضافة إلى السلة" : "Added to cart!");
     } else {
-      toast.error('Failed to add to cart');
+      toast.error(locale === "ar" ? "فشل الإضافة إلى السلة" : "Failed to add to cart");
     }
   };
 

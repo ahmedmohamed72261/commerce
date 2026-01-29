@@ -1,9 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Minus, Plus, ShoppingCart, Heart } from "lucide-react";
+import { Minus, Plus, ShoppingCart, Heart, FileText } from "lucide-react";
 import { useCart } from "@/store/cart";
 import { useWishlist } from "@/store/wishlist";
+import { useQuoteCart } from "@/store/quote-cart";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 
@@ -25,8 +26,10 @@ export const ProductActions: React.FC<Props> = ({
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
   const { addItem, removeItem, isInWishlist } = useWishlist();
+  const { addItem: addQuoteItem } = useQuoteCart();
   const wishlisted = isInWishlist(productId);
   const tShop = useTranslations("Shop");
+  const tQuote = useTranslations("Quotations");
 
   const handleAddToCart = async () => {
     const success = await addToCart(String(productId), quantity);
@@ -43,6 +46,18 @@ export const ProductActions: React.FC<Props> = ({
       addItem({ id: productId, title, price: salePrice ?? price ?? 0, salePrice });
       toast.success("Added to wishlist!");
     }
+  };
+
+  const handleAddToQuote = () => {
+    addQuoteItem({
+      _id: String(productId),
+      name: title,
+      price: salePrice ?? price ?? 0,
+      images: [],
+      stock: 0,
+      isActive: true
+    } as any, quantity);
+    toast.success("Added to quotation");
   };
 
   return (
@@ -76,6 +91,14 @@ export const ProductActions: React.FC<Props> = ({
           className="flex-1 bg-red-600 h-12 hover:bg-black dark:hover:bg-red-700 text-white rounded-xl font-black uppercase italic shadow-lg disabled:opacity-50 transition-all flex items-center justify-center gap-2"
         >
           <ShoppingCart size={20} /> {tShop("addToCart")}
+        </Button>
+
+        {/* Add to Quotation */}
+        <Button
+          onClick={handleAddToQuote}
+          className="flex-1 h-12 border border-border bg-white dark:bg-card text-foreground rounded-xl font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 hover:bg-red-50 dark:hover:bg-primary/20 hover:text-red-600 dark:hover:text-primary"
+        >
+          <FileText size={18} /> {tQuote("addToQuote")}
         </Button>
 
         {/* Wishlist */}

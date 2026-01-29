@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useLocale, useTranslations } from "next-intl";
+import { formatCurrency } from "@/utils/utils";
 import {
   CheckCircle,
   Trash2,
@@ -16,12 +17,14 @@ import {
 } from "lucide-react";
 import { useWishlist } from "@/store/wishlist";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { useCart } from "@/store/cart";
 
 export default function WishlistPage() {
   const { items, loading, fetchWishlist, removeItem, totalItems } = useWishlist();
   const t = useTranslations("Wishlist");
   const locale = useLocale() as "en" | "ar";
   const isRTL = locale === "ar";
+  const { addToCart } = useCart();
 
   useEffect(() => {
     fetchWishlist();
@@ -47,7 +50,7 @@ export default function WishlistPage() {
       <div className="max-w-6xl mx-auto px-4 mt-10">
         {/* Header */}
         <header className="flex flex-col md:flex-row justify-between gap-6 mb-10">
-          <h1 className="text-3xl md:text-6xl font-black italic dark:text-foreground">
+          <h1 className="text-3xl md:text-4xl font-black italic dark:text-foreground">
             {t("title")}
           </h1>
 
@@ -107,7 +110,7 @@ export default function WishlistPage() {
                       {t("saved")}
                     </span>
                     <span className="text-slate-400 dark:text-muted-foreground">
-                      ${((item.salePrice ?? item.price) || 0).toFixed(2)}
+                      {formatCurrency((item.salePrice ?? item.price) || 0, locale)}
                     </span>
                   </div>
                 </div>
@@ -117,6 +120,16 @@ export default function WishlistPage() {
                   <Button
                     size="sm"
                     className="h-9 px-2 md:px-6"
+                    onClick={async () => {
+                      const success = await addToCart(String(item.id), 1);
+                      if (success) {
+                        const msg = locale === "ar" ? "تمت الإضافة إلى السلة" : "Added to cart!";
+                        (await import("sonner")).toast.success(msg);
+                      } else {
+                        const msg = locale === "ar" ? "فشل الإضافة إلى السلة" : "Failed to add to cart";
+                        (await import("sonner")).toast.error(msg);
+                      }
+                    }}
                   >
                     <ShoppingCart size={16} />
                     <span className="hidden md:inline ms-2">
@@ -154,17 +167,30 @@ export default function WishlistPage() {
                 {t("totalValue")}
               </p>
               <p className="text-2xl font-black italic dark:text-foreground">
-                ${totalValue.toFixed(2)}
+                {formatCurrency(totalValue, locale)}
               </p>
             </div>
 
-            <Button className="h-14 px-10 bg-red-600 dark:bg-primary">
+            <Button
+              className="h-14 px-10 bg-red-600 dark:bg-primary"
+              onClick={async () => {
+                let okCount = 0;
+                for (const it of items) {
+                  const success = await addToCart(String(it.id), 1);
+                  if (success) okCount++;
+                }
+                const msg = locale === "ar"
+                  ? `تم ترحيل ${okCount} عنصرًا إلى السلة`
+                  : `Deployed ${okCount} items to cart`;
+                (await import("sonner")).toast.success(msg);
+              }}
+            >
               {t("deployAll")}
               <Zap className="ms-2 w-4 h-4" />
             </Button>
           </div>
+          </div>
         </div>
-      </div>
     </div>
   );
 }

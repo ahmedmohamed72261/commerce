@@ -33,6 +33,7 @@ export default function CreateProductPage() {
   const locale = useLocale() as "en" | "ar";
   const tForm = useTranslations('AdminForm');
   const tSidebar = useTranslations('AdminSidebar');
+  const isRTL = locale === "ar";
   
 
   useEffect(() => {
@@ -94,11 +95,11 @@ export default function CreateProductPage() {
       });
 
       await createProduct(data);
-      toast.success('Product created successfully');
-      router.push('/admin/products');
+      toast.success(isRTL ? "تم إنشاء المنتج بنجاح" : "Product created successfully");
+      router.push(`/${locale}/admin/products`);
     } catch (error) {
       console.error(error);
-      toast.error('Failed to create product');
+      toast.error(isRTL ? "فشل إنشاء المنتج" : "Failed to create product");
     } finally {
       setLoading(false);
     }

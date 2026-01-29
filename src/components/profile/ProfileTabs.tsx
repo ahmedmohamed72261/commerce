@@ -2,18 +2,18 @@
 
 import React from "react";
 import { User, ShoppingBag, Heart, MapPin } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 type ProfileTabsProps = {
   activeTab: string;
   setActiveTab: (tab: string) => void;
 };
 
-const sidebarItems = [
-  { id: "My Profile", icon: User, label: "My Profile" },
-  { id: "My Orders", icon: ShoppingBag, label: "My Orders" },
-  { id: "My Wishlist", icon: Heart, label: "My Wishlist" },
-  { id: "My Addresses", icon: MapPin, label: "My Addresses" },
+const SidebarConfig = [
+  { id: "My Profile", icon: User, tKey: "myProfile" },
+  { id: "My Orders", icon: ShoppingBag, tKey: "myOrders" },
+  { id: "My Wishlist", icon: Heart, tKey: "myWishlist" },
+  { id: "My Addresses", icon: MapPin, tKey: "myAddresses" },
 ];
 
 export const ProfileTabs: React.FC<ProfileTabsProps> = ({
@@ -22,13 +22,14 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({
 }) => {
   const locale = useLocale() as "en" | "ar";
   const dir = locale === "ar" ? "rtl" : "ltr";
+  const t = useTranslations("Profile");
 
   return (
     <div className="flex flex-col lg:flex-row gap-6" dir={dir}>
       {/* Sidebar for desktop */}
       <aside className="hidden lg:block lg:w-[260px] shrink-0">
         <div className="space-y-3">
-          {sidebarItems.map((item) => (
+          {SidebarConfig.map((item) => (
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
@@ -44,7 +45,7 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({
                   activeTab === item.id ? "text-red-600 dark:text-primary" : "text-slate-400 dark:text-muted-foreground"
                 }`}
               />
-              <span className="truncate">{item.label}</span>
+              <span className="truncate">{t(item.tKey)}</span>
             </button>
           ))}
         </div>
@@ -55,7 +56,7 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({
         {/* Mobile horizontal tabs */}
         <div className="lg:hidden">
           <div className="flex gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-2">
-            {sidebarItems.map((item) => (
+            {SidebarConfig.map((item) => (
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
@@ -66,7 +67,7 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({
                 }`}
               >
                 <item.icon size={16} />
-                {item.label}
+                {t(item.tKey)}
               </button>
             ))}
           </div>

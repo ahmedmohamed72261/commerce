@@ -42,11 +42,11 @@ export default function CreateCategoryPage() {
       }
 
       await createCategory(data);
-      toast.success('Category created successfully');
-      router.push('/admin/categories');
+      toast.success(locale === "ar" ? "تم إنشاء التصنيف بنجاح" : "Category created successfully");
+      router.push(`/${locale}/admin/categories`);
     } catch (error) {
       console.error(error);
-      toast.error('Failed to create category');
+      toast.error(locale === "ar" ? "فشل إنشاء التصنيف" : "Failed to create category");
     } finally {
       setLoading(false);
     }

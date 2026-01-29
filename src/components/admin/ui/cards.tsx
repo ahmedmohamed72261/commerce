@@ -7,7 +7,7 @@ export function StatCard({ label, value, icon: Icon, color }: any) {
   // We'll wrap it to add some depth.
   
   return (
-    <div className={`${color} p-6 rounded-xl text-white flex items-center justify-between shadow-lg shadow-gray-200/50 dark:shadow-black/20 relative overflow-hidden group transition-all duration-300 hover:-translate-y-1 hover:shadow-xl`}>
+    <div className={`${color} p-6 rounded-xl text-white flex items-center justify-between shadow-lg shadow-gray-200/50 dark:shadow-black/20 relative group transition-all duration-300 hover:-translate-y-1 hover:shadow-xl`}>
       <div className="z-10 relative">
         <div className="text-xs font-bold uppercase opacity-70 tracking-wider mb-2">{label}</div>
         <div className="text-3xl font-bold tracking-tight">{value}</div>

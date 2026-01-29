@@ -52,14 +52,14 @@ export const AddressesTab: React.FC<AddressesTabProps> = ({
 
   const handleCreate = async (data: AddressPayload) => {
     await addAddress(data);
-    toast.success("Address added");
+    toast.success(t("addressAdded"));
     onRefresh();
   };
 
   const handleUpdate = async (data: AddressPayload) => {
     if (!editingAddress?._id) return;
     await updateAddress(editingAddress._id, data);
-    toast.success("Address updated");
+    toast.success(t("addressUpdated"));
     onRefresh();
   };
   const dir = locale === "ar" ? "rtl" : "ltr";
@@ -81,7 +81,7 @@ export const AddressesTab: React.FC<AddressesTabProps> = ({
       {defaultAddress && (
         <section>
           <h4 className="text-xs font-medium text-slate-500 mb-3 uppercase">
-            Default address
+            {t("defaultAddress")}
           </h4>
 
           <div className="rounded-2xl border border-red-200 bg-red-50 p-5">
@@ -118,7 +118,7 @@ export const AddressesTab: React.FC<AddressesTabProps> = ({
                 }}
                 className="text-sm text-red-600 hover:underline"
               >
-                Edit
+                {t("editAddress")}
               </button>
             </div>
           </div>
@@ -133,7 +133,7 @@ export const AddressesTab: React.FC<AddressesTabProps> = ({
 
         {otherAddresses.length === 0 ? (
           <div className="rounded-xl border border-dashed border-slate-200 p-6 text-sm text-slate-500">
-            No additional addresses saved.
+            {locale === "ar" ? "لا توجد عناوين إضافية محفوظة." : "No additional addresses saved."}
           </div>
         ) : (
           <div className="space-y-3">
@@ -177,8 +177,8 @@ export const AddressesTab: React.FC<AddressesTabProps> = ({
       <AddressFormModal
         open={isCreateOpen}
         onOpenChange={setIsCreateOpen}
-        title="Add address"
-        submitLabel="Save address"
+        title={t("addAddressModalTitle")}
+        submitLabel={t("saveAddress")}
         initialData={initialForm}
         onSubmit={handleCreate}
       />
@@ -186,8 +186,8 @@ export const AddressesTab: React.FC<AddressesTabProps> = ({
       <AddressFormModal
         open={isEditOpen}
         onOpenChange={setIsEditOpen}
-        title="Edit address"
-        submitLabel="Update address"
+        title={t("editAddressModalTitle")}
+        submitLabel={t("updateAddress")}
         initialData={
           editingAddress
             ? {

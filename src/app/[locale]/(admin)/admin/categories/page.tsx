@@ -19,6 +19,7 @@ export default function CategoriesPage() {
   const t = useTranslations("AdminCategories");
   const locale = useLocale();
   const tTable = useTranslations("AdminTable");
+  const isRTL = (locale as string) === "ar";
 
   useEffect(() => {
     async function fetchData() {
@@ -52,10 +53,10 @@ export default function CategoriesPage() {
   const handleDelete = async (id: string) => {
     try {
       await deleteCategory(id);
-      toast.success('Category deleted');
+      toast.success(isRTL ? "تم حذف التصنيف" : "Category deleted");
       await refresh();
     } catch (e) {
-      toast.error('Failed to delete category');
+      toast.error(isRTL ? "فشل حذف التصنيف" : "Failed to delete category");
     }
   };
 
@@ -165,21 +166,26 @@ export default function CategoriesPage() {
             </div>
           )}
           onSave={async ({ id, form, newFiles, removedExisting }) => {
-            if (newFiles[0]) {
-              const fd = new FormData();
-              fd.append("name", JSON.stringify({ en: String(form.nameEn ?? ""), ar: String(form.nameAr ?? "") }));
-              fd.append("image", newFiles[0]);
-              await updateCategory(id, fd);
-            } else {
-              const payload: Record<string, unknown> = {
-                name: { en: String(form.nameEn ?? ""), ar: String(form.nameAr ?? "") },
-              };
-              if (removedExisting.length > 0) {
-                (payload as any).image = null;
+            try {
+              if (newFiles[0]) {
+                const fd = new FormData();
+                fd.append("name", JSON.stringify({ en: String(form.nameEn ?? ""), ar: String(form.nameAr ?? "") }));
+                fd.append("image", newFiles[0]);
+                await updateCategory(id, fd);
+              } else {
+                const payload: Record<string, unknown> = {
+                  name: { en: String(form.nameEn ?? ""), ar: String(form.nameAr ?? "") },
+                };
+                if (removedExisting.length > 0) {
+                  (payload as any).image = null;
+                }
+                await updateCategory(id, payload);
               }
-              await updateCategory(id, payload);
+              await refresh();
+              toast.success(tForm("updated"));
+            } catch {
+              toast.error(tForm("updateFailed"));
             }
-            await refresh();
           }}
         />
       )}

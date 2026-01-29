@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Printer, ArrowLeft, Loader2, Package, Calendar, User, MapPin, CreditCard, Box } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
+import { formatCurrency } from "@/utils/utils";
 
 export default function AdminOrderDetailsPage() {
   const params = useParams();
@@ -153,7 +154,7 @@ export default function AdminOrderDetailsPage() {
                {statusLabel(order.status)}
              </span>
              <p className="text-sm font-medium text-muted-foreground print:text-xs">
-               {t("totalLabel")}: <span className="text-xl font-bold text-foreground print:text-sm">${Number(order.totalAmount).toFixed(2)}</span>
+               {t("totalLabel")}: <span className="text-xl font-bold text-foreground print:text-sm">{formatCurrency(Number(order.totalAmount) || 0, locale as "en" | "ar")}</span>
              </p>
           </div>
         </div>
@@ -256,10 +257,10 @@ export default function AdminOrderDetailsPage() {
                       {item.quantity}
                     </td>
                     <td className="px-6 py-4 text-right print:px-2 print:py-1 print:text-[10px]">
-                      ${Number(item.unitPrice).toFixed(2)}
+                      {formatCurrency(Number(item.unitPrice) || 0, locale as "en" | "ar")}
                     </td>
                     <td className="px-6 py-4 text-right font-medium print:px-2 print:py-1 print:text-[10px]">
-                      ${(Number(item.unitPrice) * item.quantity).toFixed(2)}
+                      {formatCurrency((Number(item.unitPrice) || 0) * (Number(item.quantity) || 0), locale as "en" | "ar")}
                     </td>
                   </tr>
                 ))}

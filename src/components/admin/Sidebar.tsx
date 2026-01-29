@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
+import { useAuthStore } from '@/store/auth';
 import { 
   LayoutDashboard, ShoppingBag, BarChart3, Zap, Ticket, 
   FileText, Menu as MenuIcon, Edit3, ImageIcon, 
@@ -15,13 +16,22 @@ export function AdminSidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: 
   const isRTL = locale === 'ar';
   const t = useTranslations('AdminSidebar');
   const [expandedMenus, setExpandedMenus] = useState(['Products', 'Appearance']);
+  const { user } = useAuthStore();
+  const isAdmin = !!user && (
+    // ((user as any).role === 'admin') ||
+    ((user as any).role === 'superAdmin') ||
+    ((user as any).role === 'super_admin') ||
+    ((user as any).isAdmin === true)
+  );
+  const tAdminControl = useTranslations('AdminControl');
 
   const toggleMenu = (name: string) => {
     setExpandedMenus(prev => prev.includes(name) ? prev.filter(m => m !== name) : [...prev, name]);
   };
 
-  const isActive = (path: string) => pathname === path;
-  const isParentActive = (paths: string[]) => paths.some(p => pathname.startsWith(p));
+  const normalizedPathname = pathname.replace(/^\/[a-z]{2}/, "") || "/";
+  const isActive = (path: string) => normalizedPathname === path;
+  const isParentActive = (paths: string[]) => paths.some(p => normalizedPathname.startsWith(p));
 
   return (
     <>
@@ -83,6 +93,10 @@ export function AdminSidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: 
           <SidebarLink href={`/${locale}/admin/payment-methods`} icon={Settings} label={t('paymentMethods') || 'Payment Methods'} active={isActive('/admin/payment-methods')} onClose={onClose} />
           <SidebarLink href={`/${locale}/admin/governorates`} icon={Globe} label={t('governorates') || 'Governorates'} active={isActive('/admin/governorates')} onClose={onClose} />
           <SidebarLink href={`/${locale}/admin/banners`} icon={Palette} label={t('banners')} active={isActive('/admin/banners')} onClose={onClose} />
+          <SidebarLink href={`/${locale}/admin/quotations`} icon={Palette} label={t('quotations')} active={isActive('/admin/quotations')} onClose={onClose} />
+          {isAdmin && (
+            <SidebarLink href={`/${locale}/admin/admin-control`} icon={BadgeCheck} label={tAdminControl('title')} active={isActive('/admin/admin-control')} onClose={onClose} />
+          )}
           <SidebarLink href={`/${locale}/admin/settings`} icon={Settings} label={t('settings')} active={isActive('/admin/settings')} onClose={onClose} />
         </nav>
 

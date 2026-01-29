@@ -5,13 +5,14 @@ import { StatCard, WhiteCard } from '@/components/admin/ui/cards';
 import { getOrders } from '@/services/orders.service';
  
 import { useTranslations, useLocale } from 'next-intl';
+import { formatCurrency } from '@/utils/utils';
 
 export default function AdminDashboard() {
   const [latestOrders, setLatestOrders] = useState<any[]>([]);
   // Payment Methods section removed from dashboard
 
   const t = useTranslations('AdminDashboard');
-  const locale = useLocale();
+  const locale = useLocale() as "en" | "ar";
 
   useEffect(() => {
     async function fetchLatest() {
@@ -36,7 +37,7 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard label={t('stats.totalRevenue')} value="$45,231.89" icon={DollarSign} color="bg-gradient-to-br from-green-500 to-green-600" trend="+20.1% from last month" />
+        <StatCard label={t('stats.totalRevenue')} value={formatCurrency(45231.89, locale)} icon={DollarSign} color="bg-gradient-to-br from-green-500 to-green-600" trend="+20.1% from last month" />
         <StatCard label={t('stats.subscriptions')} value="+2350" icon={Users} color="bg-gradient-to-br from-blue-500 to-blue-600" trend="+180.1% from last month" />
         <StatCard label={t('stats.sales')} value="+12,234" icon={ShoppingCart} color="bg-gradient-to-br from-orange-500 to-orange-600" trend="+19% from last month" />
         <StatCard label={t('stats.activeNow')} value="+573" icon={BarChart2} color="bg-gradient-to-br from-purple-500 to-purple-600" trend="+201 since last hour" />
@@ -62,7 +63,7 @@ export default function AdminDashboard() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-gray-800 dark:text-foreground">${Number(order.totalAmount).toFixed(2)}</p>
+                      <p className="font-bold text-gray-800 dark:text-foreground">{formatCurrency(Number(order.totalAmount || 0), locale)}</p>
                       <p className="text-xs text-gray-500 dark:text-muted-foreground">{new Date(order.createdAt || order.date).toLocaleDateString()}</p>
                     </div>
                   </div>
@@ -76,14 +77,14 @@ export default function AdminDashboard() {
           <WhiteCard title={t('recentActivityTitle')}>
             <div className="space-y-6">
               {latestOrders.length > 0 ? (
-                <ActivityItem icon={ShoppingCart} color="green" text={<><strong>New Order #...{String(latestOrders[0]?._id ?? latestOrders[0]?.orderId ?? '').slice(-4)}</strong> for ${Number(latestOrders[0]?.totalAmount || 0).toFixed(2)}</>} time="5m ago" />
+                <ActivityItem icon={ShoppingCart} color="green" text={<><strong>New Order #...{String(latestOrders[0]?._id ?? latestOrders[0]?.orderId ?? '').slice(-4)}</strong> for {Number(latestOrders[0]?.totalAmount || 0).toFixed(2)}</>} time="5m ago" />
               ) : (
                 <ActivityItem icon={ShoppingCart} color="green" text={<>No recent orders</>} time="-" />
               )}
               <ActivityItem icon={User} color="blue" text={<><strong>New customer</strong> signed up: user@example.com</>} time="1h ago" />
               <ActivityItem icon={Tag} color="orange" text={<><strong>Product updated:</strong> "Wireless Headphones"</>} time="3h ago" />
               {latestOrders.length > 1 ? (
-                <ActivityItem icon={ShoppingCart} color="green" text={<><strong>New Order #...{String(latestOrders[1]?._id ?? latestOrders[1]?.orderId ?? '').slice(-4)}</strong> for ${Number(latestOrders[1]?.totalAmount || 0).toFixed(2)}</>} time="5h ago" />
+                <ActivityItem icon={ShoppingCart} color="green" text={<><strong>New Order #...{String(latestOrders[1]?._id ?? latestOrders[1]?.orderId ?? '').slice(-4)}</strong> for {Number(latestOrders[1]?.totalAmount || 0).toFixed(2)}</>} time="5h ago" />
               ) : (
                 <ActivityItem icon={ShoppingCart} color="green" text={<>No additional orders</>} time="-" />
               )}

@@ -4,7 +4,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useOrdersStore, ShippingAddress } from '@/store/orders';
 import { getProfile } from '@/services/user.service';
-import { cn } from '@/utils/utils';
+import { cn, formatCurrency } from '@/utils/utils';
+import { useTranslations, useLocale } from 'next-intl';
 
 interface CheckoutFormProps {
   onSubmit: (shippingAddress: ShippingAddress, paymentMethod: string, notes?: string) => void;
@@ -38,6 +39,9 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, p
   });
   const [paymentMethod, setPaymentMethod] = useState<string>('cash');
   const [notes, setNotes] = useState('');
+  const t = useTranslations('cart');
+  const locale = useLocale() as "en" | "ar";
+  const dir = locale === "ar" ? "rtl" : "ltr";
 
   useEffect(() => {
     (async () => {
@@ -92,19 +96,19 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, p
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white dark:bg-card border border-slate-200 dark:border-border rounded-3xl p-8">
+    <form onSubmit={handleSubmit} className="bg-white dark:bg-card border border-slate-200 dark:border-border rounded-3xl p-8" dir={dir}>
       <h2 className="text-2xl font-black uppercase tracking-tighter mb-6 border-b border-slate-100 dark:border-border pb-4 text-gray-800 dark:text-foreground">
-        Shipping Information
+        {t('shippingInformation')}
       </h2>
       {summary && (
         <div className="mb-6 grid grid-cols-2 gap-4">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-muted border border-slate-200 dark:border-border">
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-muted-foreground">Items</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-muted-foreground">{t('summary.items')}</p>
             <p className="text-lg font-black text-gray-800 dark:text-foreground">{summary.itemCount}</p>
           </div>
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-muted border border-slate-200 dark:border-border">
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-muted-foreground">Total</p>
-            <p className="text-lg font-black text-gray-800 dark:text-foreground">${summary.totalAmount.toFixed(2)}</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-muted-foreground">{t('summary.total')}</p>
+            <p className="text-lg font-black text-gray-800 dark:text-foreground">{formatCurrency(summary.totalAmount, locale)}</p>
           </div>
         </div>
       )
@@ -112,7 +116,7 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, p
 
       <div className="mb-6">
         <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3 block">
-          Select Address
+          {t('selectAddress')}
         </label>
         {addresses.length > 0 ? (
           <div className="space-y-2">
@@ -142,11 +146,11 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, p
                   />
 
                   <span className="text-xs font-bold text-foreground flex-1">
-                    {label || "Address"}
+                    {label || t('address')}
 
                     {addr.isDefault && (
                       <span className="ml-2 text-[10px] font-black uppercase text-green-600 dark:text-green-400">
-                        Default
+                        {t('default')}
                       </span>
                     )}
                   </span>
@@ -156,7 +160,7 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, p
             })}
           </div>
         ) : (
-          <p className="text-slate-500 dark:text-muted-foreground text-sm">No saved addresses found.</p>
+          <p className="text-slate-500 dark:text-muted-foreground text-sm">{t('noSavedAddresses')}</p>
         )}
         <div className="mt-3">
           <Button
@@ -179,7 +183,7 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, p
                 `
             )}
           >
-            {showNewForm ? "Use Saved Address" : "Add New Address"}
+            {showNewForm ? t('useSavedAddress') : t('addNewAddress')}
           </Button>
         </div>
       </div>
@@ -188,7 +192,7 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, p
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div>
           <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-muted-foreground mb-2 block">
-            City *
+            {t('city')} *
           </label>
           <input
             type="text"
@@ -202,7 +206,7 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, p
 
         <div>
           <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-muted-foreground mb-2 block">
-            Street *
+            {t('street')} *
           </label>
           <input
             type="text"
@@ -216,7 +220,7 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, p
 
         <div>
           <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-muted-foreground mb-2 block">
-            Building *
+            {t('building')} *
           </label>
           <input
             type="text"
@@ -230,7 +234,7 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, p
 
         <div>
           <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-muted-foreground mb-2 block">
-            Floor *
+            {t('floor')} *
           </label>
           <input
             type="text"
@@ -244,7 +248,7 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, p
 
         <div>
           <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-muted-foreground mb-2 block">
-            Apartment *
+            {t('apartment')} *
           </label>
           <input
             type="text"
@@ -258,7 +262,7 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, p
 
         <div>
           <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-muted-foreground mb-2 block">
-            Additional Info
+            {t('additionalInfo')}
           </label>
           <input
             type="text"
@@ -273,7 +277,7 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, p
 
       <div className="mb-6">
         <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-muted-foreground mb-3 block">
-          Payment Method *
+          {t('paymentMethod')} *
         </label>
         {paymentMethods && paymentMethods.length > 0 ? (
           <div className="flex flex-col gap-2">
@@ -315,14 +319,14 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, p
 
       <div className="mb-6">
         <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-muted-foreground mb-2 block">
-          Order Notes
+          {t('orderNotes')}
         </label>
         <textarea
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           rows={4}
           className="w-full px-4 py-3 border border-slate-200 dark:border-border bg-white dark:bg-muted text-gray-800 dark:text-foreground rounded-xl focus:ring-2 focus:ring-red-600 dark:focus:ring-primary focus:border-transparent outline-none transition-all resize-none"
-          placeholder="Any special instructions for delivery..."
+          placeholder={t('orderNotesPlaceholder')}
         />
       </div>
 
@@ -331,7 +335,7 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSubmit, loading, p
         disabled={loading}
         className="w-full h-14 bg-red-600 dark:bg-primary hover:bg-black dark:hover:bg-red-700 text-white rounded-xl text-sm font-black uppercase tracking-widest transition-all shadow-xl shadow-red-600/20 dark:shadow-primary/20 disabled:opacity-50"
       >
-        {loading ? 'Processing...' : 'Place Order'}
+        {loading ? t('processing') : t('placeOrder')}
       </Button>
     </form>
   );

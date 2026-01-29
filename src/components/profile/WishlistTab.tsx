@@ -3,9 +3,12 @@ import Image from "next/image";
 import React, { useEffect } from "react";
 import { useWishlist } from "@/store/wishlist";
 import { Trash2 } from "lucide-react";
+import { useLocale } from "next-intl";
+import { formatCurrency } from "@/utils/utils";
 
 export const WishlistTab = () => {
   const { items: wishlistItems, fetchWishlist, removeItem } = useWishlist();
+  const locale = useLocale() as "en" | "ar";
 
   useEffect(() => {
     fetchWishlist();
@@ -25,7 +28,7 @@ export const WishlistTab = () => {
           </div>
           <div className="flex-1">
             <h4 className="text-sm font-black text-slate-900 leading-tight line-clamp-2">{item.title}</h4>
-            <p className="text-red-600 font-black text-sm mt-1">${item.salePrice ?? item.price}</p>
+            <p className="text-red-600 font-black text-sm mt-1">{formatCurrency(item.salePrice ?? item.price, locale)}</p>
           </div>
           <button 
             onClick={() => removeItem(String(item.id))}

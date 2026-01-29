@@ -4,3 +4,11 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export function formatCurrency(amount: number, locale: "en" | "ar") {
+  const unitEn = "KWD";
+  const unitAr = "دينار كويتى";
+  const value = Number.isFinite(amount) ? amount : 0;
+  const formatted = value.toFixed(2);
+  return locale === "ar" ? `${formatted} ${unitAr}` : `${unitEn} ${formatted}`;
+}

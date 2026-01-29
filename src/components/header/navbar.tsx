@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Search, ShoppingCart, User, List, X, ChevronDown, Moon, Sun, Heart } from "lucide-react";
+import { Search, ShoppingCart, User, List, X, ChevronDown, Moon, Sun, Heart, FileText } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Sidebar } from "./sidebar";
@@ -12,12 +12,14 @@ import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth";
 import { http } from "@/services/http";
 import { useCart } from "@/store/cart";
+import { useQuoteCart } from "@/store/quote-cart";
 import { useWishlist } from "@/store/wishlist";
 import { SearchBox } from "./search-box";
 
 export function Navbar({ locale }: { locale: string }) {
   const t = useTranslations("Nav");
   const tProfile = useTranslations("Common");
+  const tQuote = useTranslations("Quotations");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -31,6 +33,7 @@ export function Navbar({ locale }: { locale: string }) {
   const [langOpen, setLangOpen] = useState(false);
   const { user, logout } = useAuthStore();
   const { totalItems: cartTotalItems, getCart } = useCart();
+  const { totalItems: quoteTotalItems } = useQuoteCart();
   const { totalItems: wishlistTotalItems } = useWishlist();
 
   // Ensure user data persists across refreshes
@@ -79,10 +82,11 @@ export function Navbar({ locale }: { locale: string }) {
 
         {/* Main Menu */}
         <nav className="hidden lg:flex flex-1 justify-center">
-          <ul className="flex items-center gap-6 text-sm font-bold text-neutral-800 dark:text-foreground uppercase tracking-wide">
+          <ul className="flex items-center gap-6 text-sm sm:text-lg font-bold text-neutral-800 dark:text-foreground uppercase tracking-wide">
             <li className="group relative">
               <Link href={`/${locale}`} className="py-4 hover:text-red-600 dark:hover:text-primary transition flex items-center gap-1">
-                {t("home")} <span className="text-red-600 dark:text-primary text-xs">+</span>
+                {t("home")} 
+                {/* <span className="text-red-600 dark:text-primary text-xs">+</span> */}
               </Link>
             </li>
             <li>
@@ -129,18 +133,29 @@ export function Navbar({ locale }: { locale: string }) {
                     <Link
                       href={`/${locale}/admin`}
                       onClick={() => setUserMenuOpen(false)}
-                      className="block px-3 py-2 rtl:text-right text-sm hover:bg-neutral-100 dark:hover:bg-muted rounded font-semibold"
+                      className="block px-3 py-2 rtl: text-right text-sm hover:bg-neutral-100 dark:hover:bg-muted rounded font-semibold"
                     >
                       {tProfile("Dashboard")}
                     </Link>
                   ) : 
-                  <Link
-                    href={`/${locale}/profile`}
-                    onClick={() => setUserMenuOpen(false)}
-                    className="block px-3 py-2 rtl:text-right text-sm hover:bg-neutral-100 dark:hover:bg-muted rounded"
-                  >
-                    {tProfile("profile")}
-                  </Link>
+                    (
+                    <>
+                    <Link
+                      href={`/${locale}/profile`}
+                      onClick={() => setUserMenuOpen(false)}
+                      className="block px-3 py-2 rtl:text-right text-sm hover:bg-neutral-100 dark:hover:bg-muted rounded"
+                    >
+                      {tProfile("profile")}
+                    </Link>
+                    <Link
+                      href={`/${locale}/quotations/my-quotations`}
+                      onClick={() => setUserMenuOpen(false)}
+                      className="block px-3 py-2 rtl:text-right text-sm hover:bg-neutral-100 dark:hover:bg-muted rounded"
+                    >
+                      {tQuote("myQuotations")}
+                    </Link>
+                    </>
+                  )
                   }
                   
                   <button
@@ -165,6 +180,14 @@ export function Navbar({ locale }: { locale: string }) {
           >
             {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
+
+          {/* Quote Cart */}
+          <Link href={`/${locale}/quotations/cart`} className="relative text-neutral-600 dark:text-muted-foreground hover:text-red-600 dark:hover:text-primary transition">
+            <FileText className="w-5 h-5" />
+            <span className="absolute -top-2 -right-2 h-4 w-4 rounded-full bg-red-600 text-white text-[10px] flex items-center justify-center">
+              {quoteTotalItems()}
+            </span>
+          </Link>
 
           {/* Wishlist */}
           <Link href={`/${locale}/wishlist`} className="relative text-neutral-600 dark:text-muted-foreground hover:text-red-600 dark:hover:text-primary transition">

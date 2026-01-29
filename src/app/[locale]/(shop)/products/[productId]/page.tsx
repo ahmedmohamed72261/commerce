@@ -13,6 +13,7 @@ import { ProductMeta } from "@/components/product/ProductMeta";
 import { RelatedProducts } from "@/components/product/RelatedProducts";
 import { useParams } from "next/navigation";
 import { useIsRTL } from "@/utils/rtl";
+import { formatCurrency } from "@/utils/utils";
 import { ProductDetailsSkeleton } from "@/components/product/ProductDetailsSkeleton";
 import { rateProduct } from "@/services/products.service";
 
@@ -95,7 +96,7 @@ const ProductDetailsClient = ({ locale, productId }: { locale: string; productId
                 {productDetails.salePrice && productDetails.price > productDetails.salePrice && (
                   <div className="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-900/20 rounded-xl p-4 text-center">
                     <p className="text-red-600 dark:text-red-400 font-black text-sm uppercase tracking-widest">
-                      Save ${(productDetails.price - productDetails.salePrice).toFixed(2)} (
+                      {isRTL ? "وفّر" : "Save"} {formatCurrency(productDetails.price - productDetails.salePrice, locale as "en" | "ar")} (
                       {Math.round(
                         ((productDetails.price - productDetails.salePrice) / productDetails.price) * 100
                       )}

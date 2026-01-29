@@ -20,6 +20,7 @@ export default function BrandsPage() {
   const locale = useLocale();
   const [search, setSearch] = useState("");
   const tTable = useTranslations("AdminTable");
+  const isRTL = (locale as string) === "ar";
 
   useEffect(() => {
     async function fetchData() {
@@ -55,10 +56,10 @@ export default function BrandsPage() {
   const handleDelete = async (id: string) => {
     try {
       await deleteBrand(id);
-      toast.success("Brand deleted");
+      toast.success(isRTL ? "تم حذف العلامة التجارية" : "Brand deleted");
       await refresh();
     } catch {
-      toast.error("Failed to delete brand");
+      toast.error(isRTL ? "فشل حذف العلامة التجارية" : "Failed to delete brand");
     }
   };
 
@@ -183,21 +184,26 @@ export default function BrandsPage() {
             </div>
           )}
           onSave={async ({ id, form, newFiles, removedExisting }) => {
-            if (newFiles[0]) {
-              const fd = new FormData();
-              fd.append("name", JSON.stringify({ en: String(form.nameEn ?? ""), ar: String(form.nameAr ?? "") }));
-              fd.append("image", newFiles[0]);
-              await updateBrand(id, fd);
-            } else {
-              const payload: Record<string, unknown> = {
-                name: { en: String(form.nameEn ?? ""), ar: String(form.nameAr ?? "") },
-              };
-              if (removedExisting.length > 0) {
-                (payload as any).image = null;
+            try {
+              if (newFiles[0]) {
+                const fd = new FormData();
+                fd.append("name", JSON.stringify({ en: String(form.nameEn ?? ""), ar: String(form.nameAr ?? "") }));
+                fd.append("image", newFiles[0]);
+                await updateBrand(id, fd);
+              } else {
+                const payload: Record<string, unknown> = {
+                  name: { en: String(form.nameEn ?? ""), ar: String(form.nameAr ?? "") },
+                };
+                if (removedExisting.length > 0) {
+                  (payload as any).image = null;
+                }
+                await updateBrand(id, payload);
               }
-              await updateBrand(id, payload);
+              await refresh();
+              toast.success(tForm("updated"));
+            } catch {
+              toast.error(tForm("updateFailed"));
             }
-            await refresh();
           }}
         />
       )}

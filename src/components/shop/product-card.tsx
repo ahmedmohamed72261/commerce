@@ -1,10 +1,11 @@
 "use client";
-import { ShoppingCart, Heart, Eye, ArrowUpRight, Star, Plus, Zap, Shield, Layers,Maximize2, Hash, MoveUpRight, Globe, Share2, Info, Compass, Box, Cpu, Radio } from "lucide-react";
-import { cn } from "@/utils/utils";
+import { ShoppingCart, Heart, Eye, ArrowUpRight, Star, Plus, Zap, Shield, Layers,Maximize2, Hash, MoveUpRight, Globe, Share2, Info, Compass, Box, Cpu, Radio, FileText } from "lucide-react";
+import { cn, formatCurrency } from "@/utils/utils";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useWishlist } from "@/store/wishlist";
 import { useCart } from "@/store/cart";
+import { useQuoteCart } from "@/store/quote-cart";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import { toast } from "sonner";
@@ -32,6 +33,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
   const t = useTranslations("Shop");
   const { addItem, removeItem, isInWishlist } = useWishlist();
   const { addToCart } = useCart();
+  const { addItem: addQuoteItem } = useQuoteCart();
   const router = useRouter();
   const locale = useLocale() as "en" | "ar";
   // GLOBAL TRANSITION: 1000ms
@@ -68,7 +70,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
             }}
           >
             <Heart size={18} fill={productId !== undefined && isInWishlist(productId) ? "currentColor" : "none"} />
-          </Button>  
+          </Button>
           <Button
             className="p-3 rounded-full bg-white/70 dark:bg-card/70 backdrop-blur-md border border-neutral-100 dark:border-border shadow-sm hover:bg-red-600 hover:text-white transition-all text-neutral-600 dark:text-foreground"
             onClick={(e) => {
@@ -123,13 +125,13 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
           </div>
           <div className="flex flex-col">
             <span className="md:text-2xl text-md font-black tracking-tighter text-neutral-900 dark:text-foreground">
-              ${salePrice || price}
+              {formatCurrency(salePrice || price, locale)}
             </span>
           </div>
         </div>
 
         {/* --- Primary Action --- */}
-        <div className="mt-2">
+        <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
           <button 
             className="w-full group/btn relative h-10 overflow-hidden rounded-[1rem] bg-red-600 text-white transition-all hover:shadow-[0_15px_30px_-10px_rgba(220,38,38,0.4)] active:scale-95"
             onClick={async (e) => {
@@ -148,6 +150,18 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
             <span className="relative z-10 flex items-center rtl:flex-row-reverse justify-center gap-2 font-black uppercase text-xs tracking-widest">
               <ShoppingCart size={14} /> {t("addToCart")}
             </span>
+          </button>
+          <button 
+            className="w-full h-10 rounded-[1rem] border border-neutral-200 dark:border-border bg-slate-950 text-white font-black uppercase text-xs tracking-widest hover:bg-red-50 dark:hover:bg-primary/20 hover:text-red-600 dark:hover:text-primary transition-all flex items-center justify-center gap-2"
+            onClick={(e) => {
+              e.preventDefault();
+              if (productId !== undefined) {
+                addQuoteItem({ _id: String(productId), name: title, price, image, salePrice } as any, 1);
+                toast.success(locale === "ar" ? "تمت الإضافة لعروض الأسعار" : "Added to quotation");
+              }
+            }}
+          >
+            <FileText size={14} /> {locale === "ar" ? "عرض سعر" : "Add to Quote"}
           </button>
         </div>
       </div>

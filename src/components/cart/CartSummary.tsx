@@ -1,9 +1,10 @@
   "use client";
 
-  import React from 'react';
+import React from 'react';
   import { Button } from '@/components/ui/button';
   import { ShoppingCart, Trash2 } from 'lucide-react';
-  import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
+import { formatCurrency } from '@/utils/utils';
 
   interface CartSummaryProps {
     totalAmount: number;
@@ -19,6 +20,7 @@
     onClearCart
   }) => {
     const t = useTranslations('cart');
+    const locale = useLocale() as "en" | "ar";
 
     return (
       <div className="bg-white dark:bg-card border border-slate-200 dark:border-border rounded-3xl p-8 sticky top-6">
@@ -31,7 +33,7 @@
             <span className="text-slate-600 dark:text-muted-foreground font-bold">
               {t('summary.subtotal', { count: itemCount })}  
             </span>
-            <span className="text-sm md:text-md lg:text-lg font-black dark:text-foreground">${totalAmount.toFixed(2)}</span>
+            <span className="text-sm md:text-md lg:text-lg font-black dark:text-foreground">{formatCurrency(totalAmount, locale)}</span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-slate-600 dark:text-muted-foreground font-bold">
@@ -45,7 +47,7 @@
             <span className="text-slate-600 dark:text-muted-foreground font-bold">
               {t('summary.tax')}
             </span>
-            <span className="text-sm md:text-md lg:text-lg font-black dark:text-foreground">${(totalAmount * 0.08).toFixed(2)}</span> 
+            <span className="text-sm md:text-md lg:text-lg font-black dark:text-foreground">{formatCurrency(totalAmount * 0.08, locale)}</span> 
           </div>
         </div>
 
@@ -55,7 +57,7 @@
               {t('summary.total')}  
             </span>
             <span className="text-sm md:text-md lg:text-lg font-black text-red-600 dark:text-primary tracking-tighter">
-              ${totalAmount.toFixed(2)}
+              {formatCurrency(totalAmount, locale)}
             </span>
           </div>
         </div>

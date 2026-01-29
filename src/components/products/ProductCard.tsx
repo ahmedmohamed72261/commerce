@@ -3,11 +3,14 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShoppingCart, Heart, Star, Zap } from 'lucide-react';
+import { ShoppingCart, Heart, Star, Zap, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Product } from '@/store/products';
 import { useWishlist } from '@/store/wishlist';
 import { toast } from 'sonner';
+import { useQuoteCart } from '@/store/quote-cart';
+import { useTranslations } from 'next-intl';
+import { formatCurrency } from '@/utils/utils';
 
 interface ProductCardProps {
   product: Product;
@@ -24,6 +27,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const { addItem, removeItem, isInWishlist } = useWishlist();
   const isWishlisted = isInWishlist(product.id);
+  const { addItem: addQuoteItem } = useQuoteCart();
+  const tQuote = useTranslations("Quotations");
+  const tCart = useTranslations("Common");
+  const loc = (locale === "ar" ? "ar" : "en") as "en" | "ar";
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -50,6 +57,22 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       });
       toast.success('Added to wishlist!');
     }
+  };
+  
+  const handleAddToQuote = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addQuoteItem({
+      _id: String(product.id),
+      name: product.title,
+      description: typeof product.description === 'string' ? product.description : product.description?.en,
+      price: product.price,
+      salePrice: product.salePrice,
+      images: product.image ? [product.image] : [],
+      stock: product.stock ?? 0,
+      isActive: true
+    } as any, 1);
+    toast.success('Added to quote');
   };
 
   return (
@@ -79,6 +102,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             {product.category}
           </div>
         )}
+        <div className="absolute top-4 right-4">
+          <Star
+            size={16}
+            className={isWishlisted ? "text-amber-400" : "text-white/70 dark:text-muted-foreground/70"}
+            fill={isWishlisted ? "currentColor" : "none"}
+          />
+        </div>
         {product.stock !== undefined && product.stock === 0 && (
           <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
             <span className="bg-red-600 dark:bg-primary text-white text-xs font-black px-4 py-2 rounded-full uppercase">
@@ -112,10 +142,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
             <div>
               <span className="text-xl font-black italic tracking-tighter text-slate-950 dark:text-foreground">
-                ${product.salePrice || product.price}
+                {formatCurrency(product.salePrice || product.price, loc)}
               </span>
               {product.salePrice && product.price > product.salePrice && (
-                <p className="text-[10px] font-bold text-slate-300 dark:text-muted-foreground line-through">${product.price}</p>
+                <p className="text-[10px] font-bold text-slate-300 dark:text-muted-foreground line-through">
+                  {formatCurrency(product.price, loc)}
+                </p>
               )}
             </div>
             {product.condition && (
@@ -138,11 +170,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               <Heart size={18} fill={isWishlisted ? "currentColor" : "none"} />
             </Button>
             <Button
+              className="h-12 px-6 flex rounded-xl bg-slate-950 text-white border border-border font-black text-[10px] tracking-widest uppercase hover:bg-red-50 dark:hover:bg-primary/20 hover:text-red-600 dark:hover:text-primary transition-all gap-2"
+              onClick={handleAddToQuote}
+            >
+              <FileText size={16} /> {tQuote("addToQuote")}
+            </Button>
+            <Button
               className="h-12 px-6 flex rounded-xl bg-slate-950 dark:bg-primary text-white font-black text-[10px] tracking-widest uppercase hover:bg-red-600 dark:hover:bg-red-700 transition-all gap-2"
               onClick={handleAddToCart}
               disabled={product.stock === 0}
             >
-              <ShoppingCart size={16} /> ADD
+              <ShoppingCart size={16} /> {tCart("cart")}
             </Button>
           </div>
         </div>

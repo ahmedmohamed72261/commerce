@@ -8,11 +8,12 @@ import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { cn } from '@/utils/utils';
 import { toast } from 'sonner';
+import { formatCurrency } from '@/utils/utils';
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const locale = useLocale();
+  const locale = useLocale() as "en" | "ar";
   const t = useTranslations('AdminOrders');
   const tTable = useTranslations('AdminTable');
 
@@ -152,7 +153,7 @@ export default function OrdersPage() {
                        </span>
                      </td>
                      <td className="px-6 py-4 font-semibold text-gray-900 dark:text-foreground">
-                       ${Number(order.totalAmount || 0).toFixed(2)}
+                       {formatCurrency(Number(order.totalAmount || 0), locale)}
                      </td>
                      <td className="px-6 py-4 text-right">
                        <div className="flex items-center justify-end gap-2">

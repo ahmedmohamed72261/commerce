@@ -62,7 +62,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               ref={ref}
               type={inputType}
               dir={locale === "ar" ? "rtl" : "ltr"}
-              placeholder=" "
+              placeholder=""
               className={cn(
                 "peer w-full h-12 bg-transparent text-sm outline-none",
                 "text-[--color-foreground]",
@@ -91,7 +91,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               <label
                 className={cn(
                   "absolute pointer-events-none transition-all duration-200",
-                  locale === "ar" ? "right-4" : "left-4",
+                  locale === "ar" ? "right-8" : "left-8",
                   float
                     ? "-top-1 text-[11px] font-semibold text-[--color-primary]"
                     : "top-1/2 -translate-y-1/2 text-sm text-[--color-muted-foreground]"
@@ -118,7 +118,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               <button
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
-                className="absolute top-1/2 -translate-y-1/2 right-3 text-[--color-muted-foreground] hover:text-[--color-primary]"
+                className={cn(
+                  "absolute top-1/2 -translate-y-1/2",
+                  locale === "ar" ? "left-3" : "right-3",
+                  "text-[--color-muted-foreground] hover:text-[--color-primary]"
+                )}
               >
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>

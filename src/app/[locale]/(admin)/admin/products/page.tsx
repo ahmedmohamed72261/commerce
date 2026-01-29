@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select } from '@/components/ui/select';
 import Link from 'next/link';
+import { formatCurrency } from "@/utils/utils";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<any[]>([]);
@@ -23,8 +24,9 @@ export default function ProductsPage() {
   const [brands, setBrands] = useState<any[]>([]);
   const tForm = useTranslations("AdminForm");
   const tProd = useTranslations("AdminProducts");
-  const locale = useLocale();
+  const locale = useLocale() as "en" | "ar";
   const tTable = useTranslations("AdminTable");
+  const isRTL = (locale as string) === "ar";
 
   useEffect(() => {
     async function fetchData() {
@@ -78,10 +80,10 @@ export default function ProductsPage() {
   const handleDelete = async (id: string) => {
     try {
       await deleteProduct(id);
-      toast.success('Product deleted');
+      toast.success(isRTL ? "تم حذف المنتج" : "Product deleted");
       await refresh();
     } catch {
-      toast.error('Failed to delete product');
+      toast.error(isRTL ? "فشل حذف المنتج" : "Failed to delete product");
     }
   };
 
@@ -150,7 +152,7 @@ export default function ProductsPage() {
                         {product.category?.name?.en || '—'}
                       </td>
 
-                     <td className="px-5 py-3 font-bold text-gray-800 dark:text-foreground">${product.price}</td>
+                     <td className="px-5 py-3 font-bold text-gray-800 dark:text-foreground">{formatCurrency(product.price, locale)}</td>
                      <td className="px-5 py-3 text-right">
                        <div className="flex items-center justify-end gap-2">
                          <button
@@ -159,10 +161,14 @@ export default function ProductsPage() {
                            onClick={async () => {
                              try {
                                await setTrendingProduct(String(product._id || product.id), !product.trending);
-                               toast.success(product.trending ? 'Removed from trending' : 'Marked as trending');
+                              toast.success(
+                                isRTL
+                                  ? (product.trending ? "تمت إزالة المنتج من المميز" : "تم وضع المنتج ضمن المميز")
+                                  : (product.trending ? "Removed from trending" : "Marked as trending")
+                              );
                                await refresh();
                              } catch (error) {
-                               toast.error('Failed to update trending status');
+                              toast.error(isRTL ? "فشل تحديث حالة التمييز" : "Failed to update trending status");
                              }
                            }}
                          >
@@ -338,36 +344,41 @@ export default function ProductsPage() {
             </>
           )}
           onSave={async ({ id, form, newFiles, removedExisting }) => {
-            const hasFiles = newFiles.length > 0;
-            if (hasFiles) {
-              const fd = new FormData();
-              if (form.nameEn || form.nameAr) {
-                fd.append("name", JSON.stringify({ en: String(form.nameEn ?? ""), ar: String(form.nameAr ?? "") }));
+            try {
+              const hasFiles = newFiles.length > 0;
+              if (hasFiles) {
+                const fd = new FormData();
+                if (form.nameEn || form.nameAr) {
+                  fd.append("name", JSON.stringify({ en: String(form.nameEn ?? ""), ar: String(form.nameAr ?? "") }));
+                }
+                if (form.descEn || form.descAr) {
+                  fd.append("description", JSON.stringify({ en: String(form.descEn ?? ""), ar: String(form.descAr ?? "") }));
+                }
+                if (form.price) fd.append("price", String(form.price as string));
+                if (form.stock) fd.append("stock", String(form.stock as string));
+                if (form.condition) fd.append("condition", String(form.condition as string));
+                if (form.category) fd.append("category", String(form.category as string));
+                if (form.brand) fd.append("brand", String(form.brand as string));
+                if (removedExisting.length > 0) fd.append("images", JSON.stringify(removedExisting));
+                newFiles.forEach((f) => fd.append("images", f));
+                await updateProduct(String(id), fd);
+              } else {
+                const payload: Record<string, unknown> = {};
+                if (form.nameEn || form.nameAr) payload.name = { en: String(form.nameEn ?? ""), ar: String(form.nameAr ?? "") };
+                if (form.descEn || form.descAr) payload.description = { en: String(form.descEn ?? ""), ar: String(form.descAr ?? "") };
+                if (form.price) payload.price = Number(form.price as string);
+                if (form.stock) payload.stock = Number(form.stock as string);
+                if (form.condition) payload.condition = String(form.condition as string);
+                if (form.category) payload.category = String(form.category as string);
+                if (form.brand) payload.brand = String(form.brand as string);
+                if (removedExisting.length > 0) (payload as any).removedImages = removedExisting;
+                await updateProduct(String(id), payload);
               }
-              if (form.descEn || form.descAr) {
-                fd.append("description", JSON.stringify({ en: String(form.descEn ?? ""), ar: String(form.descAr ?? "") }));
-              }
-              if (form.price) fd.append("price", String(form.price as string));
-              if (form.stock) fd.append("stock", String(form.stock as string));
-              if (form.condition) fd.append("condition", String(form.condition as string));
-              if (form.category) fd.append("category", String(form.category as string));
-              if (form.brand) fd.append("brand", String(form.brand as string));
-              if (removedExisting.length > 0) fd.append("images", JSON.stringify(removedExisting));
-              newFiles.forEach((f) => fd.append("images", f));
-              await updateProduct(String(id), fd);
-            } else {
-              const payload: Record<string, unknown> = {};
-              if (form.nameEn || form.nameAr) payload.name = { en: String(form.nameEn ?? ""), ar: String(form.nameAr ?? "") };
-              if (form.descEn || form.descAr) payload.description = { en: String(form.descEn ?? ""), ar: String(form.descAr ?? "") };
-              if (form.price) payload.price = Number(form.price as string);
-              if (form.stock) payload.stock = Number(form.stock as string);
-              if (form.condition) payload.condition = String(form.condition as string);
-              if (form.category) payload.category = String(form.category as string);
-              if (form.brand) payload.brand = String(form.brand as string);
-              if (removedExisting.length > 0) (payload as any).removedImages = removedExisting;
-              await updateProduct(String(id), payload);
+              await refresh();
+              toast.success(tForm("updated"));
+            } catch {
+              toast.error(tForm("updateFailed"));
             }
-            await refresh();
           }}
         />
       )}

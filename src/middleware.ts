@@ -17,13 +17,15 @@ export function middleware(request: NextRequest) {
     
     // Redirect if there is no locale
     if (pathname.startsWith('/api') || pathname.startsWith('/_next') || pathname.includes('.')) {
-      return;
+      return NextResponse.next();
     }
 
     return NextResponse.redirect(
       new URL(`/${locale}${pathname}`, request.url)
     );
   }
+
+  return NextResponse.next();
 }
 
 export const config = {

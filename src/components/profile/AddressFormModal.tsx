@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { type AddressPayload } from "@/services/user.service";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { getAllGovernorates } from "@/services/governorates.service";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
@@ -36,6 +36,8 @@ export const AddressFormModal: React.FC<AddressFormModalProps> = ({
   const [loading, setLoading] = React.useState(false);
   const locale = useLocale() as "en" | "ar";
   const dir = locale === "ar" ? "rtl" : "ltr";
+  const t = useTranslations("Profile");
+  const tForm = useTranslations("AdminForm");
   const [governorates, setGovernorates] = React.useState<Array<{ id?: string | number; name: string | { en: string; ar: string } }>>([]);
 
   React.useEffect(() => {
@@ -73,7 +75,7 @@ export const AddressFormModal: React.FC<AddressFormModalProps> = ({
             {title}
           </DialogTitle>
           <p className="text-sm text-slate-500">
-            Please enter accurate delivery details
+            {locale === "ar" ? "الرجاء إدخال تفاصيل التوصيل بدقة" : "Please enter accurate delivery details"}
           </p>
         </DialogHeader>
 
@@ -81,13 +83,13 @@ export const AddressFormModal: React.FC<AddressFormModalProps> = ({
           {/* City (Governorate) */}
           <div className="col-span-2">
             <Select
-              label={locale === "ar" ? "المحافظة" : "Governorate"}
+              label={t("governorate")}
               value={formData.city}
               onChange={(e) => setFormData((p) => ({ ...p, city: e.target.value }))}
               appearance="white"
               locale={locale}
             >
-              <option value="">{locale === "ar" ? "اختر محافظة" : "Select governorate"}</option>
+              <option value="">{t("selectGovernorate")}</option>
               {governorates.map((g, idx) => {
                 const label = typeof g.name === "string" ? g.name : locale === "ar" ? (g.name as any).ar : (g.name as any).en;
                 return (
@@ -102,14 +104,14 @@ export const AddressFormModal: React.FC<AddressFormModalProps> = ({
           {/* Street */}
           <div className="col-span-2">
             <label className="block text-xs font-medium text-slate-600 mb-1">
-              Street
+              {t("street")}
             </label>
             <input
               value={formData.street}
               onChange={(e) =>
                 setFormData((p) => ({ ...p, street: e.target.value }))
               }
-              placeholder="Tahrir Street"
+              placeholder={locale === "ar" ? "شارع التحرير" : "Tahrir Street"}
               className="w-full h-11 rounded-lg border border-slate-200 dark:border-border bg-white dark:bg-muted px-3 text-sm focus:ring-2 focus:ring-red-500 outline-none"
               dir={dir}
             />
@@ -118,14 +120,14 @@ export const AddressFormModal: React.FC<AddressFormModalProps> = ({
           {/* Building */}
           <div>
             <label className="block text-xs font-medium text-slate-600 mb-1">
-              Building
+              {t("building")}
             </label>
             <input
               value={formData.building}
               onChange={(e) =>
                 setFormData((p) => ({ ...p, building: e.target.value }))
               }
-              placeholder="12B"
+              placeholder={locale === "ar" ? "12ب" : "12B"}
               className="w-full h-11 rounded-lg border border-slate-200 dark:border-border bg-white dark:bg-muted px-3 text-sm focus:ring-2 focus:ring-red-500 outline-none"
               dir={dir}
             />
@@ -134,14 +136,14 @@ export const AddressFormModal: React.FC<AddressFormModalProps> = ({
           {/* Apartment */}
           <div>
             <label className="block text-xs font-medium text-slate-600 mb-1">
-              Apartment
+              {t("apartment")}
             </label>
             <input
               value={formData.apartment}
               onChange={(e) =>
                 setFormData((p) => ({ ...p, apartment: e.target.value }))
               }
-              placeholder="402"
+              placeholder={locale === "ar" ? "٤٠٢" : "402"}
               className="w-full h-11 rounded-lg border border-slate-200 dark:border-border bg-white dark:bg-muted px-3 text-sm focus:ring-2 focus:ring-red-500 outline-none"
               dir={dir}
             />
@@ -150,14 +152,14 @@ export const AddressFormModal: React.FC<AddressFormModalProps> = ({
           {/* Floor */}
           <div>
             <label className="block text-xs font-medium text-slate-600 mb-1">
-              Floor
+              {t("floor")}
             </label>
             <input
               value={formData.floor}
               onChange={(e) =>
                 setFormData((p) => ({ ...p, floor: e.target.value }))
               }
-              placeholder="4"
+              placeholder={locale === "ar" ? "٤" : "4"}
               className="w-full h-11 rounded-lg border border-slate-200 dark:border-border bg-white dark:bg-muted px-3 text-sm focus:ring-2 focus:ring-red-500 outline-none"
               dir={dir}
             />
@@ -166,12 +168,12 @@ export const AddressFormModal: React.FC<AddressFormModalProps> = ({
           {/* Notes */}
           <div className="col-span-2">
             <label className="block text-xs font-medium text-slate-600 mb-1">
-              Delivery Notes
+              {t("deliveryNotes")}
             </label>
             <Textarea
               value={formData.additionalInfo}
               onChange={(e) => setFormData((p) => ({ ...p, additionalInfo: e.target.value }))}
-              placeholder="Ring bell twice..."
+              placeholder={locale === "ar" ? "اضرب الجرس مرتين..." : "Ring bell twice..."}
               appearance="white"
               locale={locale}
               rows={4}
@@ -185,7 +187,7 @@ export const AddressFormModal: React.FC<AddressFormModalProps> = ({
             disabled={loading}
             className="w-full h-12 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-medium"
           >
-            {loading ? "Saving..." : submitLabel}
+            {loading ? tForm("saving") : submitLabel}
           </Button>
         </DialogFooter>
       </DialogContent>
