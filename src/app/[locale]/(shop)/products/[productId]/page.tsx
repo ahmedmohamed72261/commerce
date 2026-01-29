@@ -112,7 +112,7 @@ const ProductDetailsClient = ({ locale, productId }: { locale: string; productId
             <div className="bg-card rounded-3xl shadow-sm border border-border p-6 md:p-8 flex flex-col gap-6">
               <ProductHeader product={productDetails} />
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 <ProductPrice price={productDetails.price} salePrice={productDetails.salePrice} />
                 <ProductMeta stock={productDetails.stock} condition={productDetails.condition} />
               </div>

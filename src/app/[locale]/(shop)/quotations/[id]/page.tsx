@@ -62,7 +62,7 @@ export default function QuotationDetailsPage() {
           </div>
           <div className="text-right">
             <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-1">{t("quotationDetails")}</p>
-            <p className="text-lg font-mono font-black text-foreground">#{quotation.quotationCode || "DWQ-0009"}</p>
+            <p className="text-lg font-mono font-black text-foreground">{quotation.quotationCode || "DWQ-0009"}</p>
           </div>
         </div>
 
@@ -91,26 +91,26 @@ export default function QuotationDetailsPage() {
           <table className="w-full text-left border-collapse">
             <thead className="bg-slate-100 border-b border-slate-200">
               <tr>
-                <th className="p-3 text-[9px] font-black uppercase tracking-widest text-foreground border-r border-slate-200">{tProduct("description")}</th>
-                <th className="p-3 text-center text-[9px] font-black uppercase tracking-widest text-foreground w-16 border-r border-slate-200">{t("quantity")}</th>
-                <th className="p-3 text-right text-[9px] font-black uppercase tracking-widest text-foreground w-32 border-r border-slate-200">{t("price")}</th>
-                <th className="p-3 text-right text-[9px] font-black uppercase tracking-widest text-foreground w-32">{t("total")}</th>
+                <th className="p-3 text-[16px] text-center font-black uppercase tracking-widest text-foreground border-r border-slate-200">{tProduct("description")}</th>
+                <th className="p-3 text-center text-[16px] font-black uppercase tracking-widest text-foreground w-16 border-r border-slate-200">{t("quantity")}</th>
+                <th className="p-3 text-center text-[16px] font-black uppercase tracking-widest text-foreground w-32 border-r border-slate-200">{t("price")}</th>
+                <th className="p-3 text-center text-[16px] font-black uppercase tracking-widest text-foreground w-32">{t("total")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {quotation.items.map((item: any, i: number) => (
                 <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-slate-50/50"}>
                   <td className="p-4 border-r border-slate-200">
-                    <p className="font-bold text-foreground text-[13px] uppercase tracking-tight">
+                    <p className="font-bold text-center text-foreground text-[13px] uppercase tracking-tight">
                       {typeof (item.productName || item.product?.name) === "string"
                         ? (item.productName || item.product?.name)
                         : ((item.productName || item.product?.name)?.[locale === "ar" ? "ar" : "en"] ?? "")}
                     </p>
-                    <p className="text-[10px] text-muted-foreground mt-0.5 leading-tight italic">{item.productDescription || "Service implementation."}</p>
+                    <p className="text-[10px] text-center text-muted-foreground mt-0.5 leading-tight italic">{item.productDescription || "Service implementation."}</p>
                   </td>
-                  <td className="p-4 text-center font-mono text-xs border-r border-slate-200">{item.quantity}</td>
-                  <td className="p-4 text-right font-mono text-xs text-muted-foreground border-r border-slate-200">{formatCurrency(item.unitPriceSnapshot || item.productPrice, locale)}</td>
-                  <td className="p-4 text-right font-mono font-black text-foreground text-sm tracking-tighter">
+                  <td className="p-4 text-center font-mono text-sm border-r border-slate-200">{item.quantity}</td>
+                  <td className="p-4 text-center font-mono text-sm text-muted-foreground border-r border-slate-200">{formatCurrency(item.unitPriceSnapshot || item.productPrice, locale)}</td>
+                  <td className="p-4 text-center font-mono font-black text-foreground text-sm tracking-tighter">
                     {formatCurrency(item.totalItemPrice || ((item.unitPriceSnapshot || item.productPrice) * item.quantity), locale)}
                   </td>
                 </tr>
@@ -131,13 +131,9 @@ export default function QuotationDetailsPage() {
           </div>
 
           <div className="w-64 space-y-1">
-            <div className="flex justify-between py-1 text-[10px] font-bold text-muted-foreground uppercase border-b border-slate-100">
-              <span>{t("subtotal")}</span>
-              <span className="font-mono text-foreground">{formatCurrency(quotation.subtotal || 0, locale)}</span>
-            </div>
-            <div className="flex justify-between items-baseline pt-4">
-              <span className="text-[10px] font-black uppercase text-primary tracking-[0.3em]">{t("total")}</span>
-              <span className="text-2xl font-black text-foreground font-mono tracking-tighter tabular-nums leading-none underline decoration-primary/30 decoration-4 underline-offset-4">
+            <div className="flex flex-col items-center justify-between pt-4">
+              <span className="text-xl font-black uppercase text-primary tracking-[0.3em]">{t("total")}</span>
+              <span className="text-xl font-black text-foreground font-mono tracking-tighter tabular-nums leading-none underline decoration-primary/30 decoration-4 underline-offset-4">
                 {formatCurrency(quotation.subtotal || 0, locale)}
               </span>
             </div>

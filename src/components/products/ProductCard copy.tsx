@@ -142,36 +142,26 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </div>
 
         {(product.brand || product.condition) && (
-          <div className="flex flex-col gap-3 mb-4">
-            {/* 1. PRICE SECTION - High Visibility */}
-            <div className="flex flex-col">
-              <span className="text-lg sm:text-xl font-black italic tracking-tighter text-slate-950 dark:text-foreground leading-none">
+          <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
+            <div>
+              <span className="text-xl font-black italic tracking-tighter text-slate-950 dark:text-foreground">
                 {formatCurrency(product.salePrice || product.price, loc)}
               </span>
-              {/* Discount: Kept in code, but clean & subtle */}
               {product.salePrice && product.price > product.salePrice && (
-                <span className="text-[10px] font-bold text-slate-300 dark:text-muted-foreground/50 line-through mt-1">
+                <p className="text-[10px] font-bold text-slate-300 dark:text-muted-foreground line-through">
                   {formatCurrency(product.price, loc)}
-                </span>
+                </p>
               )}
             </div>
-
-            {/* 2. TAGS SECTION - Enhanced UI & Animations */}
-            <div className="flex items-center gap-2 flex-wrap">
-              {/* Brand Tag: Original colors, enhanced padding */}
+            <div className="flex items-center gap-2">
               {product.brand && (
-                <span className="inline-flex items-center px-2.5 py-1 rounded-md text-[14px] font-black uppercase tracking-widest bg-red-50 dark:bg-primary/15 text-red-700 dark:text-primary border border-red-100/50 dark:border-primary/20 transition-transform duration-300 group-hover:-translate-y-0.5">
+                <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-red-50 dark:bg-primary/15 text-red-700 dark:text-primary">
                   {tTable("brand")}: {product.brand}
                 </span>
               )}
-
-              {/* Condition Tag: High-end "Live" Animation */}
               {product.condition && (
-                <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md text-[16px] font-black uppercase tracking-widest bg-red-50 dark:bg-primary/15 text-neutral-700 dark:text-muted-foreground border border-neutral-200/50 dark:border-white/5 transition-all duration-300">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
-                  </span>
+                <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-neutral-100 dark:bg-muted/20 text-neutral-700 dark:text-muted-foreground">
+                  <Zap size={14} className="text-red-600 dark:text-primary" />
                   {{
                     new: tForm("conditionNew"),
                     used: tForm("conditionUsed"),

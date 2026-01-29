@@ -4,8 +4,10 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ShoppingBag, Star } from "lucide-react";
 import { cn } from "@/utils/utils";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { getTrendingProducts } from "@/services/products.service";
+import { useCart } from "@/store/cart";
+import { toast } from "sonner";
 
 interface CustomStyles {
   container?: string;
@@ -79,7 +81,10 @@ export function AboutSectionHero({
   customStyles = {},
 }: AboutSectionHeroProps) {
   const locale = useLocale() as "en" | "ar";
+  const tTable = useTranslations("AdminTable");
+  const tForm = useTranslations("AdminForm");
   const s = getTheme(version);
+  const { addToCart } = useCart();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -184,6 +189,13 @@ export function AboutSectionHero({
   const condition = (product as any).condition as string | undefined;
   const attrs = (product as any).attributes || {};
   const avgRating = Number((product as any).averageRating ?? 0);
+  const conditionText = (() => {
+    const v = String(condition || "").toLowerCase();
+    if (!v) return "";
+    if (v === "new") return tForm("conditionNew");
+    if (v === "used") return tForm("conditionUsed");
+    return condition || "";
+  })();
 
   return (
     <section className="max-w-6xl mx-auto px-4 relative z-30 -mt-15" dir={locale === "ar" ? "rtl" : "ltr"}>
@@ -256,11 +268,11 @@ export function AboutSectionHero({
             </p>
           )}
 
-          <div className="mt-3 grid grid-cols-2 gap-3 text-xs">
+          <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
             {brandName && (
               <div className="text-neutral-600 dark:text-muted-foreground">
-                {locale === "ar" ? "العلامة" : "Brand"}:{" "}
-                <span className="font-semibold text-neutral-900 dark:text-foreground">{brandName}</span>
+                {tTable("brand")}:{" "}
+                <span className="px-2 py-0.5 rounded-full border border-border bg-white dark:bg-card font-black text-neutral-900 dark:text-foreground">{brandName}</span>
               </div>
             )}
             {categoryName && (
@@ -269,12 +281,34 @@ export function AboutSectionHero({
                 <span className="font-semibold text-neutral-900 dark:text-foreground">{categoryName}</span>
               </div>
             )}
-            {condition && (
-              <div className="text-neutral-600 dark:text-muted-foreground">
-                {locale === "ar" ? "الحالة" : "Condition"}:{" "}
-                <span className="font-semibold text-neutral-900 dark:text-foreground">{condition}</span>
-              </div>
-            )}
+           {conditionText && (
+            <div className="text-neutral-600 dark:text-muted-foreground flex items-center gap-2">
+              <span>{locale === "ar" ? "الحالة" : "Condition"}:</span>
+              
+              {/* ENHANCED ANIMATED SPAN */}
+              <span className={cn(
+                "relative inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-white dark:bg-card overflow-hidden group/cond shadow-sm transition-all duration-300 hover:border-primary/50",
+                "font-black text-[14px] uppercase tracking-wider text-neutral-900 dark:text-foreground"
+              )}>
+                
+                {/* 1. Live Indicator Dot */}
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                </span>
+
+                {/* 2. Text with Shimmer */}
+                <span className="relative z-10">
+                  {conditionText}
+                  {/* Shimmer Light Sweep */}
+                  <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-primary/10 to-transparent animate-shimmer" />
+                </span>
+                
+                {/* 3. Subtle background glow on hover */}
+                <span className="absolute inset-0 bg-primary/5 opacity-0 group-hover/cond:opacity-100 transition-opacity" />
+              </span>
+            </div>
+          )}
             <div className="text-neutral-600 dark:text-muted-foreground flex items-center gap-2">
               <span>{locale === "ar" ? "التقييم" : "Rating"}:</span>
               <div className="flex items-center gap-1">
@@ -314,6 +348,15 @@ export function AboutSectionHero({
                 s.btn,
                 customStyles.mainButton
               )}
+              onClick={async () => {
+                if (!product?._id) return;
+                const ok = await addToCart(String(product._id), 1);
+                if (ok) {
+                  toast.success(locale === "ar" ? "تمت إضافة المنتج إلى السلة" : "Product added to cart");
+                } else {
+                  toast.error(locale === "ar" ? "فشل في إضافة المنتج إلى السلة" : "Failed to add product to cart");
+                }
+              }}
             >
               {locale === "ar" ? "اشتر الآن" : "Buy now"}
               <ShoppingBag className="ml-3 rtl:ml-0 rtl:mr-3" size={18} />

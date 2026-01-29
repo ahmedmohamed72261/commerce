@@ -31,6 +31,8 @@ interface ProductCardProps {
 
 export function ProductCard({ variant = "v1", productId, title, price, oldPrice = price * 1.2, image, rating = 4, reviewsCount = 0, category, brand, stock, condition, salePrice }: ProductCardProps) {
   const t = useTranslations("Shop");
+  const tTable = useTranslations("AdminTable");
+  const tForm = useTranslations("AdminForm");
   const { addItem, removeItem, isInWishlist } = useWishlist();
   const { addToCart } = useCart();
   const { addItem: addQuoteItem } = useQuoteCart();
@@ -127,6 +129,21 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
             <span className="md:text-2xl text-md font-black tracking-tighter text-neutral-900 dark:text-foreground">
               {formatCurrency(salePrice || price, locale)}
             </span>
+            <div className="mt-1 flex items-center gap-2 flex-wrap">
+              {brand && (
+                <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-neutral-100 dark:bg-muted/20 text-neutral-700 dark:text-muted-foreground">
+                  {tTable("brand")}: {brand}
+                </span>
+              )}
+              {condition && (
+                <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-red-50 dark:bg-primary/15 text-red-700 dark:text-primary">
+                  {{
+                    new: tForm("conditionNew"),
+                    used: tForm("conditionUsed"),
+                  }[String(condition).toLowerCase()] || condition}
+                </span>
+              )}
+            </div>
           </div>
         </div>
 

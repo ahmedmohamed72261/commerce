@@ -17,7 +17,7 @@ export const ProductPrice: React.FC<Props> = ({ price, salePrice }) => {
         {t("price")}
       </p>
       <div className="flex items-center gap-3">
-        <span className="text-2xl md:text-3xl font-black text-red-600 dark:text-red-500 tracking-tight">
+        <span className="text-xl md:text-2xl font-black text-red-600 dark:text-red-500 tracking-tight">
           {formatCurrency(finalPrice, locale)}
         </span>
         {showCompare && (
