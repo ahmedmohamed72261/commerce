@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Trash2, Plus, Minus } from "lucide-react";
 import { useAuthStore } from "@/store/auth";
+import { formatCurrency } from "@/utils/utils";
 
 export default function QuoteCartPage() {
     const t = useTranslations("Quotations");
@@ -57,14 +58,24 @@ export default function QuoteCartPage() {
                         <div key={item.product._id} className="flex gap-4 p-4 border rounded-lg items-center bg-card">
                             <div className="w-24 h-24 relative flex-shrink-0">
                                 <img 
-                                    src={item.product.image || "/images/placeholder.png"} 
-                                    alt={typeof item.product.name === 'string' ? item.product.name : item.product.name.en} 
+                                    src={(item.product.images && item.product.images[0]) ? item.product.images[0] : "/images/placeholder.png"} 
+                                    alt={
+                                        typeof item.product.name === 'string' 
+                                            ? item.product.name 
+                                            : (item.product.name[(locale as string) === 'ar' ? 'ar' : 'en'] || item.product.name.en)
+                                    } 
                                     className="object-cover w-full h-full rounded" 
                                 />
                             </div>
                             <div className="flex-1">
-                                <h3 className="font-bold text-lg">{typeof item.product.name === 'string' ? item.product.name : item.product.name.en}</h3>
-                                <p className="text-muted-foreground font-semibold">${item.product.salePrice || item.product.price}</p>
+                                <h3 className="font-bold text-lg">
+                                    {typeof item.product.name === 'string' 
+                                        ? item.product.name 
+                                        : (item.product.name[(locale as string) === 'ar' ? 'ar' : 'en'] || item.product.name.en)}
+                                </h3>
+                                <p className="text-muted-foreground font-semibold">
+                                    {formatCurrency(item.product.salePrice || item.product.price, (locale as "en" | "ar"))}
+                                </p>
                             </div>
                             <div className="flex items-center gap-2">
                                 <Button size="icon" variant="outline" onClick={() => updateQuantity(item.product._id, Math.max(1, item.quantity - 1))}>

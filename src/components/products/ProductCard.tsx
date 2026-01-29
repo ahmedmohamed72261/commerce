@@ -65,7 +65,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     addQuoteItem({
       _id: String(product.id),
       name: product.title,
-      description: typeof product.description === 'string' ? product.description : product.description?.en,
+      description: product.description,
       price: product.price,
       salePrice: product.salePrice,
       images: product.image ? [product.image] : [],

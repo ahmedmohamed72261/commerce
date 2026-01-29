@@ -6,6 +6,7 @@ export interface SuggestedProduct {
   _id: string;
   name: string | { en: string; ar: string };
   image?: string;
+  description?: string;
 }
 
 export function useProductSearch() {
