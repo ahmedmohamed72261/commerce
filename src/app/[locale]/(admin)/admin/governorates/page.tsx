@@ -69,7 +69,7 @@ export default function GovernoratesPage() {
         }
       >
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm text-gray-600 dark:text-muted-foreground">
+          <table className="w-full text-center text-sm text-gray-600 dark:text-muted-foreground">
             <thead className="bg-gray-50 dark:bg-muted/50 text-gray-500 dark:text-muted-foreground font-semibold uppercase text-xs">
               <tr>
                 <th className="px-5 py-3 w-10">
@@ -80,7 +80,7 @@ export default function GovernoratesPage() {
                 </th>
                 <th className="px-5 py-3">{tForm("nameEn")}</th>
                 <th className="px-5 py-3">{tForm("nameAr")}</th>
-                <th className="px-5 py-3 text-right">{tTable("actions")}</th>
+                <th className="px-5 py-3 text-center">{tTable("actions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
@@ -108,11 +108,11 @@ export default function GovernoratesPage() {
                     <td className="px-5 py-3 font-medium text-gray-800 dark:text-foreground">
                       {typeof g.name === "string" ? g.name : g.name?.en}
                     </td>
-                    <td className="px-5 py-3 font-medium text-gray-800 dark:text-foreground text-right" dir="rtl">
+                    <td className="px-5 py-3 font-medium text-gray-800 dark:text-foreground text-center" dir="rtl">
                       {typeof g.name === "string" ? g.name : g.name?.ar}
                     </td>
-                    <td className="px-5 py-3 text-right">
-                      <div className="flex items-center justify-end gap-2">
+                    <td className="px-5 py-3 text-center">
+                      <div className="flex items-center justify-center gap-2">
                         <button
                           className="p-1.5 rounded hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400"
                           aria-label="Delete"

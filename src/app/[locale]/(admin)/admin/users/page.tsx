@@ -46,7 +46,7 @@ export default function AdminUsersPage() {
         }
       >
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm text-gray-600 dark:text-muted-foreground">
+          <table className="w-full text-center text-sm text-gray-600 dark:text-muted-foreground">
             <thead className="bg-gray-50 dark:bg-muted/50 text-gray-500 dark:text-muted-foreground font-semibold uppercase text-xs">
               <tr>
                 <th className="px-5 py-3">{tTable("name")}</th>
@@ -71,7 +71,7 @@ export default function AdminUsersPage() {
               ) : (
                 users.map((u: any) => (
                   <tr key={u._id || u.id} className="hover:bg-gray-50/50 dark:hover:bg-muted/50 transition-colors">
-                    <td className="px-5 py-3 font-medium text-gray-800 dark:text-foreground">
+                    <td className="px-5 py-3 font-medium text-gray-800 dark:text-foreground align-middle">
                       <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-muted flex items-center justify-center">
                           <User size={16} className="text-gray-400 dark:text-muted-foreground" />

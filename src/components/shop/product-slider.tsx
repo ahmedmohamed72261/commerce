@@ -59,7 +59,7 @@ export function ProductSlider({ products, title, className }: ProductSliderProps
       <Swiper
         modules={[Navigation, Autoplay]}
         spaceBetween={10}
-        slidesPerView={1}
+        slidesPerView={2}
         centeredSlides={false}
         loop
         autoplay={{

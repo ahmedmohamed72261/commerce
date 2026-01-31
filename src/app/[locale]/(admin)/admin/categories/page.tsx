@@ -78,14 +78,14 @@ export default function CategoriesPage() {
          </div>
        }>
          <div className="overflow-x-auto">
-           <table className="w-full text-left text-sm text-gray-600 dark:text-muted-foreground">
+           <table className="w-full text-center text-sm text-gray-600 dark:text-muted-foreground">
              <thead className="bg-gray-50 dark:bg-muted/50 text-gray-500 dark:text-muted-foreground font-semibold uppercase text-xs">
                <tr>
                  <th className="px-5 py-3 w-10"><input type="checkbox" className="rounded border-gray-300 dark:border-border bg-white dark:bg-card text-red-600 focus:ring-red-500" /></th>
                 <th className="px-5 py-3">{tTable("image")}</th>
                 <th className="px-5 py-3">{tForm("nameEn")}</th>
                 <th className="px-5 py-3">{tForm("nameAr")}</th>
-                <th className="px-5 py-3 text-right">{tTable("actions")}</th>
+                <th className="px-5 py-3">{tTable("actions")}</th>
                </tr>
              </thead>
              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
@@ -98,7 +98,7 @@ export default function CategoriesPage() {
                    <tr key={cat._id || cat.id} className="hover:bg-gray-50/50 dark:hover:bg-muted/50 transition-colors">
                     <td className="px-5 py-3"><input type="checkbox" className="rounded border-gray-300 dark:border-border bg-white dark:bg-card text-red-600 focus:ring-red-500" /></td>
                      <td className="px-5 py-3">
-                       <div className="w-10 h-10 bg-gray-100 dark:bg-muted rounded border border-gray-200 dark:border-border flex items-center justify-center overflow-hidden">
+                       <div className="w-10 h-10 m-auto bg-gray-100 dark:bg-muted rounded border border-gray-200 dark:border-border flex items-center justify-center overflow-hidden">
                          {cat.image ? (
                            <img src={cat.image} alt={cat.name?.en} className="w-full h-full object-cover" />
                          ) : (
@@ -107,9 +107,9 @@ export default function CategoriesPage() {
                        </div>
                     </td>
                     <td className="px-5 py-3 font-medium text-gray-800 dark:text-foreground">{cat.name?.en || cat.name}</td>
-                    <td className="px-5 py-3 font-medium text-gray-800 dark:text-foreground text-right" dir="rtl">{cat.name?.ar}</td>
-                    <td className="px-5 py-3 text-right">
-                       <div className="flex items-center justify-end gap-2">
+                    <td className="px-5 py-3 font-medium text-gray-800 dark:text-foreground" dir="rtl">{cat.name?.ar}</td>
+                    <td className="px-5 py-3">
+                       <div className="flex items-center justify-center gap-2">
                          <button className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-muted text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground" aria-label="Edit" onClick={() => openEdit(cat)}>
                            <Pencil size={16} />
                          </button>

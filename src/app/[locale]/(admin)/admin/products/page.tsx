@@ -106,7 +106,7 @@ export default function ProductsPage() {
          </div>
        }>
          <div className="overflow-x-auto">
-           <table className="w-full text-left text-sm text-gray-600 dark:text-muted-foreground">
+           <table className="w-full text-center text-sm text-gray-600 dark:text-muted-foreground">
              <thead className="bg-gray-50 dark:bg-muted/50 text-gray-500 dark:text-muted-foreground font-semibold uppercase text-xs">
                <tr>
                  <th className="px-5 py-3 w-10"><input type="checkbox" className="rounded border-gray-300 dark:border-border bg-white dark:bg-card text-red-600 focus:ring-red-500" /></th>
@@ -114,7 +114,7 @@ export default function ProductsPage() {
                 <th className="px-5 py-3">{tTable("name")}</th>
                 <th className="px-5 py-3">{tTable("category")}</th>
                 <th className="px-5 py-3">{tTable("price")}</th>
-                <th className="px-5 py-3 text-right">{tTable("actions")}</th>
+                <th className="px-5 py-3">{tTable("actions")}</th>
                </tr>
              </thead>
              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
@@ -139,7 +139,7 @@ export default function ProductsPage() {
                   <tr key={product._id || product.id} className="hover:bg-gray-50/50 dark:hover:bg-muted/50 transition-colors group">
                     <td className="px-5 py-3"><input type="checkbox" className="rounded border-gray-300 dark:border-border bg-white dark:bg-card text-red-600 focus:ring-red-500" /></td>
                     <td className="px-5 py-3">
-                       <div className="w-10 h-10 bg-gray-100 dark:bg-muted rounded border border-gray-200 dark:border-border flex items-center justify-center overflow-hidden">
+                       <div className="w-10 h-10 m-auto bg-gray-100 dark:bg-muted rounded border border-gray-200 dark:border-border flex items-center justify-center overflow-hidden">
                          {product.images && product.images[0] ? (
                            <img src={product.images[0]} alt={product.name?.en || product.name} className="w-full h-full object-cover" />
                          ) : (
@@ -153,8 +153,8 @@ export default function ProductsPage() {
                       </td>
 
                      <td className="px-5 py-3 font-bold text-gray-800 dark:text-foreground">{formatCurrency(product.price, locale)}</td>
-                     <td className="px-5 py-3 text-right">
-                       <div className="flex items-center justify-end gap-2">
+                     <td className="px-5 py-3">
+                       <div className="flex items-center justify-center gap-2">
                          <button
                            className={`p-1.5 rounded ${product.trending ? 'text-yellow-500' : 'text-gray-400 dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-muted'}`}
                            aria-label={product.trending ? 'Remove from trending' : 'Make trending'}

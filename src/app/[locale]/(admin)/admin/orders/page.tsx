@@ -92,7 +92,7 @@ export default function OrdersPage() {
          </div>
        }>
          <div className="overflow-x-auto">
-           <table className="w-full text-left text-sm text-gray-600 dark:text-muted-foreground">
+           <table className="w-full text-center text-sm text-gray-600 dark:text-muted-foreground">
              <thead className="bg-gray-50/50 dark:bg-muted/50 border-b border-gray-100 dark:border-border">
                <tr>
                  <th className="px-6 py-4 w-10">
@@ -155,8 +155,8 @@ export default function OrdersPage() {
                      <td className="px-6 py-4 font-semibold text-gray-900 dark:text-foreground">
                        {formatCurrency(Number(order.totalAmount || 0), locale)}
                      </td>
-                     <td className="px-6 py-4 text-right">
-                       <div className="flex items-center justify-end gap-2">
+                     <td className="px-6 py-4">
+                       <div className="flex items-center justify-center gap-2">
                          <Link 
                            href={`/${locale}/admin/orders/${order._id || order.orderId}`}
                            className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-foreground hover:bg-muted rounded-lg transition-colors"

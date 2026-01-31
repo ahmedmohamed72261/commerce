@@ -171,6 +171,21 @@ export function Sidebar({ open, onClose, version = 1 }: SidebarProps) {
             </div>
 
             <div className="flex-1 overflow-y-auto custom-scrollbar overscroll-contain will-change-scroll">
+              {/* Quick Actions at Top */}
+              <div className="px-6 pt-6 grid grid-cols-3 gap-4">
+                 <Link href={`/${locale}/wishlist`} className="flex flex-col items-center justify-center p-4 bg-neutral-50 dark:bg-white/5 rounded-2xl gap-2 hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
+                    <Heart className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
+                    <span className="text-[10px] font-bold uppercase">{tCommon("wishlist")}</span>
+                 </Link>
+                 <Link href={`/${locale}/cart`} className="flex flex-col items-center justify-center p-4 bg-neutral-50 dark:bg-white/5 rounded-2xl gap-2 hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
+                    <ShoppingBag className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
+                    <span className="text-[10px] font-bold uppercase">{tCommon("cart")}</span>
+                 </Link>
+                 <Link href={`/${locale}/quotations/cart`} className="flex flex-col items-center justify-center p-4 bg-neutral-50 dark:bg-white/5 rounded-2xl gap-2 hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
+                    <Percent className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
+                    <span className="text-[10px] font-bold uppercase">{tQuote("title")}</span>
+                 </Link>
+              </div>
               {/* Categories */}
               <nav className="p-6">
                 <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-[0.3em] mb-4">{tCommon("categories")}</p>
@@ -230,21 +245,7 @@ export function Sidebar({ open, onClose, version = 1 }: SidebarProps) {
                 </div>
               </nav>
 
-              {/* Quick Settings Grid */}
-              <div className="px-6 py-4 grid grid-cols-2 gap-4">
-                 <Link href={`/${locale}/wishlist`} className="flex flex-col items-center justify-center p-4 bg-neutral-50 dark:bg-white/5 rounded-2xl gap-2 hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
-                    <Heart className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
-                    <span className="text-[10px] font-bold uppercase">{tCommon("wishlist")}</span>
-                 </Link>
-                 <Link href={`/${locale}/cart`} className="flex flex-col items-center justify-center p-4 bg-neutral-50 dark:bg-white/5 rounded-2xl gap-2 hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
-                    <ShoppingBag className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
-                    <span className="text-[10px] font-bold uppercase">{tCommon("cart")}</span>
-                 </Link>
-                 <Link href={`/${locale}/quotations/cart`} className="flex flex-col items-center justify-center p-4 bg-neutral-50 dark:bg-white/5 rounded-2xl gap-2 hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
-                    <Percent className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
-                    <span className="text-[10px] font-bold uppercase">{tQuote("title")}</span>
-                 </Link>
-              </div>
+              {/* Moved quick actions to top */}
             </div>
 
             {/* Footer Contact & Socials */}

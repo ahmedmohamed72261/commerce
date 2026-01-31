@@ -61,7 +61,7 @@ export const ProductActions: React.FC<Props> = ({
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-3">
+    <div className="flex flex-col gap-3">
       {/* Quantity Selector */}
       <div className="flex items-center justify-between w-full md:w-auto min-w-[160px] border border-border rounded-xl p-1 bg-muted/50">
         <Button

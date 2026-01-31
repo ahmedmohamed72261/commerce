@@ -16,6 +16,8 @@ import { useIsRTL } from "@/utils/rtl";
 import { formatCurrency } from "@/utils/utils";
 import { ProductDetailsSkeleton } from "@/components/product/ProductDetailsSkeleton";
 import { rateProduct } from "@/services/products.service";
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 export default function ProductDetailsPage() {
   const { locale, productId } = useParams() as { locale: string; productId: string };
@@ -24,6 +26,8 @@ export default function ProductDetailsPage() {
 
 const ProductDetailsClient = ({ locale, productId }: { locale: string; productId: string }) => {
   const isRTL = useIsRTL();
+  const tProduct = useTranslations("Product");
+  const tHome = useTranslations("Home");
   const { getProductDetails, productDetails, productDetailsLoading, error, items, fetch } =
     useProductsStore();
 
@@ -76,7 +80,7 @@ const ProductDetailsClient = ({ locale, productId }: { locale: string; productId
       <div className="bg-card/80 border-b border-border backdrop-blur-sm sticky top-0 z-10">
         <Breadcrumb
           items={[
-            { label: isRTL ? "المنتجات" : "Products", href: `/${locale}/products` },
+            { label: isRTL ? "المنتجات" : tProduct("seeAll"), href: `/${locale}/products` },
             { label: productDetails.title },
           ]}
           showHome={true}
@@ -117,39 +121,7 @@ const ProductDetailsClient = ({ locale, productId }: { locale: string; productId
                 <ProductMeta stock={productDetails.stock} condition={productDetails.condition} />
               </div>
 
-              {/* Rating Section */}
-              <div className="border-t border-border pt-6">
-              <h3 className="font-bold text-lg mb-3">Rate this product</h3>
-
-              <div className="flex items-center gap-2">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <button
-                    key={star}
-                    onClick={async () => {
-                      if (!productId) return;
-                      try {
-                        await rateProduct(productId, star);
-                        setRating(star);
-                        alert(`Thank you for rating this product ${star} star${star !== 1 ? 's' : ''}!`);
-                      } catch (error) {
-                        console.error('Failed to rate product:', error);
-                        alert('Failed to submit rating');
-                      }
-                    }}
-                    onMouseEnter={() => setHover(star)}
-                    onMouseLeave={() => setHover(0)}
-                    className="focus:outline-none"
-                  >
-                    <Star 
-                      size={24} 
-                      className={`cursor-pointer ${star <= (hover || rating) ? 'text-yellow-500' : 'text-muted-foreground/30'}`} 
-                      fill={star <= (hover || rating) ? 'currentColor' : 'none'} 
-                    />
-                  </button>
-                ))}
-                <span className="ml-2 text-sm text-muted-foreground">Click to rate</span>
-              </div>
-            </div>
+              
 
             <ProductActions
               productId={productDetails.id}
@@ -166,20 +138,58 @@ const ProductDetailsClient = ({ locale, productId }: { locale: string; productId
       <div className="container mx-auto px-4 mt-2">
         <div className="bg-card rounded-3xl border border-border shadow-md p-6 md:p-10">
           <h3 className="font-black text-lg mb-3 uppercase tracking-widest text-muted-foreground">
-            Product Details
+            {tProduct("description")}
           </h3>
-          <ProductDescription description={productDetails.description} />
+          <ProductDescription description={productDetails.description ?? ""} />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 text-sm text-foreground">
             {productDetails.condition && (
               <div>
-                <strong className="text-muted-foreground">Condition:</strong> {productDetails.condition}
+                <strong className="text-muted-foreground">{tProduct("condition")}:</strong> {productDetails.condition}
               </div>
             )}
             {productDetails.brand && (
               <div>
-                <strong className="text-muted-foreground">Brand:</strong> {productDetails.brand}
+                <strong className="text-muted-foreground">{tHome("brand")}:</strong>{" "}
+                {productDetails.brand}
               </div>
             )}
+          </div>
+          {/* Rating Section - New design under description */}
+          <div className="mt-6 rounded-2xl border border-border bg-neutral-50 dark:bg-white/5 p-5 md:p-6">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h4 className="text-base md:text-lg font-black">{isRTL ? "قيّم هذا المنتج" : "Rate this product"}</h4>
+                <p className="text-xs md:text-sm text-muted-foreground">{isRTL ? "اضغط للتقييم" : "Click to rate"}</p>
+              </div>
+              <div className="flex items-center gap-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    onClick={async () => {
+                      if (!productId) return;
+                      try {
+                        await rateProduct(productId, star);
+                        setRating(star);
+                        toast.success(isRTL ? `تم تقييم المنتج ${star} نجمة` : `Rated ${star} star${star !== 1 ? "s" : ""}`);
+                      } catch (error) {
+                        console.error("Failed to rate product:", error);
+                        toast.error(isRTL ? "فشل إرسال التقييم" : "Failed to submit rating");
+                      }
+                    }}
+                    onMouseEnter={() => setHover(star)}
+                    onMouseLeave={() => setHover(0)}
+                    className="focus:outline-none"
+                    aria-label={isRTL ? `تقييم ${star}` : `Rate ${star}`}
+                  >
+                    <Star
+                      size={26}
+                      className={`cursor-pointer ${star <= (hover || rating) ? "text-yellow-500" : "text-muted-foreground/30"}`}
+                      fill={star <= (hover || rating) ? "currentColor" : "none"}
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
