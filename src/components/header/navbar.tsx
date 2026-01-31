@@ -20,6 +20,7 @@ export function Navbar({ locale }: { locale: string }) {
   const t = useTranslations("Nav");
   const tProfile = useTranslations("Common");
   const tQuote = useTranslations("Quotations");
+  const tAuth = useTranslations("Auth");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -102,7 +103,7 @@ export function Navbar({ locale }: { locale: string }) {
         </nav>
 
         {/* Right Icons */}
-        <div className="flex  items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           
           {/* Search Component */}
           <button
@@ -168,9 +169,40 @@ export function Navbar({ locale }: { locale: string }) {
               )}
             </div>
           ) : (
-            <Link href={`/${locale}/login`} className="text-neutral-600 dark:text-muted-foreground hover:text-red-600 dark:hover:text-primary transition">
-              <User className="w-5 h-5" />
-            </Link>
+            <>
+              {/* Mobile: show dropdown on click */}
+              <div className="relative md:hidden">
+                <button
+                  onClick={() => setUserMenuOpen((v) => !v)}
+                  className="flex items-center justify-center w-10 h-10 rounded-full border border-neutral-200 dark:border-border text-neutral-700 dark:text-foreground hover:bg-red-50 dark:hover:bg-red-900/20 hover:border-red-200 dark:hover:border-primary/30 hover:text-red-700 dark:hover:text-primary transition"
+                  aria-label="Open user menu"
+                >
+                  <User className="w-5 h-5" />
+                </button>
+                {userMenuOpen && (
+                  <div className="absolute right-0 rtl:left-0 rtl:right-auto top-full mt-2 w-40 bg-white dark:bg-card border dark:border-border shadow-md rounded-md p-2 z-50">
+                    <Link
+                      href={`/${locale}/login`}
+                      onClick={() => setUserMenuOpen(false)}
+                      className="block px-3 py-2 rtl:text-right text-sm hover:bg-neutral-100 dark:hover:bg-muted rounded"
+                    >
+                      {tAuth("login")}
+                    </Link>
+                    <Link
+                      href={`/${locale}/signup`}
+                      onClick={() => setUserMenuOpen(false)}
+                      className="block px-3 py-2 rtl:text-right text-sm hover:bg-neutral-100 dark:hover:bg-muted rounded"
+                    >
+                      {tAuth("signUp")}
+                    </Link>
+                  </div>
+                )}
+              </div>
+              {/* Desktop: direct link to login */}
+              <Link href={`/${locale}/login`} className="hidden md:inline-flex text-neutral-600 dark:text-muted-foreground hover:text-red-600 dark:hover:text-primary transition">
+                <User className="w-5 h-5" />
+              </Link>
+            </>
           )
           }
           {/* Theme Toggle (Optional, kept from original) */}
@@ -182,7 +214,7 @@ export function Navbar({ locale }: { locale: string }) {
           </button>
 
           {/* Quote Cart */}
-          <Link href={`/${locale}/quotations/cart`} className="relative text-neutral-600 dark:text-muted-foreground hover:text-red-600 dark:hover:text-primary transition">
+          <Link href={`/${locale}/quotations/cart`} className="relative text-neutral-600 dark:text-muted-foreground hover:text-red-600 dark:hover:text-primary transition hidden sm:inline-flex">
             <FileText className="w-5 h-5" />
             <span className="absolute -top-2 -right-2 h-4 w-4 rounded-full bg-red-600 text-white text-[10px] flex items-center justify-center">
               {quoteTotalItems()}
@@ -190,7 +222,7 @@ export function Navbar({ locale }: { locale: string }) {
           </Link>
 
           {/* Wishlist */}
-          <Link href={`/${locale}/wishlist`} className="relative text-neutral-600 dark:text-muted-foreground hover:text-red-600 dark:hover:text-primary transition">
+          <Link href={`/${locale}/wishlist`} className="relative text-neutral-600 dark:text-muted-foreground hover:text-red-600 dark:hover:text-primary transition hidden sm:inline-flex">
             <Heart className="w-5 h-5" />
             <span className="absolute -top-2 -right-2 h-4 w-4 rounded-full bg-red-600 text-white text-[10px] flex items-center justify-center">
               {wishlistTotalItems()}

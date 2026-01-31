@@ -2,11 +2,12 @@
 
 import { useTranslations } from "next-intl";
 import { BannerSlider } from "@/components/hero/banner-slider";
+import { MainBanner } from "@/components/banners/MainBanner";
 import { Button } from "@/components/ui/button";
 import { BannerCard } from "@/components/hero/banner-card";
 import { Play, Shield, Globe, Award, MoveRight, ArrowLeft, ArrowRight } from "lucide-react";
 import { AboutSectionHero } from "./AboutSectionHero";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useBrandsStore } from "@/store/brands";
 import { useLocale } from "next-intl";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -16,48 +17,37 @@ import "swiper/css/navigation";
 import { BrandSliderCardSkeleton } from "./BrandSliderCardSkeleton";
 export function HeroSection() {
   const t = useTranslations("Home");
+  const tSlides = useTranslations("HeroSlides");
   const brandRed = "#C40000";
   const { brands, fetchBrands, loading: brandsLoading } = useBrandsStore();
   const locale = useLocale() as "en" | "ar";
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
     fetchBrands(locale);
   }, [fetchBrands, locale]);
-
-  const sliderImages = [
-    "/images/banners2/a.jpg",
-    "/images/banners2/b.jpg",
-    "/images/banners2/c.jpg",
-    "/images/banners2/d.jpg",
-    "/images/banners2/e.jpg",
-    "/images/banners2/f.jpg",
-  ];
 
   // Brands are fetched via store and mapped into cards below
 
   return (
     <section className="relative pt-0 px-4 pb-5 overflow-visible bg-background dark:bg-background">
       {/* 1. Main Hero Slider */}
-      <div className="w-full relative">
-        <BannerSlider
-          images={sliderImages}
-          interval={6000}
-          className="rounded-none shadow-none"
-          heightClass="h-[360px] md:h-[600px] lg:h-[850px]"
-        >
+      <MainBanner interval={6000} heightClass="h-[360px] md:h-[600px] lg:h-[850px]" onIndexChange={setCurrentSlide}>
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent rtl:bg-gradient-to-l" />
           <div className="absolute inset-y-0 left-0 rtl:left-auto rtl:right-0 flex items-center w-full">
             <div className="container mx-auto px-4 md:px-12">
               <div className="max-w-2xl text-white">
                 <div className="flex items-center gap-3 mb-4 animate-fade-down opacity-0 [animation-fill-mode:forwards]">
                   <div className="h-px w-10 bg-red-600" />
-                  <span className="uppercase tracking-[0.4em] text-xs font-bold text-red-500">Premium Tech Solutions</span>
+                  <span className="uppercase tracking-[0.4em] text-xs font-bold text-red-500">
+                    {tSlides(`slide${currentSlide + 1}.tag`)}
+                  </span>
                 </div>
                 <h1 className="text-3xl md:text-7xl font-black drop-shadow-md leading-[0.9] uppercase tracking-tighter animate-fade-up opacity-0 [animation-delay:200ms] [animation-fill-mode:forwards]">
-                  {t("heroTitle")}
+                  {tSlides(`slide${currentSlide + 1}.title`)}
                 </h1>
                 <p className="mt-6 text-md md:text-xl text-white/80 leading-relaxed max-w-lg animate-fade-up opacity-0 [animation-delay:400ms] [animation-fill-mode:forwards]">
-                  {t("heroDesc")}
+                  {tSlides(`slide${currentSlide + 1}.desc`)}
                 </p>
                 <div className="my-10 flex gap-4 animate-fade-up opacity-0 [animation-delay:600ms] [animation-fill-mode:forwards]">
                   <Button className="bg-[#C40000] hover:bg-white hover:text-black text-white px-10 py-7 md:text-lg text-md font-black uppercase tracking-widest rounded-none transition-all duration-300 shadow-2xl">
@@ -67,8 +57,7 @@ export function HeroSection() {
               </div>
             </div>
           </div>
-        </BannerSlider>
-      </div>
+      </MainBanner>
 
       <AboutSectionHero />
 

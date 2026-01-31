@@ -83,7 +83,7 @@ export const ProductActions: React.FC<Props> = ({
         </Button>
       </div>
 
-      <div className="flex flex-row gap-3 w-full">
+      <div className="flex flex-col sm:flex-row gap-3 w-full">
         {/* Add to Cart */}
         <Button
           onClick={handleAddToCart}

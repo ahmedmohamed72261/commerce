@@ -21,7 +21,7 @@ export const ProductMeta: React.FC<Props> = ({ stock, condition, brand }) => {
   })();
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 animate-fade-up">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 animate-fade-up">
       
       {/* STOCK SECTION */}
       <div className="glass-panel p-6 rounded-[--radius] group transition-all duration-300">
@@ -44,7 +44,7 @@ export const ProductMeta: React.FC<Props> = ({ stock, condition, brand }) => {
       </div>
 
       {/* BRAND SECTION */}
-      {brand && (
+      {/* {brand && (
         <div className="glass-panel p-6 rounded-[--radius] bg-muted/20 border-primary/10">
           <div className="flex items-center gap-2 mb-4 text-muted-foreground">
             <Tag size={16} strokeWidth={2.5} />
@@ -54,12 +54,12 @@ export const ProductMeta: React.FC<Props> = ({ stock, condition, brand }) => {
             {brand}<span className="text-primary animate-pulse">_</span>
           </h3>
         </div>
-      )}
+      )} */}
 
       {/* CONDITION SECTION - THE ANIMATED PILL */}
       {conditionText && (
-        <div className="glass-panel p-6 rounded-[--radius] flex flex-col justify-between overflow-hidden relative border-primary/20">
-          <div className="flex items-center gap-2 mb-4 text-muted-foreground">
+        <div className="glass-panel p-2 rounded-[--radius] flex flex-col justify-between overflow-hidden relative border-primary/20">
+          <div className="flex items-center gap-2 mb-2 text-muted-foreground">
             <Layers size={16} strokeWidth={2.5} />
             <p className="text-[10px] font-black uppercase tracking-[0.2em]">{t("condition")}</p>
           </div>

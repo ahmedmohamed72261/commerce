@@ -59,7 +59,7 @@ export function ProductSlider({ products, title, className }: ProductSliderProps
       <Swiper
         modules={[Navigation, Autoplay]}
         spaceBetween={10}
-        slidesPerView={2}
+        slidesPerView={1}
         centeredSlides={false}
         loop
         autoplay={{
@@ -75,7 +75,8 @@ export function ProductSlider({ products, title, className }: ProductSliderProps
           480: { slidesPerView: 2, spaceBetween: 10 },
           768: { slidesPerView: 2, spaceBetween: 24 },
           1024: { slidesPerView: 3, spaceBetween: 24 },
-          1280: { slidesPerView: 5, spaceBetween: 24 },
+          1280: { slidesPerView: 4, spaceBetween: 24 },
+          1440: { slidesPerView: 5, spaceBetween: 24 },
         }}
         className="!overflow-visible"
       >

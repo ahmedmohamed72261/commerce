@@ -210,7 +210,7 @@ export function AboutSectionHero({
         {/* IMAGE */}
         <div
           className={cn(
-            "flex items-center justify-center h-[250px] md:h-auto p-3 lg:p-9",
+            "flex items-center justify-center h-[230px] md:h-auto overflow-hidden",
             s.img,
             customStyles.imageSection
           )}
@@ -219,7 +219,7 @@ export function AboutSectionHero({
             src={image}
             alt={title}
             className={cn(
-              "w-full max-w-sm h-full object-cover transition-transform duration-700 hover:scale-105",
+              "w-full h-full object-cover transition-transform duration-700 hover:scale-105",
               customStyles.productImg
             )}
           />
@@ -248,27 +248,27 @@ export function AboutSectionHero({
               ${salePrice ?? price}
             </span>
 
-            {salePrice && (
+            {/* {salePrice && (
               <span className="text-lg text-neutral-400 line-through">
                 ${price}
               </span>
-            )}
+            )} */}
           </div>
 
           {/* STOCK */}
           {typeof stock === "number" && (
-            <span className="text-sm text-neutral-500">
+            <span className="text-sm sm:text-base md:text-lg text-neutral-500">
               {locale === "ar" ? "المتوفر" : "In stock"}: {stock}
             </span>
           )}
 
           {desc && (
-            <p className="text-sm text-neutral-600 dark:text-muted-foreground mt-2">
+            <p className="text-sm sm:text-base md:text-lg text-neutral-600 dark:text-muted-foreground mt-2">
               {desc}
             </p>
           )}
 
-          <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
+          <div className="mt-3 grid grid-cols-2 gap-3 text-sm sm:text-base md:text-lg">
             {brandName && (
               <div className="text-neutral-600 dark:text-muted-foreground">
                 {tTable("brand")}:{" "}
@@ -288,7 +288,7 @@ export function AboutSectionHero({
               {/* ENHANCED ANIMATED SPAN */}
               <span className={cn(
                 "relative inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-white dark:bg-card overflow-hidden group/cond shadow-sm transition-all duration-300 hover:border-primary/50",
-                "font-black text-[14px] uppercase tracking-wider text-neutral-900 dark:text-foreground"
+                "font-black text-xs sm:text-sm md:text-base uppercase tracking-wider text-neutral-900 dark:text-foreground"
               )}>
                 
                 {/* 1. Live Indicator Dot */}
@@ -333,7 +333,7 @@ export function AboutSectionHero({
           {attrs && Object.keys(attrs).length > 0 && (
             <div className="mt-2 flex flex-wrap gap-2">
               {Object.entries(attrs).slice(0, 4).map(([k, v]) => (
-                <span key={String(k)} className="px-2 py-1 rounded-full text-[11px] border border-gray-200 dark:border-border bg-gray-50 dark:bg-muted/30 text-neutral-700 dark:text-muted-foreground">
+                <span key={String(k)} className="px-2 py-1 rounded-full text-xs sm:text-sm md:text-base border border-gray-200 dark:border-border bg-gray-50 dark:bg-muted/30 text-neutral-700 dark:text-muted-foreground">
                   {String(k)}: {String(v)}
                 </span>
               ))}
@@ -344,7 +344,7 @@ export function AboutSectionHero({
           <div className="pt-2">
             <Button
               className={cn(
-                "h-10 px-10 text-sm font-medium transition-transform active:scale-95",
+                "h-10 px-10 text-xs sm:text-sm md:text-base font-medium transition-transform active:scale-95",
                 s.btn,
                 customStyles.mainButton
               )}

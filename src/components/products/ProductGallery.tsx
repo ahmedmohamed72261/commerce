@@ -40,7 +40,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ images, productN
           src={images[selectedImg]} 
           alt={`${productName} - Image ${selectedImg + 1}`} 
           fill 
-          className="object-contain transition-transform duration-700 group-hover:scale-105" 
+          className="object-cover transition-transform duration-700 group-hover:scale-105" 
           priority
         />
         

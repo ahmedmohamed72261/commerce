@@ -105,12 +105,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             {product.category}
           </div>
         )}
-        <div className="absolute top-4 right-4">
-          <Star
-            size={16}
-            className={isWishlisted ? "text-amber-400" : "text-white/70 dark:text-muted-foreground/70"}
-            fill={isWishlisted ? "currentColor" : "none"}
-          />
+        <div className="absolute top-2 right-2">
+          <Button
+              size="icon"
+              variant="ghost"
+              className={`h-10 w-10 rounded-xl hover:bg-red-50 dark:hover:bg-primary/20 hover:text-red-600 dark:hover:text-primary ${isWishlisted ? 'text-red-600 dark:text-primary bg-red-50 dark:bg-primary/20' : ''}`}
+              onClick={handleWishlist}
+            >
+              <Heart size={18} fill={isWishlisted ? "currentColor" : "none"} />
+            </Button>
         </div>
         {product.stock !== undefined && product.stock === 0 && (
           <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
@@ -159,11 +162,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             {/* 2. TAGS SECTION - Enhanced UI & Animations */}
             <div className="flex items-center gap-2 flex-wrap">
               {/* Brand Tag: Original colors, enhanced padding */}
-              {product.brand && (
+              {/* {product.brand && (
                 <span className="inline-flex items-center px-2.5 py-1 rounded-md text-[14px] font-black uppercase tracking-widest bg-red-50 dark:bg-primary/15 text-red-700 dark:text-primary border border-red-100/50 dark:border-primary/20 transition-transform duration-300 group-hover:-translate-y-0.5">
                   {tTable("brand")}: {product.brand}
                 </span>
-              )}
+              )} */}
 
               {/* Condition Tag: High-end "Live" Animation */}
               {product.condition && (
@@ -175,7 +178,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                   {{
                     new: tForm("conditionNew"),
                     used: tForm("conditionUsed"),
-                    refurbished: tForm("conditionRefurbished")
                   }[String(product.condition).toLowerCase()] || product.condition}
                 </span>
               )}
@@ -184,23 +186,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         )}
 
         <div className="mt-auto flex flex-col sm:flex-row sm:items-center items-start justify-between gap-2">
-          <div className="flex w-full gap-2 justify-between items-center">
+          <div className="flex w-full flex-col sm:flex-row gap-2 justify-between items-center"> 
             <Button
-              size="icon"
-              variant="ghost"
-              className={`h-10 w-10 rounded-xl hover:bg-red-50 dark:hover:bg-primary/20 hover:text-red-600 dark:hover:text-primary ${isWishlisted ? 'text-red-600 dark:text-primary bg-red-50 dark:bg-primary/20' : ''}`}
-              onClick={handleWishlist}
-            >
-              <Heart size={18} fill={isWishlisted ? "currentColor" : "none"} />
-            </Button>
-            <Button
-              className="h-12 px-6 flex rounded-xl bg-slate-950 text-white border border-border font-black text-[10px] tracking-widest uppercase hover:bg-red-50 dark:hover:bg-primary/20 hover:text-red-600 dark:hover:text-primary transition-all gap-2"
+              className="h-12 w-full px-6 flex-1 rounded-xl bg-slate-950 text-white border border-border font-black text-[10px] tracking-widest uppercase hover:bg-red-50 dark:hover:bg-primary/20 hover:text-red-600 dark:hover:text-primary transition-all gap-2"
               onClick={handleAddToQuote}
             >
               <FileText size={16} /> {tQuote("addToQuote")}
             </Button>
             <Button
-              className="h-12 px-6 flex rounded-xl bg-slate-950 dark:bg-primary text-white font-black text-[10px] tracking-widest uppercase hover:bg-red-600 dark:hover:bg-red-700 transition-all gap-2"
+              className="h-12 w-full px-6 flex-1 rounded-xl bg-slate-950 dark:bg-primary text-white font-black text-[10px] tracking-widest uppercase hover:bg-red-600 dark:hover:bg-red-700 transition-all gap-2"
               onClick={handleAddToCart}
               disabled={product.stock === 0}
             >

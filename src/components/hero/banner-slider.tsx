@@ -11,16 +11,22 @@ export function BannerSlider({
   children,
   className,
   heightClass = "aspect-[16/9] md:aspect-[21/9]", // More cinematic aspect ratio
+  onIndexChange,
 }: {
   images: string[];
   interval?: number;
   children?: React.ReactNode;
   className?: string;
   heightClass?: string;
+  onIndexChange?: (index: number) => void;
 }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    onIndexChange?.(index);
+  }, [index, onIndexChange]);
 
   useEffect(() => {
     if (paused) return;
@@ -84,35 +90,39 @@ export function BannerSlider({
       </div>
 
       {/* Navigation Arrows */}
-      <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 flex items-center justify-between z-30 pointer-events-none">
-        <NavButton onClick={prev} direction="left" />
-        <NavButton onClick={next} direction="right" />
-      </div>
+      {images.length > 1 && (
+        <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 flex items-center justify-between z-30 pointer-events-none">
+          <NavButton onClick={prev} direction="left" />
+          <NavButton onClick={next} direction="right" />
+        </div>
+      )}
 
       {/* Modern Progress Dots */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-4 z-30 items-center">
-        {images.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setIndex(i)}
-            className="group relative h-4 w-12 flex items-center justify-center"
-            aria-label={`Go to slide ${i + 1}`}
-          >
-            <div className={cn(
-              "h-1 rounded-full transition-all duration-300",
-              i === index ? "w-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)]" : "w-6 bg-white/30 group-hover:bg-white/60"
-            )} />
-            
-            {/* Animated filling effect for active slide */}
-            {i === index && !paused && (
-              <div 
-                className="absolute inset-x-0 h-1 bg-white/40 rounded-full origin-left animate-progress-fill"
-                style={{ animationDuration: `${interval}ms` }}
-              />
-            )}
-          </button>
-        ))}
-      </div>
+      {images.length > 1 && (
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-4 z-30 items-center">
+          {images.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIndex(i)}
+              className="group relative h-4 w-12 flex items-center justify-center"
+              aria-label={`Go to slide ${i + 1}`}
+            >
+              <div className={cn(
+                "h-1 rounded-full transition-all duration-300",
+                i === index ? "w-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)]" : "w-6 bg-white/30 group-hover:bg-white/60"
+              )} />
+              
+              {/* Animated filling effect for active slide */}
+              {i === index && !paused && (
+                <div 
+                  className="absolute inset-x-0 h-1 bg-white/40 rounded-full origin-left animate-progress-fill"
+                  style={{ animationDuration: `${interval}ms` }}
+                />
+              )}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Add this to your globals.css for the progress effect */}
       <style jsx>{`

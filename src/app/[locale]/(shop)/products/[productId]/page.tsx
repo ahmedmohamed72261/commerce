@@ -84,12 +84,12 @@ const ProductDetailsClient = ({ locale, productId }: { locale: string; productId
       </div>
 
       <div className="container mx-auto px-4 mt-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-2">
           
           {/* Left Column: Gallery (Sticky on Desktop) */}
           <div className="lg:col-span-6 xl:col-span-7">
              <div className="lg:sticky lg:top-24 space-y-6">
-                <div className="bg-card rounded-3xl shadow-sm border border-border p-4 md:p-6">
+                <div className="bg-card rounded-3xl shadow-sm border border-border p-2">
                   <ProductGallery images={images} productName={productDetails.title} />
                 </div>
                 
@@ -163,7 +163,7 @@ const ProductDetailsClient = ({ locale, productId }: { locale: string; productId
       </div>
       </div>
 
-      <div className="container mx-auto px-4 mt-8">
+      <div className="container mx-auto px-4 mt-2">
         <div className="bg-card rounded-3xl border border-border shadow-md p-6 md:p-10">
           <h3 className="font-black text-lg mb-3 uppercase tracking-widest text-muted-foreground">
             Product Details

@@ -12,6 +12,7 @@ import { cn } from "@/utils/utils";
 export default function BannersPage() {
   const [main, setMain] = useState<any[]>([]);
   const [secondary, setSecondary] = useState<any[]>([]);
+  const [third, setThird] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [form, setForm] = useState<{ title: string; bannerType: BannerType; images: File[] }>({
@@ -25,9 +26,14 @@ export default function BannersPage() {
   const refresh = async () => {
     setLoading(true);
     try {
-      const [m, s] = await Promise.all([getBannersByType("main"), getBannersByType("secondary")]);
+      const [m, s, t] = await Promise.all([
+        getBannersByType("main"),
+        getBannersByType("secondary"),
+        getBannersByType("third")
+      ]);
       setMain(m);
       setSecondary(s);
+      setThird(t);
     } finally {
       setLoading(false);
     }
@@ -55,10 +61,11 @@ export default function BannersPage() {
     }
   };
 
-  const handleUpdateType = async (id: string, type: BannerType) => {
+  const handleUpdateType = async (id: string, currentType: BannerType) => {
     try {
+      const nextType: BannerType = currentType === "main" ? "secondary" : currentType === "secondary" ? "third" : "main";
       const fd = new FormData();
-      fd.append("bannerType", type);
+      fd.append("bannerType", nextType);
       await updateBanner(id, fd);
       toast.success("Banner updated");
       await refresh();
@@ -153,7 +160,7 @@ export default function BannersPage() {
                     <div className="flex items-center justify-end gap-2">
                       <button
                         className="px-3 py-1.5 rounded bg-gray-100 dark:bg-muted text-gray-700 dark:text-foreground hover:bg-gray-200 dark:hover:bg-muted/80"
-                        onClick={() => handleUpdateType(String(b._id || b.id), b.bannerType === "main" ? "secondary" : "main")}
+                        onClick={() => handleUpdateType(String(b._id || b.id), b.bannerType)}
                       >
                             {t('toggleType')}
                       </button>
@@ -204,6 +211,7 @@ export default function BannersPage() {
               >
                 <option value="main">{t('typeMain')}</option>
                 <option value="secondary">{t('typeSecondary')}</option>
+                <option value="third">{t('typeThird')}</option>
               </select>
             </div>
             <div className="mt-4">
@@ -221,6 +229,7 @@ export default function BannersPage() {
 
       {renderList(t('mainList'), main)}
       {renderList(t('secondaryList'), secondary)}
+      {renderList(t('thirdList'), third)}
     </div>
   );
 }

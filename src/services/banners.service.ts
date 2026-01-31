@@ -1,6 +1,6 @@
 import { http } from "./http";
 
-export type BannerType = "main" | "secondary";
+export type BannerType = "main" | "secondary" | "third";
 
 const normalizeImages = (images: any): string[] => {
   if (!images) return [];

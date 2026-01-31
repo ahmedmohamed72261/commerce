@@ -71,9 +71,39 @@
     "floor": "Floor",
     "deliveryNotes": "Delivery Notes"
   },
+  "HeroSlides": {
+    "slide1": {
+      "tag": "Quality & Trust",
+      "title": "Your Complete World of Electronics",
+      "desc": "Find everything you need in the world of electronics with top quality, trusted brands, and the best prices — all in one place."
+    },
+    "slide2": {
+      "tag": "Performance & Technology",
+      "title": "Powering Your Digital Life",
+      "desc": "From advanced computers to premium tech accessories, we deliver performance, reliability, and modern design that keeps you ahead."
+    },
+    "slide3": {
+      "tag": "Value & Experience",
+      "title": "Smart Technology at the Right Price",
+      "desc": "We believe great technology should be accessible to everyone. Enjoy carefully selected products, competitive prices, and fast, reliable service."
+    },
+    "slide4": {
+      "tag": "Innovation & Future",
+      "title": "Experience the Future Today",
+      "desc": "Discover the latest innovations that shape tomorrow. Stay ahead with cutting-edge technology designed for the modern world."
+    },
+    "slide5": {
+      "tag": "Gaming & Entertainment",
+      "title": "Level Up Your Game",
+      "desc": "Immerse yourself in ultimate gaming experiences with high-performance gear, stunning visuals, and precision accessories."
+    },
+    "slide6": {
+      "tag": "Global Connectivity",
+      "title": "Stay Connected Everywhere",
+      "desc": "Reliable networking solutions to keep you online, productive, and connected with the world, no matter where you are."
+    }
+  },
   "Home": {
-    "heroTitle": "The Future of Shopping",
-    "heroDesc": "Experience premium quality with our curated collection of futuristic tech and accessories.",
     "ctaShop": "Shop Now",
     "featuredBrands": "Featured Brands",
     "featuredProducts": "Featured Products",
@@ -83,7 +113,7 @@
     "catalog": "Catalog"
   },
   "Shop": {
-    "addToCart": "Add to Cart",
+    "addToCart": "Add Cart",
     "buyNow": "Buy Now",
     "price": "Price",
     "filter": "Filter"
@@ -142,7 +172,7 @@
     "totalItems": "Total Items",
     "saved": "Saved",
     "valuation": "Valuation",
-    "addToCart": "Add to Cart",
+    "addToCart": "Add Cart",
     "remove": "Remove",
     "deployAll": "Deploy All to Cart",
     "back": "Back to shopping",
@@ -383,7 +413,6 @@
     "condition": "Condition",
     "conditionNew": "New",
     "conditionUsed": "Used",
-    "conditionRefurbished": "Refurbished",
     "category": "Category",
     "brand": "Brand",
     "selectCategory": "Select a category",
@@ -425,7 +454,27 @@
     "mainList": "Main Banners",
     "secondaryList": "Secondary Banners",
     "typeMain": "Main",
-    "typeSecondary": "Secondary"
+    "typeSecondary": "Secondary",
+    "thirdList": "Third",
+    "typeThird":"Third"
+  },
+  "Newsletter": {
+    "title": "Join our newsletter",
+    "subtitle": "Be the first to know the latest offers",
+    "placeholder": "Enter your email",
+    "cta": "Subscribe"
+  },
+  "Features": {
+    "shopAllDay": "Shop all day 24/7",
+    "shopAllDayDesc": "Orders any time you want",
+    "ongoingOffers": "Ongoing offers",
+    "ongoingOffersDesc": "Our offers continue all year long",
+    "payLater": "Buy now, pay later",
+    "payLaterDesc": "Flexible payment options",
+    "contactUs": "Contact us",
+    "contactUsDesc": "Reach us easily on WhatsApp",
+    "freeShipping": "Free shipping",
+    "freeShippingDesc": "Free delivery on orders above 25 KWD"
   },
   "AdminTable": {
     "image": "Image",
@@ -503,6 +552,8 @@
     "phone": "Phone",
     "email": "Email",
     "address": "Address",
-    "generatedDate": "Generated Date"
+    "generatedDate": "Generated Date",
+    "notesPlaceholder": "Add any special notes for the customer",
+    "backToStore": "Back to Store"
   }
 }

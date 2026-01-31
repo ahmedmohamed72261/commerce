@@ -21,6 +21,7 @@ interface SidebarProps {
 export function Sidebar({ open, onClose, version = 1 }: SidebarProps) {
   const t = useTranslations("Nav");
   const tCommon = useTranslations("Common");
+  const tQuote = useTranslations("Quotations");
   const { theme, setTheme } = useTheme();
   const { user, logout } = useAuthStore();
   const { categories, loading, fetchCategories } = useCategoriesStore();
@@ -55,7 +56,6 @@ export function Sidebar({ open, onClose, version = 1 }: SidebarProps) {
       2: { panel: "bg-black text-white", accent: "text-red-500", item: "hover:pl-4 border-b border-white/10", font: "font-mono uppercase" },
       3: { panel: "bg-zinc-50 dark:bg-zinc-900 border-l border-zinc-200", accent: "text-blue-600", item: "rounded-xl hover:bg-white dark:hover:bg-zinc-800 shadow-sm", font: "font-serif" },
       4: { panel: "bg-[#C40000] text-white", accent: "text-white underline", item: "hover:bg-black/10", font: "font-black" },
-      // ... Themes 5-30 generate varied combinations of shadows, borders, and colors
     };
     return themes[v] || themes[1];
   };
@@ -239,6 +239,10 @@ export function Sidebar({ open, onClose, version = 1 }: SidebarProps) {
                  <Link href={`/${locale}/cart`} className="flex flex-col items-center justify-center p-4 bg-neutral-50 dark:bg-white/5 rounded-2xl gap-2 hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
                     <ShoppingBag className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
                     <span className="text-[10px] font-bold uppercase">{tCommon("cart")}</span>
+                 </Link>
+                 <Link href={`/${locale}/quotations/cart`} className="flex flex-col items-center justify-center p-4 bg-neutral-50 dark:bg-white/5 rounded-2xl gap-2 hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
+                    <Percent className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
+                    <span className="text-[10px] font-bold uppercase">{tQuote("title")}</span>
                  </Link>
               </div>
             </div>

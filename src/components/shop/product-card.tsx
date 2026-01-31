@@ -87,7 +87,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
             </div>
 
             {/* Product Image */}
-            <div className="w-full h-full flex items-center justify-center p-2 ">
+            <div className="w-full h-full flex items-center justify-center ">
               <motion.img
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -114,22 +114,22 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
           </div>
         </div>
 
-        <div className="space-y-1 flex justify-between">
+        <div className="space-y-1 flex flex-col sm:flex-row justify-between">
           <div>
             <h3 className="md:text-2xl text-md font-bold tracking-tight text-neutral-900 dark:text-foreground group-hover:text-red-600 dark:group-hover:text-primary transition-colors">
             {title}
           </h3>
-          {stock && (
+          {/* {stock && (
             <div className="flex items-center gap-1.5 text-[9px] font-bold text-neutral-400 dark:text-muted-foreground uppercase">
               <Box size={10} /> {stock} Units Left
             </div>
-          )}
+          )} */}
           </div>
           <div className="flex flex-col">
             <span className="md:text-2xl text-md font-black tracking-tighter text-neutral-900 dark:text-foreground">
               {formatCurrency(salePrice || price, locale)}
             </span>
-            <div className="mt-1 flex items-center gap-2 flex-wrap">
+            {/* <div className="mt-1 flex items-center gap-2 flex-wrap">
               {brand && (
                 <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-neutral-100 dark:bg-muted/20 text-neutral-700 dark:text-muted-foreground">
                   {tTable("brand")}: {brand}
@@ -143,7 +143,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
                   }[String(condition).toLowerCase()] || condition}
                 </span>
               )}
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -164,7 +164,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
             }}
           >
             <div className="absolute inset-0 w-full h-full bg-neutral-900 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
-            <span className="relative z-10 flex items-center rtl:flex-row-reverse justify-center gap-2 font-black uppercase text-xs tracking-widest">
+            <span className="relative z-10 flex items-center justify-center gap-2 font-black uppercase text-xs tracking-widest">
               <ShoppingCart size={14} /> {t("addToCart")}
             </span>
           </button>
@@ -178,7 +178,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
               }
             }}
           >
-            <FileText size={14} /> {locale === "ar" ? "عرض سعر" : "Add to Quote"}
+            <FileText size={14} /> {locale === "ar" ? "عرض سعر" : "Add Quote"}
           </button>
         </div>
       </div>
