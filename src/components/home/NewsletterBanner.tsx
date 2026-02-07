@@ -22,7 +22,7 @@ export function NewsletterBanner() {
               {isAr ? "انضم للمخبة" : "Join the Elite"}
             </span>
           </div>
-          <h3 className="text-2xl sm:text-4xl md:text-7xl font-black tracking-tighter text-foreground leading-[0.8] uppercase italic">
+          <h3 className="text-2xl sm:text-4xl md:text-7xl font-black tracking-tighter text-foreground leading-[0.8] uppercase ">
             {t("title")}
           </h3>
           <p className="mt-8 text-muted-foreground text-xl font-medium max-w-md leading-tight">

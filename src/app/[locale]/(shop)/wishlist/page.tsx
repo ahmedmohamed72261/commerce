@@ -47,14 +47,14 @@ export default function WishlistPage() {
         ]}
       />
 
-      <div className="max-w-6xl mx-auto px-4 mt-10">
+      <div className="px-6 mt-10">
         {/* Header */}
         <header className="flex flex-col md:flex-row justify-between gap-6 mb-10">
-          <h1 className="text-3xl md:text-4xl font-black italic dark:text-foreground">
+          <h1 className="text-3xl md:text-4xl font-black  dark:text-foreground">
             {t("title")}
           </h1>
 
-          <div className="bg-slate-900 dark:bg-card dark:border dark:border-border text-white rounded-2xl px-6 py-4 text-center">
+          <div className="bg-slate-900 dark:bg-card dark:border dark:border-border rounded-2xl px-6 py-4 text-center">
             <p className="text-xs uppercase opacity-60">
               {t("totalItems")}
             </p>
@@ -166,7 +166,7 @@ export default function WishlistPage() {
               <p className="text-xs text-slate-400 dark:text-muted-foreground">
                 {t("totalValue")}
               </p>
-              <p className="text-2xl font-black italic dark:text-foreground">
+              <p className="text-2xl font-black  dark:text-foreground">
                 {formatCurrency(totalValue, locale)}
               </p>
             </div>

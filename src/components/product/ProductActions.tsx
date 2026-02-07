@@ -88,7 +88,7 @@ export const ProductActions: React.FC<Props> = ({
         <Button
           onClick={handleAddToCart}
           disabled={!stock || stock === 0}
-          className="flex-1 bg-red-600 h-12 hover:bg-black dark:hover:bg-red-700 text-white rounded-xl font-black uppercase italic shadow-lg disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+          className="flex-1 bg-red-600 h-12 hover:bg-black dark:hover:bg-red-700 text-white rounded-xl font-black uppercase  shadow-lg disabled:opacity-50 transition-all flex items-center justify-center gap-2"
         >
           <ShoppingCart size={20} /> {tShop("addToCart")}
         </Button>
@@ -96,7 +96,7 @@ export const ProductActions: React.FC<Props> = ({
         {/* Add to Quotation */}
         <Button
           onClick={handleAddToQuote}
-          className="flex-1 h-12 border border-border bg-white dark:bg-card text-foreground rounded-xl font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 hover:bg-red-50 dark:hover:bg-primary/20 hover:text-red-600 dark:hover:text-primary"
+          className="flex-1 h-12 border border-neutral-200 dark:border-border bg-slate-950 text-white font-black uppercase text-xs tracking-widest hover:bg-red-50 dark:hover:bg-primary/20 hover:text-red-600 dark:hover:text-primary rounded-xl transition-all flex items-center justify-center gap-2"
         >
           <FileText size={18} /> {tQuote("addToQuote")}
         </Button>
@@ -106,7 +106,7 @@ export const ProductActions: React.FC<Props> = ({
           onClick={handleToggleWishlist}
           variant="outline"
           className={`flex-1 rounded-xl h-12 border border-border hover:bg-muted ${
-            wishlisted ? "bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-900/20" : ""
+            wishlisted ? "bg-red-100 dark:bg-red-900/10 border-red-200 dark:border-red-900/30" : ""
           }`}
         >
           <Heart

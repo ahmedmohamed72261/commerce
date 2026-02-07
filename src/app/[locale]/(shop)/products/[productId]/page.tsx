@@ -137,29 +137,16 @@ const ProductDetailsClient = ({ locale, productId }: { locale: string; productId
 
       <div className="container mx-auto px-4 mt-2">
         <div className="bg-card rounded-3xl border border-border shadow-md p-6 md:p-10">
-          <h3 className="font-black text-lg mb-3 uppercase tracking-widest text-muted-foreground">
-            {tProduct("description")}
-          </h3>
-          <ProductDescription description={productDetails.description ?? ""} />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 text-sm text-foreground">
-            {productDetails.condition && (
-              <div>
-                <strong className="text-muted-foreground">{tProduct("condition")}:</strong> {productDetails.condition}
-              </div>
-            )}
-            {productDetails.brand && (
-              <div>
-                <strong className="text-muted-foreground">{tHome("brand")}:</strong>{" "}
-                {productDetails.brand}
-              </div>
-            )}
-          </div>
+          <ProductDescription 
+            description={productDetails.description ?? ""} 
+            attributes={productDetails.attributes} 
+          />
+
           {/* Rating Section - New design under description */}
           <div className="mt-6 rounded-2xl border border-border bg-neutral-50 dark:bg-white/5 p-5 md:p-6">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <h4 className="text-base md:text-lg font-black">{isRTL ? "قيّم هذا المنتج" : "Rate this product"}</h4>
-                <p className="text-xs md:text-sm text-muted-foreground">{isRTL ? "اضغط للتقييم" : "Click to rate"}</p>
+                <h4 className="text-base md:text-lg font-black">{isRTL ? "قيّم هذا المنتج" : "Rate Product"}</h4>
               </div>
               <div className="flex items-center gap-2">
                 {[1, 2, 3, 4, 5].map((star) => (

@@ -142,7 +142,7 @@ export default function QuotationDetailsPage() {
               </div>
               <div className="bg-red-600 text-white p-8 shadow-2xl print:bg-black print:shadow-none">
                 <p className="text-[11px] font-black uppercase tracking-[0.3em] mb-2 opacity-70 text-center">{t("total")}</p>
-                <p className="text-4xl font-black text-center italic leading-none tabular-nums">${quotation?.subtotal?.toLocaleString()}</p>
+                <p className="text-4xl font-black text-center  leading-none tabular-nums">${quotation?.subtotal?.toLocaleString()}</p>
               </div>
             </div>
           </div>

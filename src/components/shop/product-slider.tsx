@@ -18,6 +18,7 @@ interface Product {
   price: number;
   image?: string;
   rating?: number;
+  slug?: string;
 }
 
 interface ProductSliderProps {
@@ -33,7 +34,7 @@ export function ProductSlider({ products, title, className }: ProductSliderProps
       {title && (
         <div className="flex items-end justify-between items-center mb-10 px-6 md:px-0">
           <div>
-            <h3 className="text-xl sm:text-xl md:text-2xl lg:text-2xl font-black uppercase tracking-tighter italic relative inline-block z-10">
+            <h3 className="text-xl sm:text-xl md:text-2xl lg:text-2xl font-black uppercase tracking-tighter  relative inline-block z-10">
               {title}
             </h3>
           </div>
@@ -61,7 +62,7 @@ export function ProductSlider({ products, title, className }: ProductSliderProps
         spaceBetween={10}
         slidesPerView={2}
         centeredSlides={false}
-        loop
+        loop={products.length > 4}
         autoplay={{
           delay: 4000,
           disableOnInteraction: false,
@@ -94,7 +95,7 @@ export function ProductSlider({ products, title, className }: ProductSliderProps
             <SwiperSlide key={p.id} className="h-auto">
               {p.title ? (
                 <Link
-                  href={`/${locale}/products/${p.id}`}
+                  href={`/${locale}/products/${p.slug || p.id}`}
                   className="block h-full"
                   aria-label={p.title ? `View ${p.title}` : "View product"}
                 >
@@ -106,6 +107,7 @@ export function ProductSlider({ products, title, className }: ProductSliderProps
                     image={p.image ?? "/images/a.jpg"}
                     rating={p.rating ?? 4}
                     reviewsCount={0}
+                    slug={p.slug}
                   />
                 </Link>
               ) : (

@@ -21,17 +21,17 @@ export const ProductMeta: React.FC<Props> = ({ stock, condition, brand }) => {
   })();
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 animate-fade-up">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-up">
       
       {/* STOCK SECTION */}
-      <div className="glass-panel p-6 rounded-[--radius] group transition-all duration-300">
+      <div className="glass-panel p-3 rounded-[--radius] group transition-all duration-300">
         <div className="flex items-center gap-2 mb-4 text-muted-foreground">
           <Box size={16} strokeWidth={2.5} />
-          <p className="text-[10px] font-black uppercase tracking-[0.2em]">{t("stockStatus")}</p>
+          <p className="text-[12px] font-black uppercase tracking-[0.1em]">{t("stockStatus")}</p>
         </div>
         <div className="flex items-center justify-between">
-          <span className={`text-2xl font-black italic uppercase tracking-tighter ${
-            inStock ? "text-emerald-500" : "text-primary"
+          <span className={`text-2xl font-black uppercase tracking-tighter ${
+            inStock ? "text-primary-500" : "text-primary"
           }`}>
             {inStock ? t("inStock") : t("outOfStock")}
           </span>
@@ -59,9 +59,9 @@ export const ProductMeta: React.FC<Props> = ({ stock, condition, brand }) => {
       {/* CONDITION SECTION - THE ANIMATED PILL */}
       {conditionText && (
         <div className="glass-panel p-2 rounded-[--radius] flex flex-col justify-between overflow-hidden relative border-primary/20">
-          <div className="flex items-center gap-2 mb-2 text-muted-foreground">
+          <div className="flex items-center gap-1 mb-2 text-muted-foreground">
             <Layers size={16} strokeWidth={2.5} />
-            <p className="text-[10px] font-black uppercase tracking-[0.2em]">{t("condition")}</p>
+            <p className="text-[12px] font-black uppercase tracking-[0.2em]">{t("condition")}</p>
           </div>
           
           <div className="relative">

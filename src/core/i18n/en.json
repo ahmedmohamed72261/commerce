@@ -163,8 +163,36 @@
       "tax": "Tax",
       "total": "Total",
       "checkout": "Proceed to Checkout",
-      "clearCart": "Clear Cart"
+    "clearCart": "Clear Cart",
+    "loginRequired": "Please login to continue"
     }
+  },
+  "AdminCoupons": {
+    "title": "Coupons",
+    "subtitle": "Manage discount coupons and promotions",
+    "addNew": "Add Coupon",
+    "searchPlaceholder": "Search coupons...",
+    "code": "Code",
+    "discount": "Discount",
+    "usage": "Usage",
+    "expiry": "Expiry",
+    "status": "Status",
+    "actions": "Actions",
+    "empty": "No coupons found",
+    "createTitle": "Create New Coupon",
+    "editTitle": "Edit Coupon",
+    "cancel": "Cancel",
+    "create": "Create",
+    "update": "Update",
+    "couponCode": "Coupon Code",
+    "discountValue": "Discount Value (%)",
+    "usageLimit": "Usage Limit",
+    "minOrderAmount": "Min Order Amount",
+    "maxDiscount": "Max Discount",
+    "expiryDate": "Expiry Date",
+    "active": "Active",
+    "inactive": "Inactive",
+    "deleteConfirm": "delete coupon?"
   },
   "Wishlist": {
     "title": "Wishlist",
@@ -256,7 +284,8 @@
       "totalRevenue": "Total Revenue",
       "subscriptions": "Subscriptions",
       "sales": "Sales",
-      "activeNow": "Active Now"
+      "activeNow": "Active Now",
+      "products": "Products"
     },
     "latestOrdersTitle": "Latest Orders",
     "latestOrdersEmpty": "No orders to display.",
@@ -384,7 +413,8 @@
     "storefront": "Storefront",
     "banners": "Banners",
     "settings": "Settings",
-    "logout": "Logout"
+    "logout": "Logout",
+    "contacts": "Contacts"
   },
   "Uploader": {
     "clickToUploadImage": "Click to upload image",
@@ -420,8 +450,7 @@
     "categoryInfo": "Category Information",
     "brandInfo": "Brand Information",
     "categoryImage": "Category Image",
-    "brandImage": "Brand Image"
-    ,
+    "brandImage": "Brand Image",
     "attributes": "Attributes",
     "attributeKey": "Attribute Key",
     "attributeValue": "Attribute Value",

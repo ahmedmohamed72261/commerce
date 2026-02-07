@@ -9,6 +9,7 @@ import { UpdateDialog } from "@/components/admin/ui/UpdateDialog";
 import { useTranslations, useLocale } from "next-intl";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
 export default function BrandsPage() {
   const [brands, setBrands] = useState<any[]>([]);
@@ -21,6 +22,8 @@ export default function BrandsPage() {
   const [search, setSearch] = useState("");
   const tTable = useTranslations("AdminTable");
   const isRTL = (locale as string) === "ar";
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -54,13 +57,8 @@ export default function BrandsPage() {
   };
 
   const handleDelete = async (id: string) => {
-    try {
-      await deleteBrand(id);
-      toast.success(isRTL ? "تم حذف العلامة التجارية" : "Brand deleted");
-      await refresh();
-    } catch {
-      toast.error(isRTL ? "فشل حذف العلامة التجارية" : "Failed to delete brand");
-    }
+    setDeleteId(id);
+    setConfirmOpen(true);
   };
 
   return (
@@ -69,28 +67,15 @@ export default function BrandsPage() {
         <h1 className="text-2xl font-bold text-gray-800 dark:text-foreground">{tList("title")}</h1>
         <Link
           href={`/${locale}/admin/brands/create`}
-          className="bg-[#e30613] text-white px-4 py-2 rounded shadow hover:bg-red-700 transition-colors flex items-center gap-2 text-sm font-bold"
+          className="bg-[#e30613] text-white px-4 py-2 rounded shadow hover:bg-red-700 transition-colors flex items-center gap-2 text-base sm:text-xl font-bold"
         >
           <Plus size={16} /> {tList("addNew")}
         </Link>
       </div>
 
-      <WhiteCard noPadding headerAction={
-        <div className="flex gap-2">
-          <div className="relative">
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder={tList("searchPlaceholder")}
-              className="pl-9 pr-4 py-1.5 text-sm bg-gray-50 dark:bg-muted/50 border border-gray-200 dark:border-border focus:bg-white dark:focus:bg-card focus:border-red-500 dark:focus:border-primary focus:ring-2 focus:ring-red-100 dark:focus:ring-primary/20 rounded-full transition-all w-64 outline-none text-gray-800 dark:text-foreground placeholder:text-gray-400 dark:placeholder:text-muted-foreground"
-            />
-            <Search size={16} className="absolute left-3 top-2 text-gray-400 dark:text-muted-foreground" />
-          </div>
-        </div>
-      }>
+      <WhiteCard noPadding >
         <div className="overflow-x-auto">
-          <table className="w-full text-center text-sm text-gray-600 dark:text-muted-foreground">
+          <table className="w-full text-center text-base sm:text-xl text-gray-600 dark:text-muted-foreground">
             <thead className="bg-gray-50 dark:bg-muted/50 text-gray-500 dark:text-muted-foreground font-semibold uppercase text-xs">
               <tr>
                 <th className="px-5 py-3 w-10"><input type="checkbox" className="rounded border-gray-300 dark:border-border bg-white dark:bg-card text-red-600 focus:ring-red-500"/></th>
@@ -207,6 +192,27 @@ export default function BrandsPage() {
           }}
         />
       )}
+      
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        title={isRTL ? "تأكيد الحذف" : "Confirm Delete"}
+        description={isRTL ? "هل تريد حذف هذه العلامة التجارية؟" : "Do you want to delete this brand?"}
+        confirmText={isRTL ? "حذف" : "Delete"}
+        cancelText={isRTL ? "إلغاء" : "Cancel"}
+        onConfirm={async () => {
+          if (!deleteId) return;
+          try {
+            await deleteBrand(deleteId);
+            toast.success(isRTL ? "تم حذف العلامة التجارية" : "Brand deleted");
+            await refresh();
+          } catch {
+            toast.error(isRTL ? "فشل حذف العلامة التجارية" : "Failed to delete brand");
+          } finally {
+            setDeleteId(null);
+          }
+        }}
+      />
     </div>
   );
 }

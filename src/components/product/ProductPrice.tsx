@@ -13,7 +13,7 @@ export const ProductPrice: React.FC<Props> = ({ price, salePrice }) => {
 
   return (
     <div className="mb-4">
-      <p className="text-xs font-black text-muted-foreground uppercase tracking-wide mb-1">
+      <p className="text-xs sm:text-lg font-black text-muted-foreground uppercase tracking-wide mb-1">
         {t("price")}
       </p>
       <div className="flex items-center gap-3">

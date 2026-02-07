@@ -98,7 +98,7 @@ export default function AdminQuotationsPage() {
                                 <div className="flex justify-between items-center md:items-start">
                                     <div className="space-y-1">
                                         <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">{t("items")}</p>
-                                        <p className="font-bold text-sm">{q.items?.length || q.itemCount} Units</p>
+                                        <p className="font-bold text-base sm:text-xl">{q.items?.length || q.itemCount} Units</p>
                                     </div>
                                     <div className="text-right">
                                         <p className="text-[9px] font-black text-primary uppercase tracking-widest">{t("total")}</p>
@@ -125,7 +125,7 @@ export default function AdminQuotationsPage() {
                         <div className="bg-muted w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                             <FileText className="text-muted-foreground" size={32} />
                         </div>
-                        <h3 className="text-sm font-black uppercase tracking-[0.3em] text-muted-foreground">
+                        <h3 className="text-base sm:text-xl font-black uppercase tracking-[0.3em] text-muted-foreground">
                             {t("empty")}
                         </h3>
                     </div>

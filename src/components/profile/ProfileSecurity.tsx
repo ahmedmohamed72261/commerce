@@ -14,7 +14,7 @@ export const ProfileSecurity = () => {
     <section className="pt-8 border-t border-slate-50 dark:border-border space-y-6">
       <div className="flex items-center gap-4">
         <div className="w-1.5 h-6 bg-red-600 dark:bg-primary rounded-full" />
-        <h3 className={`text-base md:text-lg font-black text-slate-900 dark:text-foreground uppercase italic ${locale === "ar" ? "text-right" : "text-left"}`}>{t("securityAccess.title")}</h3>
+        <h3 className={`text-base md:text-lg font-black text-slate-900 dark:text-foreground uppercase  ${locale === "ar" ? "text-right" : "text-left"}`}>{t("securityAccess.title")}</h3>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <input

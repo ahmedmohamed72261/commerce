@@ -16,14 +16,14 @@ export function TopBar() {
         <div className="flex-1" />
 
         {/* Info Content - inside the red shape */}
-        <div className={`flex items-center h-full text-white text-xs sm:text-sm font-medium gap-6 ${isRtl ? 'pr-12' : 'pl-12'}`}>
-           <div className="flex items-center gap-2">
+        <div className={`flex items-center h-full text-white text-xs sm:text-sm md:text-base font-medium gap-6 ${isRtl ? 'pr-12' : 'pl-12'}`}>
+           {/* <div className="flex items-center gap-2">
              <MapPin className="w-4 h-4" />
              <span>219 Bedford Street Birmingham, AL 35211</span>
-           </div>
+           </div> */}
            <div className="hidden lg:flex items-center gap-6">
-             <span>info@example.com</span>
-             <span>+234 554 657 345</span>
+             <span>Worlddevelopment97@gmail.com</span>
+             <span>22623001</span>
            </div>
         </div>
       </div>

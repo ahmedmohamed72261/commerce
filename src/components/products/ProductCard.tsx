@@ -80,9 +80,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <Link
-      href={`/${locale}/products/${product.id}`}
+      href={`/${locale}/products/${product.slug || product.id}`}
       className={`
-        group bg-white dark:bg-card border border-slate-200 dark:border-border rounded-xl sm:rounded-3xl overflow-hidden
+        group bg-white dark:bg-card border border-slate-700 rounded-xl sm:rounded-3xl overflow-hidden
         transition-all duration-500 hover:shadow-2xl dark:hover:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.5)] hover:border-red-600/20 dark:hover:border-primary/20
         ${viewMode === 'list' ? 'flex flex-col sm:flex-row h-auto' : 'flex flex-col'}
       `}
@@ -100,11 +100,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             className="object-cover transition-transform duration-[1.5s] group-hover:scale-110"
           />
         )}
-        {product.category && (
-          <div className="absolute top-4 left-4 bg-slate-900/80 dark:bg-black/80 backdrop-blur-md text-white text-[8px] font-black px-3 py-1 rounded-full uppercase tracking-widest">
+        {/* {product.category && (
+          <div className="absolute top-4 left-4 bg-slate-900/80 dark:bg-black/80 backdrop-blur-md text-white text-base font-black px-3 py-1 rounded-full uppercase tracking-widest">
             {product.category}
           </div>
-        )}
+        )} */}
         <div className="absolute top-2 right-2">
           <Button
               size="icon"
@@ -127,7 +127,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       {/* CONTENT AREA */}
       <div className="p-3 pt-4 flex flex-col flex-1">
         <div className="flex justify-between items-start mb-2">
-          <h3 className="font-black text-md md:text-lg italic tracking-tighter uppercase text-foreground group-hover:text-red-600 dark:group-hover:text-primary transition-colors line-clamp-1">
+          <h3 className="font-black text-md md:text-lg  tracking-tighter uppercase text-foreground group-hover:text-red-600 dark:group-hover:text-primary transition-colors line-clamp-1">
             {product.title}
           </h3>
           <div className="flex items-center gap-1">
@@ -148,7 +148,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <div className="flex flex-col gap-3 mb-4">
             {/* 1. PRICE SECTION - High Visibility */}
             <div className="flex flex-col">
-              <span className="text-lg sm:text-xl font-black italic tracking-tighter text-slate-950 dark:text-foreground leading-none">
+              <span className="text-lg sm:text-xl font-black  tracking-tighter text-slate-950 dark:text-foreground leading-none">
                 {formatCurrency(product.salePrice || product.price, loc)}
               </span>
               {/* Discount: Kept in code, but clean & subtle */}

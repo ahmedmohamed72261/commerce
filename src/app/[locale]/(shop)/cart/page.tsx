@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useCart } from '@/store/cart';
 import { useOrdersStore, OrderItem } from '@/store/orders';
+import { useAuthStore } from '@/store/auth';
 import { CartItem } from '@/components/cart/CartItem';
 import { CartSummary } from '@/components/cart/CartSummary';
 import { CheckoutForm } from '@/components/cart/CheckoutForm';
@@ -29,14 +30,18 @@ const CartPageClient = ({ locale }: { locale: string }) => {
   const isRTL = useIsRTL();
   const [paymentMethods, setPaymentMethods] = useState<Array<{ _id: string; name: string; icon?: string; instructions?: Record<string,string>; isActive?: boolean }>>([]);
   const router = useRouter();
+  const { user } = useAuthStore();
   
   const { 
     cart, 
     loading, 
+    coupon,
     getCart, 
     updateCartItem, 
     removeFromCart, 
     clearCart,
+    applyCoupon,
+    removeCoupon,
     totalItems,
     totalPrice
   } = useCart();
@@ -75,6 +80,11 @@ const CartPageClient = ({ locale }: { locale: string }) => {
   };
 
   const handleCheckout = () => {
+    if (!user) {
+      toast.error(isRTL ? "يرجى تسجيل الدخول للمتابعة" : "Please login to continue");
+      router.push(`/${locale}/login?redirect=/${locale}/cart`);
+      return;
+    }
     setShowCheckout(true);
   };
 
@@ -95,7 +105,8 @@ const CartPageClient = ({ locale }: { locale: string }) => {
       orderItems,
       paymentMethod as "cash" | "card" | "online",
       shippingAddress,
-      notes
+      notes,
+      coupon?.code
     );
     
     if (order) {
@@ -135,7 +146,7 @@ const CartPageClient = ({ locale }: { locale: string }) => {
 
   return (
     <div className="min-h-screen bg-[#F4F5F7] dark:bg-background  p-6">
-      <div className="mx-auto w-full max-w-[1600px]">
+      <div className="w-full px-6">
         <Breadcrumb
           items={[
             { label: t('home'), href: `/${locale}` },
@@ -143,7 +154,7 @@ const CartPageClient = ({ locale }: { locale: string }) => {
           ]}
         />
         <header className="my-6 md:my-10">
-          <h1 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter leading-none text-indigo-950 dark:text-foreground mb-2">
+          <h1 className="text-xl md:text-3xl font-black uppercase tracking-tighter leading-none text-indigo-950 dark:text-foreground mb-2">
             {t('title')}
           </h1>
           <p className="text-slate-400 dark:text-slate-300 font-bold">
@@ -171,7 +182,10 @@ const CartPageClient = ({ locale }: { locale: string }) => {
                 onSubmit={handlePlaceOrder}
                 loading={orderLoading}
                 paymentMethods={paymentMethods}
-                summary={{ totalAmount: totalPrice(), itemCount: totalItems() }}
+                summary={{ 
+                  totalAmount: coupon ? coupon.totalAfterDiscount : totalPrice(), 
+                  itemCount: totalItems() 
+                }}
               />
             )}
           </div>
@@ -184,6 +198,9 @@ const CartPageClient = ({ locale }: { locale: string }) => {
                 itemCount={totalItems()}
                 onCheckout={handleCheckout}
                 onClearCart={handleClearCart}
+                coupon={coupon}
+                onApplyCoupon={(code) => applyCoupon(code, totalPrice())}
+                onRemoveCoupon={removeCoupon}
               />
             </div>
           )}

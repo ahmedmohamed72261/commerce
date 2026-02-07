@@ -6,9 +6,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatCurrency(amount: number, locale: "en" | "ar") {
-  const unitEn = "KWD";
+  const unitEn = "KD";
   const unitAr = "د.ك";
   const value = Number.isFinite(amount) ? amount : 0;
-  const formatted = value.toFixed(2);
+  const formatted = value.toFixed(3);
   return locale === "ar" ? `${formatted} ${unitAr}` : `${unitEn} ${formatted}`;
 }

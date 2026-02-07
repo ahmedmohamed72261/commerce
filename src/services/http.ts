@@ -20,6 +20,12 @@ http.interceptors.request.use((config) => {
       config.headers = config.headers || {};
       (config.headers as Record<string, string>)["Authorization"] = `Bearer ${token}`;
     }
+    const guestId =
+      typeof window !== "undefined" ? window.sessionStorage?.getItem("guest_id") : null;
+    if (guestId) {
+      config.headers = config.headers || {};
+      (config.headers as Record<string, string>)["X-Guest-Id"] = guestId;
+    }
     const lang =
       (typeof document !== "undefined" && document.documentElement.lang) ||
       (typeof window !== "undefined" && (window.location.pathname.split("/")[1] || "")) ||
@@ -36,3 +42,14 @@ http.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+try {
+  if (typeof window !== "undefined" && !(window as any).__guestCleanupInstalled) {
+    (window as any).__guestCleanupInstalled = true;
+    window.addEventListener("beforeunload", () => {
+      try {
+        window.sessionStorage?.removeItem("guest_id");
+      } catch {}
+    });
+  }
+} catch {}

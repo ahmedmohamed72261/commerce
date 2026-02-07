@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useTranslations, useLocale } from "next-intl";
 import { toast } from "sonner";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
 export default function GovernoratesPage() {
   const [items, setItems] = useState<any[]>([]);
@@ -15,6 +16,9 @@ export default function GovernoratesPage() {
   const locale = useLocale();
   const tForm = useTranslations("AdminForm");
   const tTable = useTranslations("AdminTable");
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const isRTL = (locale as string) === "ar";
 
   useEffect(() => {
     refresh();
@@ -32,13 +36,8 @@ export default function GovernoratesPage() {
   };
 
   const handleDelete = async (id: string) => {
-    try {
-      await deleteGovernorate(id);
-      toast.success("Governorate deleted");
-      await refresh();
-    } catch (e) {
-      toast.error("Failed to delete governorate");
-    }
+    setDeleteId(id);
+    setConfirmOpen(true);
   };
 
   return (
@@ -47,7 +46,7 @@ export default function GovernoratesPage() {
         <h1 className="text-2xl font-bold text-gray-800 dark:text-foreground">{t("title")}</h1>
         <Link
           href={`/${locale}/admin/governorates/create`}
-          className="bg-[#e30613] text-white px-4 py-2 rounded shadow hover:bg-red-700 transition-colors flex items-center gap-2 text-sm font-bold"
+          className="bg-[#e30613] text-white px-4 py-2 rounded shadow hover:bg-red-700 transition-colors flex items-center gap-2 text-base sm:text-xl font-bold"
         >
           <Plus size={16} /> {t("addNew")}
         </Link>
@@ -55,22 +54,10 @@ export default function GovernoratesPage() {
 
       <WhiteCard
         noPadding
-        headerAction={
-          <div className="flex gap-2">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder={t("searchPlaceholder")}
-                className="pl-9 pr-4 py-1.5 text-sm bg-gray-50 dark:bg-muted/50 border border-gray-200 dark:border-border focus:bg-white dark:focus:bg-card focus:border-red-500 dark:focus:border-primary focus:ring-2 focus:ring-red-100 dark:focus:ring-primary/20 rounded-full transition-all w-64 outline-none text-gray-800 dark:text-foreground placeholder:text-gray-400 dark:placeholder:text-muted-foreground"
-              />
-              <Search size={16} className="absolute left-3 top-2 text-gray-400 dark:text-muted-foreground" />
-            </div>
-          </div>
-        }
       >
         <div className="overflow-x-auto">
-          <table className="w-full text-center text-sm text-gray-600 dark:text-muted-foreground">
-            <thead className="bg-gray-50 dark:bg-muted/50 text-gray-500 dark:text-muted-foreground font-semibold uppercase text-xs">
+          <table className="w-full text-center text-base sm:text-xl text-gray-600 dark:text-muted-foreground">
+            <thead className="bg-gray-50 dark:bg-muted/50 text-black dark:text-foreground font-semibold uppercase  text-base sm:text-lg">
               <tr>
                 <th className="px-5 py-3 w-10">
                   <input
@@ -98,7 +85,7 @@ export default function GovernoratesPage() {
                 </tr>
               ) : (
                 items.map((g: any) => (
-                  <tr key={g._id || g.id} className="hover:bg-gray-50/50 dark:hover:bg-muted/50 transition-colors">
+                  <tr key={g._id || g.id} className="hover:bg-gray-50/50 dark:hover:bg-muted/50 transition-colors  text-base sm:text-lg">
                     <td className="px-5 py-3">
                       <input
                         type="checkbox"
@@ -129,6 +116,26 @@ export default function GovernoratesPage() {
           </table>
         </div>
       </WhiteCard>
+      
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        title={isRTL ? "تأكيد حذف" : "Confirm Delete"}
+        confirmText={isRTL? "Delete":"حذف"}
+        cancelText={isRTL? "Cancel":"إلغاء"}
+        onConfirm={async () => {
+          if (!deleteId) return;
+          try {
+            await deleteGovernorate(deleteId);
+            toast.success("Governorate deleted");
+            await refresh();
+          } catch (e) {
+            toast.error("Failed to delete governorate");
+          } finally {
+            setDeleteId(null);
+          }
+        }}
+      />
     </div>
   );
 }

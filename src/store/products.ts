@@ -19,8 +19,10 @@ export type Product = {
   stock?: number;
   brand?: string;
   condition?: string;
+  attributes?: Record<string, string | number>;
   description?: string;
   createdAt?: string;
+  slug?: string;
 };
 
 type Pagination = {
@@ -88,10 +90,12 @@ function mapRawProduct(p: unknown, locale: "en" | "ar"): Product {
   const rating = typeof obj?.rating === "number" ? (obj.rating as number) : averageRating;
   const stock = typeof obj?.stock === "number" ? (obj.stock as number) : undefined;
   const condition = typeof obj?.condition === "string" ? String(obj.condition) : undefined;
+  const attributes = (obj?.attributes && typeof obj.attributes === "object") ? (obj.attributes as Record<string, string | number>) : undefined;
   const description = pickLocaleString(obj?.description, locale) || (typeof obj?.description === "string" ? String(obj.description) : undefined);
   const createdAt = typeof obj?.createdAt === "string" ? String(obj.createdAt) : undefined;
+  const slug = typeof obj?.slug === "string" ? String(obj.slug) : undefined;
   
-  return { id, title, price, image, images, rating, averageRating, ratingsCount, category, categoryId, salePrice, stock, brand, condition, description, createdAt };
+  return { id, title, price, image, images, rating, averageRating, ratingsCount, category, categoryId, salePrice, stock, brand, condition, attributes, description, createdAt, slug };
 }
 
 function normalizeProductsResponse(raw: unknown, locale: "en" | "ar"): { items: Product[]; total?: number } {

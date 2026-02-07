@@ -14,6 +14,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select } from '@/components/ui/select';
 import Link from 'next/link';
 import { formatCurrency } from "@/utils/utils";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<any[]>([]);
@@ -27,6 +28,8 @@ export default function ProductsPage() {
   const locale = useLocale() as "en" | "ar";
   const tTable = useTranslations("AdminTable");
   const isRTL = (locale as string) === "ar";
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -78,35 +81,22 @@ export default function ProductsPage() {
 
 
   const handleDelete = async (id: string) => {
-    try {
-      await deleteProduct(id);
-      toast.success(isRTL ? "تم حذف المنتج" : "Product deleted");
-      await refresh();
-    } catch {
-      toast.error(isRTL ? "فشل حذف المنتج" : "Failed to delete product");
-    }
+    setDeleteId(id);
+    setConfirmOpen(true);
   };
 
   return (
     <div className="space-y-6">
        <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-800 dark:text-foreground">{tProd("title")}</h1>
-        <Link href={`/${locale}/admin/products/create`} className="bg-[#e30613] text-white px-4 py-2 rounded shadow hover:bg-red-700 transition-colors flex items-center gap-2 text-sm font-bold">
+        <Link href={`/${locale}/admin/products/create`} className="bg-[#e30613] text-white px-4 py-2 rounded shadow hover:bg-red-700 transition-colors flex items-center gap-2 text-base sm:text-xl font-bold">
            <Plus size={16} /> {tProd("addNew")}
         </Link>
        </div>
 
-       <WhiteCard noPadding headerAction={
-         <div className="flex gap-2">
-           <div className="relative">
-            <input type="text" placeholder={tProd("searchPlaceholder")} className="pl-9 pr-4 py-1.5 text-sm bg-gray-50 dark:bg-muted/50 border border-gray-200 dark:border-border focus:bg-white dark:focus:bg-card focus:border-red-500 dark:focus:border-primary focus:ring-2 focus:ring-red-100 dark:focus:ring-primary/20 rounded-full transition-all w-64 outline-none text-gray-800 dark:text-foreground placeholder:text-gray-400 dark:placeholder:text-muted-foreground" />
-             <Search size={16} className="absolute left-3 top-2 text-gray-400 dark:text-muted-foreground" />
-           </div>
-           <button className="p-2 border-transparent rounded-full text-gray-500 dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-muted"><Filter size={16} /></button>
-         </div>
-       }>
+       <WhiteCard noPadding >
          <div className="overflow-x-auto">
-           <table className="w-full text-center text-sm text-gray-600 dark:text-muted-foreground">
+           <table className="w-full text-center text-base sm:text-xl text-gray-600 dark:text-muted-foreground">
              <thead className="bg-gray-50 dark:bg-muted/50 text-gray-500 dark:text-muted-foreground font-semibold uppercase text-xs">
                <tr>
                  <th className="px-5 py-3 w-10"><input type="checkbox" className="rounded border-gray-300 dark:border-border bg-white dark:bg-card text-red-600 focus:ring-red-500" /></th>
@@ -129,7 +119,7 @@ export default function ProductsPage() {
                        </div>
                        <div className="space-y-1 text-center">
                         <h3 className="font-bold text-lg text-gray-700 dark:text-foreground">{tProd("empty")}</h3>
-                        <p className="text-sm text-gray-500 dark:text-muted-foreground"></p>
+                        <p className="text-base sm:text-xl text-gray-500 dark:text-muted-foreground"></p>
                        </div>
                      </div>
                    </td>
@@ -214,6 +204,7 @@ export default function ProductsPage() {
             condition: editing?.condition ?? "new",
             category: editing?.category?._id ?? editing?.category ?? "",
             brand: editing?.brand?._id ?? editing?.brand ?? "",
+            attributes: editing?.attributes ? Object.entries(editing.attributes).map(([key, value]) => ({ key, value })) : [],
           }}
           existingImages={Array.isArray(editing?.images) ? editing.images : []}
           multipleNew={true}
@@ -341,10 +332,76 @@ export default function ProductsPage() {
                   </Select>
                 </div>
               </div>
+
+              <div className="space-y-3 border border-gray-200 dark:border-border p-4 rounded-lg bg-gray-50/50 dark:bg-muted/30">
+                <div className="flex justify-between items-center">
+                  <label className="font-bold text-base sm:text-xl text-gray-700 dark:text-gray-300">{tForm("attributes")}</label>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      const current = (form.attributes as any[]) || [];
+                      setForm({ attributes: [...current, { key: "", value: "" }] });
+                    }}
+                    className="h-8 text-xs"
+                  >
+                    <Plus size={14} className="mr-1" />
+                    {tForm("addAttribute")}
+                  </Button>
+                </div>
+                {((form.attributes as any[]) || []).map((attr, index) => (
+                  <div key={index} className="flex gap-2 items-start">
+                    <Input
+                      placeholder={tForm("attributeKey")}
+                      value={attr.key}
+                      onChange={(e) => {
+                        const newAttrs = [...((form.attributes as any[]) || [])];
+                        newAttrs[index].key = e.target.value;
+                        setForm({ attributes: newAttrs });
+                      }}
+                      className="flex-1 bg-white dark:bg-card"
+                    />
+                    <Input
+                      placeholder={tForm("attributeValue")}
+                      value={attr.value}
+                      onChange={(e) => {
+                        const newAttrs = [...((form.attributes as any[]) || [])];
+                        newAttrs[index].value = e.target.value;
+                        setForm({ attributes: newAttrs });
+                      }}
+                      className="flex-1 bg-white dark:bg-card"
+                    />
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="icon"
+                      className="h-10 w-10 shrink-0"
+                      onClick={() => {
+                        const newAttrs = [...((form.attributes as any[]) || [])];
+                        newAttrs.splice(index, 1);
+                        setForm({ attributes: newAttrs });
+                      }}
+                    >
+                      <Trash2 size={16} />
+                    </Button>
+                  </div>
+                ))}
+                {((form.attributes as any[]) || []).length === 0 && (
+                  <p className="text-center text-xs text-muted-foreground py-2 italic">
+                    {tForm("attributes")} - e.g. RAM, Processor, Color
+                  </p>
+                )}
+              </div>
             </>
           )}
           onSave={async ({ id, form, newFiles, removedExisting }) => {
             try {
+              const attributesObj = ((form.attributes as any[]) || []).reduce((acc: any, curr: any) => {
+                if(curr.key) acc[curr.key] = curr.value;
+                return acc;
+              }, {});
+
               const hasFiles = newFiles.length > 0;
               if (hasFiles) {
                 const fd = new FormData();
@@ -359,6 +416,7 @@ export default function ProductsPage() {
                 if (form.condition) fd.append("condition", String(form.condition as string));
                 if (form.category) fd.append("category", String(form.category as string));
                 if (form.brand) fd.append("brand", String(form.brand as string));
+                if (Object.keys(attributesObj).length > 0) fd.append("attributes", JSON.stringify(attributesObj));
                 if (removedExisting.length > 0) fd.append("images", JSON.stringify(removedExisting));
                 newFiles.forEach((f) => fd.append("images", f));
                 await updateProduct(String(id), fd);
@@ -371,6 +429,7 @@ export default function ProductsPage() {
                 if (form.condition) payload.condition = String(form.condition as string);
                 if (form.category) payload.category = String(form.category as string);
                 if (form.brand) payload.brand = String(form.brand as string);
+                if (Object.keys(attributesObj).length > 0) payload.attributes = attributesObj;
                 if (removedExisting.length > 0) (payload as any).removedImages = removedExisting;
                 await updateProduct(String(id), payload);
               }
@@ -382,6 +441,27 @@ export default function ProductsPage() {
           }}
         />
       )}
+      
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        title={isRTL ? "تأكيد الحذف" : "Confirm Delete"}
+        description={isRTL ? "هل تريد حذف هذا المنتج؟" : "Do you want to delete this product?"}
+        confirmText={isRTL ? "حذف" : "Delete"}
+        cancelText={isRTL ? "إلغاء" : "Cancel"}
+        onConfirm={async () => {
+          if (!deleteId) return;
+          try {
+            await deleteProduct(deleteId);
+            toast.success(isRTL ? "تم حذف المنتج" : "Product deleted");
+            await refresh();
+          } catch {
+            toast.error(isRTL ? "فشل حذف المنتج" : "Failed to delete product");
+          } finally {
+            setDeleteId(null);
+          }
+        }}
+      />
     </div>
   );
 }

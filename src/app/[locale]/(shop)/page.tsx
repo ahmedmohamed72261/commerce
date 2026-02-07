@@ -26,7 +26,7 @@ export default function HomePage() {
       <HeroSection />
       <CategoriesSlider />
 
-      <div className="px-4 md:px-12 space-y-12 pb-12 overflow-hidden bg-background dark:bg-background">
+      <div className="px-4 space-y-12 p-12 overflow-hidden bg-background dark:bg-background">
         <SecondaryBannerRow />
         
         <ProductSlider 

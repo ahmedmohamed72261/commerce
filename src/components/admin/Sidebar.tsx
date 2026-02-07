@@ -7,7 +7,7 @@ import { useAuthStore } from '@/store/auth';
 import { 
   LayoutDashboard, ShoppingBag, BarChart3, Zap, Ticket, 
   FileText, Menu as MenuIcon, Edit3, ImageIcon, 
-  Users, Globe, Palette, Settings, ChevronDown, LogOut ,BadgeCheck ,Image ,Tags 
+  Users, Globe, Palette, Settings, ChevronDown, LogOut ,BadgeCheck ,Image ,Tags, Mail
 } from 'lucide-react';
 
 export function AdminSidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) {
@@ -86,10 +86,11 @@ export function AdminSidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: 
           <SidebarLink href={`/${locale}/admin/brands`} icon={Image} label={t('brands')} active={isActive('/admin/brands')} onClose={onClose} />
           <SidebarLink href={`/${locale}/admin/orders`} icon={BarChart3} label={t('orders')} active={isActive('/admin/orders')} onClose={onClose} />
           {/* <SidebarLink href="/admin/flash-sales" icon={Zap} label={t('flashSales')} active={isActive('/admin/flash-sales')} /> */}
-          {/* <SidebarLink href="/admin/coupons" icon={Ticket} label={t('coupons')} active={isActive('/admin/coupons')} /> */}
+          <SidebarLink href={`/${locale}/admin/coupons`} icon={Ticket} label={t('coupons') || 'Coupons'} active={isActive('/admin/coupons')} onClose={onClose} />
           
           <SidebarGroupTitle label={t('system')} />
           <SidebarLink href={`/${locale}/admin/users`} icon={Users} label={t('users')} active={isActive('/admin/users')} onClose={onClose} />
+          <SidebarLink href={`/${locale}/admin/contacts`} icon={Mail} label={t('contacts') || (isRTL ? "رسائل الاتصال" : "Contact Messages")} active={isActive('/admin/contacts')} onClose={onClose} />
           <SidebarLink href={`/${locale}/admin/payment-methods`} icon={Settings} label={t('paymentMethods') || 'Payment Methods'} active={isActive('/admin/payment-methods')} onClose={onClose} />
           <SidebarLink href={`/${locale}/admin/governorates`} icon={Globe} label={t('governorates') || 'Governorates'} active={isActive('/admin/governorates')} onClose={onClose} />
           <SidebarLink href={`/${locale}/admin/banners`} icon={Palette} label={t('banners')} active={isActive('/admin/banners')} onClose={onClose} />

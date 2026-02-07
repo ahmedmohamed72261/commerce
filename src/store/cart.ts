@@ -25,6 +25,8 @@ export type CartItem = {
 export type Cart = {
   _id: string;
   user: string;
+  guestId?: string;
+  cartType?: "guest" | "user";
   items: CartItem[];
   totalAmount: number;
   createdAt: string;
@@ -35,11 +37,20 @@ interface CartState {
   cart: Cart | null;
   loading: boolean;
   error: string | null;
+  coupon: {
+    code: string;
+    discountAmount: number;
+    discountPercentage: number;
+    totalAfterDiscount: number;
+  } | null;
   getCart: (locale?: "en" | "ar") => Promise<Cart | null>;
   addToCart: (productId: string, quantity: number, attributes?: Record<string, any>) => Promise<boolean>;
+  addToCartGuest: (productId: string, quantity: number, attributes?: Record<string, any>) => Promise<boolean>;
   updateCartItem: (itemId: string, quantity: number) => Promise<boolean>;
   removeFromCart: (itemId: string) => Promise<boolean>;
   clearCart: () => Promise<boolean>;
+  applyCoupon: (code: string, subtotal: number) => Promise<boolean>;
+  removeCoupon: () => void;
   totalItems: () => number;
   totalPrice: () => number;
 }
@@ -48,6 +59,7 @@ export const useCart = create<CartState>((set, get) => ({
   cart: null,
   loading: false,
   error: null,
+  coupon: null,
 
   async getCart(locale = "en") {
     set({ loading: true, error: null });
@@ -58,6 +70,13 @@ export const useCart = create<CartState>((set, get) => ({
         },
       });
       const data = res.data?.data || res.data;
+      try {
+        const xGuest = (res.headers?.["x-guest-id"] as string | undefined) || undefined;
+        const gid = (data?.guestId as string | undefined) || xGuest;
+        if (gid) {
+          window.sessionStorage?.setItem("guest_id", gid);
+        }
+      } catch {}
       set({ cart: data, loading: false });
       return data;
     } catch (e: unknown) {
@@ -71,12 +90,50 @@ export const useCart = create<CartState>((set, get) => ({
   async addToCart(productId: string, quantity: number, attributes = {}) {
     set({ loading: true, error: null });
     try {
-      await http.post("/cart", {
+      const res = await http.post("/cart", {
         product: productId,
         quantity,
         attributes,
       });
+      try {
+        const data = res.data?.data || res.data;
+        const xGuest = (res.headers?.["x-guest-id"] as string | undefined) || undefined;
+        const gid = (data?.guestId as string | undefined) || xGuest;
+        if (gid) {
+          window.sessionStorage?.setItem("guest_id", gid);
+        }
+      } catch {}
       // Refresh cart after adding
+      await get().getCart();
+      set({ loading: false });
+      return true;
+    } catch (e: unknown) {
+      const err = e as { response?: { data?: { message?: string } }; message?: string };
+      const msg = err.response?.data?.message || err.message || "Failed to add to cart";
+      set({ error: msg, loading: false });
+      return false;
+    }
+  },
+  
+  async addToCartGuest(productId: string, quantity: number, attributes = {}) {
+    set({ loading: true, error: null });
+    try {
+      const guestId = typeof window !== "undefined" ? window.sessionStorage?.getItem("guest_id") : null;
+      const res = await http.post("/cart", {
+        product: productId,
+        quantity,
+        attributes,
+      }, {
+        headers: guestId ? { "X-Guest-Id": guestId } : {},
+      });
+      try {
+        const data = res.data?.data || res.data;
+        const xGuest = (res.headers?.["x-guest-id"] as string | undefined) || undefined;
+        const gid = (data?.guestId as string | undefined) || xGuest;
+        if (gid) {
+          window.sessionStorage?.setItem("guest_id", gid);
+        }
+      } catch {}
       await get().getCart();
       set({ loading: false });
       return true;
@@ -134,6 +191,37 @@ export const useCart = create<CartState>((set, get) => ({
       set({ error: msg, loading: false });
       return false;
     }
+  },
+
+  async applyCoupon(code: string, subtotal: number) {
+    set({ loading: true, error: null });
+    try {
+      const res = await http.post("/coupons/apply", {
+        couponCode: code,
+        subtotal,
+      });
+      const data = res.data?.data || res.data;
+      
+      set({ 
+        coupon: {
+          code: data.couponCode,
+          discountAmount: data.discountAmount,
+          discountPercentage: data.discountPercentage,
+          totalAfterDiscount: data.totalAfterDiscount
+        }, 
+        loading: false 
+      });
+      return true;
+    } catch (e: unknown) {
+      const err = e as { response?: { data?: { message?: string } }; message?: string };
+      const msg = err.response?.data?.message || err.message || "Failed to apply coupon";
+      set({ error: msg, loading: false, coupon: null });
+      return false;
+    }
+  },
+
+  removeCoupon() {
+    set({ coupon: null });
   },
 
   totalItems: () => {

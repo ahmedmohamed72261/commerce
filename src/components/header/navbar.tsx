@@ -71,7 +71,7 @@ export function Navbar({ locale }: { locale: string }) {
 
   return (
     <div className="bg-white dark:bg-card shadow-sm dark:shadow-border/20 relative z-30">
-      <div className="max-w-[1600px] mx-auto px-4 py-4 sm:px-8 md:px-12 flex items-center justify-between">
+      <div className=" px-4 py-4 sm:px-8 md:px-12 flex items-center justify-between">
         
         {/* Logo */}
         <Link href={`/${locale}`} className="flex-shrink-0 z-40">

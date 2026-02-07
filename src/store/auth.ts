@@ -38,7 +38,12 @@ export const useAuthStore = create<AuthState>((set) => ({
   async register(payload: RegisterArgs) {
     set({ loading: true, message: null });
     try {
-      const res = await http.post("/auth/register", payload);
+      let body: RegisterArgs = payload;
+      try {
+        const gid = typeof window !== "undefined" ? window.sessionStorage?.getItem("guest_id") : null;
+        if (gid) body = { ...payload, guestId: gid };
+      } catch {}
+      const res = await http.post("/auth/register", body);
       const data = res.data as RegisterResponse;
       if (data.success && data.data?.token) {
         localStorage.setItem("auth_token", data.data.token);
@@ -64,7 +69,12 @@ export const useAuthStore = create<AuthState>((set) => ({
   async login(payload: LoginArgs) {
     set({ loading: true, message: null });
     try {
-      const res = await http.post("/auth/login", payload);
+      let body: LoginArgs = payload;
+      try {
+        const gid = typeof window !== "undefined" ? window.sessionStorage?.getItem("guest_id") : null;
+        if (gid) body = { ...payload, guestId: gid };
+      } catch {}
+      const res = await http.post("/auth/login", body);
       const data = res.data as LoginResponse;
       if (data.success && data.data?.token) {
         localStorage.setItem("auth_token", data.data.token);

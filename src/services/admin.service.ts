@@ -33,3 +33,8 @@ export const deactivateAdminAccount = async (id: string) => {
     return res.data;
   }
 };
+
+export const getDashboardStatistics = async () => {
+  const res = await http.get("/admin/dashboard/statistics");
+  return res.data;
+};

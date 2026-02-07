@@ -117,7 +117,7 @@ export default function QuotationDetailsPage() {
             <div className="space-y-6">
               <div className="space-y-2">
                 <p className="text-[10px] font-black text-zinc-900 uppercase tracking-widest border-b-2 border-red-600 inline-block">ملاحظات</p>
-                <p className="text-[11px] font-bold text-zinc-400 italic max-w-sm">جيد هذا العرض</p>
+                <p className="text-[11px] font-bold text-zinc-400  max-w-sm">جيد هذا العرض</p>
               </div>
               <div className="flex gap-6 text-[10px] font-black text-zinc-400 uppercase tracking-widest">
                 <span className="flex items-center gap-2"><Globe size={16} className="text-red-600" /> DEVWORLD.COM</span>
@@ -130,7 +130,7 @@ export default function QuotationDetailsPage() {
               </div>
               <div className="bg-black text-white p-8">
                 <p className="text-[11px] font-black uppercase tracking-[0.3em] mb-3 opacity-60 text-center leading-none">الإجمالي</p>
-                <p className="text-5xl font-black text-center tabular-nums leading-none italic tracking-tighter">${quotation?.subtotal?.toLocaleString()}</p>
+                <p className="text-5xl font-black text-center tabular-nums leading-none  tracking-tighter">${quotation?.subtotal?.toLocaleString()}</p>
               </div>
             </div>
           </div>

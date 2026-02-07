@@ -8,6 +8,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { getTrendingProducts } from "@/services/products.service";
 import { useCart } from "@/store/cart";
 import { toast } from "sonner";
+import { formatCurrency } from "@/utils/utils";
 
 interface CustomStyles {
   container?: string;
@@ -45,7 +46,7 @@ interface Product {
 /* -------------------- THEMES LOGIC) -------------------- */
 const themes: Record<number, Theme> = {
     1: { card: "rounded-3xl border-neutral-100 dark:border-border shadow-2xl bg-white dark:bg-card", img: "bg-neutral-50 dark:bg-muted", btn: "rounded-full bg-[#C40000] dark:bg-primary", badge: "bg-[#C40000] dark:bg-primary text-white rounded-full", icon: "text-[#C40000] dark:text-primary" },
-    2: { card: "rounded-none border-4 border-black dark:border-foreground shadow-[15px_15px_0px_#C40000] dark:shadow-[15px_15px_0px_var(--primary)] bg-white dark:bg-card", img: "bg-white dark:bg-card border-r-4 border-black dark:border-foreground", btn: "rounded-none bg-black dark:bg-foreground uppercase tracking-tighter", badge: "bg-black dark:bg-foreground text-white italic", icon: "text-black dark:text-foreground" },
+    2: { card: "rounded-none border-4 border-black dark:border-foreground shadow-[15px_15px_0px_#C40000] dark:shadow-[15px_15px_0px_var(--primary)] bg-white dark:bg-card", img: "bg-white dark:bg-card border-r-4 border-black dark:border-foreground", btn: "rounded-none bg-black dark:bg-foreground uppercase tracking-tighter", badge: "bg-black dark:bg-foreground text-white ", icon: "text-black dark:text-foreground" },
     3: { card: "rounded-[3rem] bg-zinc-950 dark:bg-black text-white border-none", img: "bg-zinc-900 dark:bg-zinc-950 rounded-[2.5rem] m-4", btn: "rounded-2xl bg-white dark:bg-foreground text-black dark:text-background", badge: "bg-white/10 backdrop-blur-md text-white", icon: "text-red-500 dark:text-primary" },
     4: { card: "rounded-none border-y border-neutral-200 dark:border-border shadow-none", img: "bg-transparent", btn: "rounded-none bg-transparent border-b-2 border-black dark:border-foreground text-black dark:text-foreground px-0", badge: "bg-transparent text-black dark:text-foreground border-l-4 border-[#C40000] dark:border-primary pl-2", icon: "text-[#C40000] dark:text-primary" },
     5: { card: "rounded-2xl bg-gradient-to-br from-red-50 to-white dark:from-red-950/20 dark:to-card border-red-100 dark:border-primary/20", img: "bg-white/50 dark:bg-muted/50", btn: "rounded-xl bg-[#C40000] dark:bg-primary shadow-lg shadow-red-200 dark:shadow-primary/20", badge: "bg-red-100 dark:bg-primary/20 text-[#C40000] dark:text-primary font-bold", icon: "text-[#C40000] dark:text-primary" },
@@ -64,7 +65,7 @@ const themes: Record<number, Theme> = {
     18: { card: "rounded-2xl bg-zinc-900 border-none shadow-2xl", img: "bg-gradient-to-b from-zinc-800 to-zinc-900", btn: "rounded-xl bg-[#C40000] shadow-[0_10px_20px_rgba(196,0,0,0.3)]", badge: "bg-zinc-100 text-black font-bold", icon: "text-[#C40000]" },
     19: { card: "rounded-none border-x-2 border-black bg-neutral-50", img: "bg-white", btn: "rounded-none bg-black text-white px-16", badge: "bg-transparent border-2 border-black text-black", icon: "text-black" },
     20: { card: "rounded-[5rem] bg-white border border-neutral-100 shadow-inner", img: "bg-teal-50/50", btn: "rounded-full bg-teal-600", badge: "bg-teal-100 text-teal-700", icon: "text-teal-600" },
-    21: { card: "rounded-none border-b-[20px] border-[#C40000] bg-white shadow-2xl", img: "bg-neutral-50", btn: "rounded-none bg-black", badge: "bg-black text-white italic", icon: "text-[#C40000]" },
+    21: { card: "rounded-none border-b-[20px] border-[#C40000] bg-white shadow-2xl", img: "bg-neutral-50", btn: "rounded-none bg-black", badge: "bg-black text-white ", icon: "text-[#C40000]" },
     22: { card: "rounded-3xl border-2 border-dashed border-red-500/20", img: "bg-red-500/5", btn: "rounded-2xl bg-gradient-to-r from-red-600 to-black", badge: "bg-red-600 text-white", icon: "text-red-600" },
     23: { card: "rounded-xl bg-white shadow-[0_0_50px_rgba(0,0,0,0.05)]", img: "bg-neutral-50 border-r border-neutral-100", btn: "rounded-none bg-neutral-900 uppercase", badge: "bg-neutral-100 text-neutral-500", icon: "text-neutral-900" },
     24: { card: "rounded-[2rem] bg-white border border-neutral-100 shadow-xl pr-6", img: "m-6 rounded-[1.5rem] bg-neutral-100", btn: "rounded-full bg-black shadow-lg", badge: "bg-[#C40000] text-white", icon: "text-[#C40000]" },
@@ -232,7 +233,7 @@ export function AboutSectionHero({
             customStyles.textSection
           )}
         >
-          <h1 className="text-xl lg:text-2xl font-semibold leading-tight">
+          <h1 className="text-xl lg:text-3xl font-bold leading-tight">
             {title}
           </h1>
 
@@ -245,7 +246,7 @@ export function AboutSectionHero({
                 customStyles.priceText
               )}
             >
-              ${salePrice ?? price}
+              {formatCurrency(salePrice ?? price, locale)}
             </span>
 
             {/* {salePrice && (
@@ -255,36 +256,25 @@ export function AboutSectionHero({
             )} */}
           </div>
 
-          {/* STOCK */}
-          {typeof stock === "number" && (
-            <span className="text-sm sm:text-base md:text-lg text-neutral-500">
-              {locale === "ar" ? "المتوفر" : "In stock"}: {stock}
-            </span>
-          )}
+          
 
           {desc && (
-            <p className="text-sm sm:text-base md:text-lg text-neutral-600 dark:text-muted-foreground mt-2">
+            <p className="text-sm sm:text-base font-bold md:text-2xl text-neutral-600 dark:text-muted-foreground mt-2">
               {desc}
             </p>
           )}
 
-          <div className="mt-3 grid grid-cols-2 gap-3 text-sm sm:text-base md:text-lg">
+          <div className="mt-3 grid grid-cols-2 gap-3 text-base sm:text-base md:text-xl">
             {brandName && (
-              <div className="text-neutral-600 dark:text-muted-foreground">
-                {tTable("brand")}:{" "}
-                <span className="px-2 py-0.5 rounded-full border border-border bg-white dark:bg-card font-black text-neutral-900 dark:text-foreground">{brandName}</span>
-              </div>
-            )}
-            {categoryName && (
-              <div className="text-neutral-600 dark:text-muted-foreground">
-                {locale === "ar" ? "الفئة" : "Category"}:{" "}
-                <span className="font-semibold text-neutral-900 dark:text-foreground">{categoryName}</span>
+               <div className="flex items-center gap-2 text-red-600 dark:text-primary font-bold text-sm sm:text-xl uppercase tracking-wide mb-1">
+                {/* <Package size={14} /> {tTable("brand")}: */}
+                <span className="px-2 py-0.5 rounded-full bg-red-50 dark:bg-primary/15 text-red-700 dark:text-primary font-black tracking-widest">
+                  {brandName}
+                </span>
               </div>
             )}
            {conditionText && (
-            <div className="text-neutral-600 dark:text-muted-foreground flex items-center gap-2">
-              <span>{locale === "ar" ? "الحالة" : "Condition"}:</span>
-              
+            <div className="text-neutral-600 dark:text-muted-foreground flex items-center gap-2">              
               {/* ENHANCED ANIMATED SPAN */}
               <span className={cn(
                 "relative inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-white dark:bg-card overflow-hidden group/cond shadow-sm transition-all duration-300 hover:border-primary/50",
@@ -310,13 +300,13 @@ export function AboutSectionHero({
             </div>
           )}
             <div className="text-neutral-600 dark:text-muted-foreground flex items-center gap-2">
-              <span>{locale === "ar" ? "التقييم" : "Rating"}:</span>
+              {/* <span>{locale === "ar" ? "التقييم" : "Rating"}:</span> */}
               <div className="flex items-center gap-1">
                 <div className="flex gap-0.5">
                   {[...Array(5)].map((_, i) => (
                     <Star 
                       key={i} 
-                      size={14} 
+                      size={20} 
                       className={cn(
                         i < Math.round(avgRating) 
                           ? "fill-yellow-400 text-yellow-400" 
@@ -325,12 +315,12 @@ export function AboutSectionHero({
                     />
                   ))}
                 </div>
-                <span className="text-xs text-neutral-500 font-medium">{avgRating}</span>
+                {/* <span className="text-lg text-neutral-500 font-medium">{avgRating}</span> */}
               </div>
             </div>
           </div>
 
-          {attrs && Object.keys(attrs).length > 0 && (
+          {/* {attrs && Object.keys(attrs).length > 0 && (
             <div className="mt-2 flex flex-wrap gap-2">
               {Object.entries(attrs).slice(0, 4).map(([k, v]) => (
                 <span key={String(k)} className="px-2 py-1 rounded-full text-xs sm:text-sm md:text-base border border-gray-200 dark:border-border bg-gray-50 dark:bg-muted/30 text-neutral-700 dark:text-muted-foreground">
@@ -338,10 +328,10 @@ export function AboutSectionHero({
                 </span>
               ))}
             </div>
-          )}
+          )} */}
 
           {/* CTA */}
-          <div className="pt-2">
+          <div className="pt-4">
             <Button
               className={cn(
                 "h-10 px-10 text-xs sm:text-sm md:text-base font-medium transition-transform active:scale-95",

@@ -8,6 +8,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { ImageUploader } from "@/components/admin/ui/ImageUploader";
 import { toast } from "sonner";
 import { cn } from "@/utils/utils";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
 export default function BannersPage() {
   const [main, setMain] = useState<any[]>([]);
@@ -22,6 +23,10 @@ export default function BannersPage() {
   });
   const locale = useLocale() as "en" | "ar";
   const t = useTranslations('AdminBanners');
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteBannerId, setDeleteBannerId] = useState<string | null>(null);
+  const [confirmImageOpen, setConfirmImageOpen] = useState(false);
+  const [imageDeletion, setImageDeletion] = useState<{ bannerId: string; imageId: string } | null>(null);
 
   const refresh = async () => {
     setLoading(true);
@@ -85,23 +90,13 @@ export default function BannersPage() {
   };
 
   const handleDeleteImage = async (bannerId: string, imageId: string) => {
-    try {
-      await deleteImageFromBanner(bannerId, imageId);
-      toast.success("Image deleted");
-      await refresh();
-    } catch {
-      toast.error("Failed to delete image");
-    }
+    setImageDeletion({ bannerId, imageId });
+    setConfirmImageOpen(true);
   };
 
   const handleDeleteBanner = async (id: string) => {
-    try {
-      await deleteBanner(id);
-      toast.success("Banner deleted");
-      await refresh();
-    } catch {
-      toast.error("Failed to delete banner");
-    }
+    setDeleteBannerId(id);
+    setConfirmOpen(true);
   };
 
   const renderList = (title: string, list: any[]) => (
@@ -230,6 +225,48 @@ export default function BannersPage() {
       {renderList(t('mainList'), main)}
       {renderList(t('secondaryList'), secondary)}
       {renderList(t('thirdList'), third)}
+      
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        title="Confirm Delete"
+        description="Do you want to delete this banner?"
+        confirmText="Delete"
+        cancelText="Cancel"
+        onConfirm={async () => {
+          if (!deleteBannerId) return;
+          try {
+            await deleteBanner(deleteBannerId);
+            toast.success("Banner deleted");
+            await refresh();
+          } catch {
+            toast.error("Failed to delete banner");
+          } finally {
+            setDeleteBannerId(null);
+          }
+        }}
+      />
+      
+      <ConfirmDialog
+        open={confirmImageOpen}
+        onOpenChange={setConfirmImageOpen}
+        title="Confirm Delete"
+        description="Do you want to delete this image?"
+        confirmText="Delete"
+        cancelText="Cancel"
+        onConfirm={async () => {
+          if (!imageDeletion) return;
+          try {
+            await deleteImageFromBanner(imageDeletion.bannerId, imageDeletion.imageId);
+            toast.success("Image deleted");
+            await refresh();
+          } catch {
+            toast.error("Failed to delete image");
+          } finally {
+            setImageDeletion(null);
+          }
+        }}
+      />
     </div>
   );
 }

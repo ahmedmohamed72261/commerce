@@ -19,7 +19,7 @@ export function SearchBox({ autoFocus = false }: { autoFocus?: boolean }) {
 
   const onEnterNavigate = () => {
     const target = activeIndex >= 0 ? suggestions[activeIndex] : suggestions?.[0];
-    if (target?._id) handleSelectProduct(target._id);
+    if (target) handleSelectProduct(target.slug || target._id);
   };
 
   useEffect(() => {
@@ -137,7 +137,7 @@ export function SearchBox({ autoFocus = false }: { autoFocus?: boolean }) {
                 {suggestions.map((p, i) => (
                   <button
                     key={p._id}
-                    onClick={() => handleSelectProduct(p._id)}
+                    onClick={() => handleSelectProduct(p.slug || p._id)}
                     onMouseEnter={() => setActiveIndex(i)}
                     className={cn(
                       "w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all relative group",
@@ -167,7 +167,7 @@ export function SearchBox({ autoFocus = false }: { autoFocus?: boolean }) {
                       </div>
                       {p.description && (
                         <div className={cn(
-                          "text-[11px] line-clamp-1 font-bold italic opacity-70",
+                          "text-[11px] line-clamp-1 font-bold  opacity-70",
                           i === activeIndex ? "text-white/80" : "text-[--color-muted-foreground]"
                         )}>
                           {p.description}

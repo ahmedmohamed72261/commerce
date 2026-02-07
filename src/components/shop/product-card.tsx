@@ -27,9 +27,10 @@ interface ProductCardProps {
   stock?: number;
   condition?: string;
   salePrice?: number;
+  slug?: string;
 }
 
-export function ProductCard({ variant = "v1", productId, title, price, oldPrice = price * 1.2, image, rating = 4, reviewsCount = 0, category, brand, stock, condition, salePrice }: ProductCardProps) {
+export function ProductCard({ variant = "v1", productId, title, price, oldPrice = price * 1.2, image, rating = 4, reviewsCount = 0, category, brand, stock, condition, salePrice, slug }: ProductCardProps) {
   const t = useTranslations("Shop");
   const tTable = useTranslations("AdminTable");
   const tForm = useTranslations("AdminForm");
@@ -77,8 +78,8 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
             className="p-3 rounded-full bg-white/70 dark:bg-card/70 backdrop-blur-md border border-neutral-100 dark:border-border shadow-sm hover:bg-red-600 hover:text-white transition-all text-neutral-600 dark:text-foreground"
             onClick={(e) => {
               e.preventDefault();
-              if (productId !== undefined) {
-                router.push(`/${locale}/products/${productId}`);
+              if (productId !== undefined || slug) {
+                router.push(`/${locale}/products/${slug || productId}`);
               }
             }}
           >
@@ -114,11 +115,15 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
           </div>
         </div>
 
-        <div className="space-y-1 flex flex-col sm:flex-row justify-between">
+        <div className="space-y-1 flex flex-col justify-between">
           <div>
-            <h3 className="md:text-2xl text-md font-bold tracking-tight text-neutral-900 dark:text-foreground group-hover:text-red-600 dark:group-hover:text-primary transition-colors">
-            {title}
-          </h3>
+            <h3 className="md:text-2xl text-md font-bold tracking-tight
+               text-neutral-900 dark:text-foreground
+               group-hover:text-red-600 dark:group-hover:text-primary
+               transition-colors
+               truncate max-w-full">
+  {title}
+</h3>
           {/* {stock && (
             <div className="flex items-center gap-1.5 text-[9px] font-bold text-neutral-400 dark:text-muted-foreground uppercase">
               <Box size={10} /> {stock} Units Left
@@ -194,7 +199,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
           </div>
           <div className="p-6 space-y-4">
              <div className="h-0.5 w-full bg-cyan-500/30 overflow-hidden"><motion.div animate={{ x: [-350, 350] }} transition={{ repeat: Infinity, duration: 2 }} className="h-full w-20 bg-cyan-400"/></div>
-             <h3 className="text-cyan-400 font-mono text-2xl font-bold italic">{title}</h3>
+             <h3 className="text-cyan-400 font-mono text-2xl font-bold ">{title}</h3>
              <div className="flex justify-between items-center text-cyan-100/50 text-[10px] font-mono"><span>LATENCY: 0.2ms</span><span>AUTH: SECURED</span></div>
              <div className="flex justify-between items-center pt-4 border-t border-cyan-500/20">
                 <span className="text-3xl font-mono font-black text-white">${price}</span>
@@ -249,7 +254,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
           </div>
           <div className="flex-1 relative flex flex-col p-10">
             <img src={image} className="h-1/2 object-contain group-hover:scale-125 transition-transform duration-1000"/>
-            <h3 className="mt-auto text-4xl font-black italic tracking-tighter group-hover:opacity-0 transition-opacity">{title}</h3>
+            <h3 className="mt-auto text-4xl font-black  tracking-tighter group-hover:opacity-0 transition-opacity">{title}</h3>
           </div>
         </div>
       );
@@ -262,7 +267,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent p-10 flex flex-col justify-end">
             <h3 className="text-white text-5xl font-black uppercase tracking-tighter leading-[0.85] mb-6">{title}</h3>
             <div className="flex justify-between items-center">
-               <div className="px-6 py-2 bg-white text-black font-black italic text-2xl">${price}</div>
+               <div className="px-6 py-2 bg-white text-black font-black  text-2xl">${price}</div>
                <button className="h-14 w-14 rounded-full border-2 border-white flex items-center justify-center text-white"><ArrowUpRight/></button>
             </div>
           </div>
@@ -279,7 +284,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
           </div>
           <div className="mt-8 text-center space-y-4">
             <h3 className="text-white font-bold text-xl uppercase tracking-widest">{title}</h3>
-            <div className="text-red-600 font-black text-4xl italic">${price}</div>
+            <div className="text-red-600 font-black text-4xl ">${price}</div>
             <button className="bg-red-600 text-white px-10 py-2 rounded-full font-bold uppercase text-[10px] tracking-widest">Connect</button>
           </div>
         </div>
@@ -293,7 +298,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
               <div className="absolute inset-0 bg-indigo-500/20 blur-3xl rounded-full"/>
               <img src={image} className="w-full h-full object-contain relative z-10"/>
            </div>
-           <h3 className="mt-10 font-serif text-3xl italic tracking-tight">{title}</h3>
+           <h3 className="mt-10 font-serif text-3xl  tracking-tight">{title}</h3>
            <div className="w-12 h-0.5 bg-indigo-400 my-4"/>
            <span className="text-3xl font-light tracking-[0.2em] text-indigo-300">${price}</span>
            <button className="mt-auto px-10 py-3 rounded-full border border-indigo-300 text-indigo-300 hover:bg-indigo-300 hover:text-indigo-950 transition-colors">Select</button>
@@ -325,9 +330,9 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
           <div className="h-full w-full bg-black rounded-[2rem] p-8 flex flex-col">
              <div className="flex justify-between text-white/40 text-[10px] uppercase font-black"><span>Premium Edition</span><Zap size={14}/></div>
              <img src={image} className="h-48 object-contain my-8 group-hover:scale-125 transition-transform"/>
-             <h3 className="text-white text-2xl font-black uppercase tracking-tighter italic">{title}</h3>
+             <h3 className="text-white text-2xl font-black uppercase tracking-tighter ">{title}</h3>
              <div className="mt-auto flex justify-between items-end border-t border-white/10 pt-4">
-                <span className="text-4xl font-black text-white italic tracking-tighter">${price}</span>
+                <span className="text-4xl font-black text-white  tracking-tighter">${price}</span>
                 <div className="h-12 w-12 bg-white rounded-xl flex items-center justify-center"><ShoppingCart size={20}/></div>
              </div>
           </div>
@@ -342,7 +347,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
               <img src={image} className="w-full h-full object-cover group-hover:h-1/2 transition-all duration-700"/>
               <div className="absolute bottom-0 left-0 right-0 h-0 group-hover:h-1/2 bg-[--color-primary] transition-all duration-700 p-8 flex flex-col justify-center text-white">
                  <h3 className="text-2xl font-black leading-none mb-4">{title}</h3>
-                 <span className="text-4xl font-bold italic">${price}</span>
+                 <span className="text-4xl font-bold ">${price}</span>
                  <button className="mt-4 py-2 border border-white hover:bg-white hover:text-[--color-primary] font-bold transition-all">Buy Now</button>
               </div>
               <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 text-center group-hover:opacity-0 transition-opacity">
@@ -363,7 +368,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
           <div className="p-10 flex-grow bg-white/5 backdrop-blur-2xl border-t border-white/10 flex flex-col justify-between">
             <h3 className="text-white text-2xl font-light tracking-widest uppercase">{title}</h3>
             <div className="flex justify-between items-end">
-              <span className="text-3xl font-black text-red-500 italic">${price}</span>
+              <span className="text-3xl font-black text-red-500 ">${price}</span>
               <button className="h-12 w-12 rounded-full bg-white text-black flex items-center justify-center hover:bg-red-600 hover:text-white transition-colors"><Plus/></button>
             </div>
           </div>
@@ -376,7 +381,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
         <div className={cn(common, "bg-black rounded-[3rem] border border-white/20")}>
           <div className="h-2/3 p-10"><img src={image} className="w-full h-full object-cover rounded-3xl"/></div>
           <div className="p-6 flex-grow flex flex-col justify-between">
-             <h3 className="text-white text-3xl font-black uppercase italic tracking-tighter">{title}</h3>
+             <h3 className="text-white text-3xl font-black uppercase  tracking-tighter">{title}</h3>
              <div className="w-full bg-red-600 -mx-6 py-2 overflow-hidden whitespace-nowrap">
                 <motion.div animate={{ x: [-200, 0] }} transition={{ repeat: Infinity, duration: 3, ease: "linear" }} className="flex gap-10 text-white font-bold uppercase text-[10px]">
                    <span>Sale Active • {title} • Sale Active • {title} • Sale Active • {title}</span>
@@ -399,7 +404,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
            </div>
            <div className="p-6 space-y-2">
               <h3 className="font-serif text-3xl text-neutral-800">{title}</h3>
-              <div className="flex justify-between items-center text-neutral-400 italic">
+              <div className="flex justify-between items-center text-neutral-400 ">
                  <span>Collection No. 1</span>
                  <span className="text-2xl font-bold text-neutral-800">${price}</span>
               </div>
@@ -491,7 +496,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
                <div className="flex justify-between items-end overflow-hidden">
                   <div className="flex flex-col">
                     <span className="text-red-500 font-bold text-xs uppercase tracking-widest">MSRP</span>
-                    <span className="text-white text-4xl font-light italic">${price}</span>
+                    <span className="text-white text-4xl font-light ">${price}</span>
                   </div>
                   <button className="bg-white text-black px-8 py-4 rounded-full font-bold uppercase text-[10px] hover:bg-red-600 hover:text-white transition-colors">Pre-Order</button>
                </div>
@@ -651,7 +656,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
               <span className="absolute -top-4 -left-4 bg-yellow-400 text-black px-4 py-2 font-black rounded-full rotate-[-12deg] shadow-lg">NEW!</span>
               <img src={image} className="w-full h-full object-contain"/>
            </div>
-           <div className="mt-auto flex justify-between items-center text-white"><h3 className="font-black text-2xl truncate w-32">{title}</h3><span className="text-3xl font-black italic">${price}</span></div>
+           <div className="mt-auto flex justify-between items-center text-white"><h3 className="font-black text-2xl truncate w-32">{title}</h3><span className="text-3xl font-black ">${price}</span></div>
         </div>
       );
 
@@ -664,7 +669,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
               <img src={image} className="h-full object-contain filter drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] group-hover:drop-shadow-[0_0_30px_rgba(220,38,38,0.5)] transition-all duration-1000" />
            </div>
            <div className="mt-12 space-y-2">
-              <h3 className="text-white text-3xl font-black italic uppercase tracking-tighter">{title}</h3>
+              <h3 className="text-white text-3xl font-black  uppercase tracking-tighter">{title}</h3>
               <div className="h-1 w-20 bg-red-600 group-hover:w-full transition-all duration-1000" />
               <div className="flex justify-between items-center pt-6">
                  <span className="text-white text-4xl font-black">${price}</span>
@@ -715,7 +720,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
                 <span className="text-[10px] font-black uppercase tracking-[0.4em] text-red-600">Premium Artifact</span>
                 <h3 className="text-3xl font-black uppercase tracking-tighter leading-none">{title}</h3>
               </div>
-              <span className="text-xl font-light italic">${price}</span>
+              <span className="text-xl font-light ">${price}</span>
             </div>
             
             <div className="flex items-center gap-2">
@@ -738,7 +743,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
               <div className="absolute top-0 left-0 w-full bg-yellow-400 text-black font-black py-1 text-center rotate-[30deg] translate-x-1/4 -translate-y-1/2">CHECK THIS OUT</div>
               <img src={image} className="w-full h-full object-cover"/>
            </div>
-           <div className="mt-4 flex flex-col justify-between flex-grow"><h3 className="text-xl font-black uppercase leading-none">{title}</h3><div className="flex justify-between items-end"><span className="text-5xl font-black tracking-tighter italic">${price}</span><button className="bg-black text-white p-3"><Plus/></button></div></div>
+           <div className="mt-4 flex flex-col justify-between flex-grow"><h3 className="text-xl font-black uppercase leading-none">{title}</h3><div className="flex justify-between items-end"><span className="text-5xl font-black tracking-tighter ">${price}</span><button className="bg-black text-white p-3"><Plus/></button></div></div>
         </div>
       );
 
@@ -749,7 +754,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
            <div className="h-1/2 flex items-center justify-center bg-[#e4dcd1] dark:bg-neutral-800 rounded-[3rem] w-full mb-10 shadow-inner">
               <img src={image} className="h-40 object-contain sepia-[0.2]"/>
            </div>
-           <h3 className="text-2xl font-serif text-[#4a463f] dark:text-neutral-400 italic leading-none">{title}</h3>
+           <h3 className="text-2xl font-serif text-[#4a463f] dark:text-neutral-400  leading-none">{title}</h3>
            <p className="mt-6 text-4xl font-black text-[#1c1b19] dark:text-white tracking-tighter leading-none">${price}</p>
            <button className="mt-auto px-10 py-3 rounded-full border border-black dark:border-white font-bold text-xs uppercase tracking-widest">Select</button>
         </div>
@@ -762,7 +767,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-900 via-slate-900 to-black opacity-40"/>
            <motion.div animate={{ rotate: [0, 360] }} transition={{ repeat: Infinity, duration: 20, ease: "linear" }} className="absolute -top-20 -right-20 w-80 h-80 bg-blue-600/20 blur-[100px] rounded-full"/>
            <img src={image} className="relative z-10 w-full h-1/2 object-contain group-hover:scale-110 transition-transform duration-1000"/>
-           <div className="relative z-10 mt-10 space-y-4"><h3 className="text-white text-2xl font-black tracking-tighter">{title}</h3><span className="text-4xl font-black text-blue-400 italic">${price}</span><button className="w-full py-4 bg-white text-black font-black rounded-2xl">Acquire</button></div>
+           <div className="relative z-10 mt-10 space-y-4"><h3 className="text-white text-2xl font-black tracking-tighter">{title}</h3><span className="text-4xl font-black text-blue-400 ">${price}</span><button className="w-full py-4 bg-white text-black font-black rounded-2xl">Acquire</button></div>
         </div>
       );
 
@@ -784,7 +789,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
       return (
         <div className={cn(common, "bg-white dark:bg-neutral-900 p-8 rounded-[3rem] shadow-xl group-hover:shadow-2xl")}>
            <div className="relative h-2/3"><div className="absolute -left-10 top-0 bg-red-600 w-full h-4/5 rounded-3xl -rotate-6 transition-transform group-hover:rotate-0 duration-1000"/><img src={image} className="relative z-10 w-full h-full object-cover rounded-3xl"/></div>
-           <div className="mt-6 flex flex-col justify-between flex-grow"><h3 className="text-2xl font-black tracking-tighter italic">{title}</h3><div className="flex justify-between items-center"><span className="text-3xl font-black text-red-600">${price}</span><Plus className="group-hover:rotate-90 transition-transform duration-1000"/></div></div>
+           <div className="mt-6 flex flex-col justify-between flex-grow"><h3 className="text-2xl font-black tracking-tighter ">{title}</h3><div className="flex justify-between items-center"><span className="text-3xl font-black text-red-600">${price}</span><Plus className="group-hover:rotate-90 transition-transform duration-1000"/></div></div>
         </div>
       );
 
@@ -792,12 +797,12 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
     case "v37":
       return (
         <div className={cn(common, "bg-neutral-50 dark:bg-black rounded-[3rem] p-10")}>
-           <div className="absolute -top-10 -right-10 text-[200px] font-black text-black/5 dark:text-white/5 italic">0{price % 10}</div>
+           <div className="absolute -top-10 -right-10 text-[200px] font-black text-black/5 dark:text-white/5 ">0{price % 10}</div>
            <div className="h-1/2 relative"><img src={image} className="w-full h-full object-contain group-hover:scale-125 transition-transform duration-1000" /></div>
            <div className="mt-auto space-y-6 relative">
               <h3 className="text-4xl font-black tracking-tighter uppercase leading-none">{title}</h3>
               <div className="flex items-center gap-6">
-                 <span className="text-5xl font-black text-red-600 tracking-tighter italic">${price}</span>
+                 <span className="text-5xl font-black text-red-600 tracking-tighter ">${price}</span>
                  <button className="h-16 w-16 bg-black dark:bg-white text-white dark:text-black rounded-full flex items-center justify-center"><Plus/></button>
               </div>
            </div>
@@ -828,7 +833,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
         <div className={cn(common, "bg-[#0a0a0a] rounded-[3.5rem] p-12 border-none shadow-2xl items-center text-center")}>
            <div className="h-56 w-full relative group-hover:-translate-y-4 transition-transform duration-1000"><div className="absolute inset-0 bg-red-600/10 blur-[60px] rounded-full"/><img src={image} className="w-full h-full object-contain relative z-10"/></div>
            <h3 className="mt-10 text-white font-black text-2xl uppercase tracking-widest opacity-80">{title}</h3>
-           <div className="mt-4 text-red-600 font-black text-5xl tracking-tighter italic leading-none">${price}</div>
+           <div className="mt-4 text-red-600 font-black text-5xl tracking-tighter  leading-none">${price}</div>
            <button className="mt-auto w-full py-4 rounded-full border border-white/20 text-white/50 hover:text-white hover:border-white transition-all duration-1000 text-xs font-bold uppercase tracking-[0.3em]">Examine</button>
         </div>
       );
@@ -838,7 +843,7 @@ export function ProductCard({ variant = "v1", productId, title, price, oldPrice 
       return (
         <div className={cn(common, "bg-neutral-100 dark:bg-neutral-900 rounded-[8rem] p-10 border border-neutral-200 dark:border-neutral-800 items-center justify-between")}>
            <div className="h-64 w-64 rounded-full bg-white dark:bg-black shadow-xl flex items-center justify-center p-8"><img src={image} className="w-full h-full object-contain"/></div>
-           <div className="text-center space-y-2"><h3 className="text-xl font-bold">{title}</h3><p className="text-3xl font-black text-red-600 italic tracking-tighter">${price}</p></div>
+           <div className="text-center space-y-2"><h3 className="text-xl font-bold">{title}</h3><p className="text-3xl font-black text-red-600  tracking-tighter">${price}</p></div>
            <button className="h-16 w-16 bg-black dark:bg-white text-white dark:text-black rounded-full flex items-center justify-center"><Plus/></button>
         </div>
       );

@@ -33,7 +33,7 @@ import { ImageUploader } from "@/components/admin/ui/ImageUploader";
      <div className="space-y-8">
        <div>
          <h1 className="text-2xl font-bold text-gray-800 dark:text-foreground">{t('paymentMethodsTitle')}</h1>
-         <p className="text-sm text-gray-500 dark:text-muted-foreground mt-1">{t('manageStorefront')}</p>
+         <p className="text-base sm:text-xl text-gray-500 dark:text-muted-foreground mt-1">{t('manageStorefront')}</p>
        </div>
  
       <WhiteCard title={t('paymentMethodsTitle')}>
@@ -76,7 +76,7 @@ import { ImageUploader } from "@/components/admin/ui/ImageUploader";
             </div>
            </div>
            <button
-            className="px-4 py-2 bg-[#e30613] hover:bg-red-700 dark:bg-primary dark:hover:bg-primary/90 text-white rounded-xl text-sm font-bold transition"
+            className="px-4 py-2 bg-[#e30613] hover:bg-red-700 dark:bg-primary dark:hover:bg-primary/90 text-white rounded-xl text-base sm:text-xl font-bold transition"
              onClick={async () => {
                const fd = new FormData();
                if (iconFiles[0]) fd.append("icon", iconFiles[0]);
@@ -105,7 +105,7 @@ import { ImageUploader } from "@/components/admin/ui/ImageUploader";
                  <div className="flex items-center gap-2">
                   <span className={`text-xs px-2 py-0.5 rounded ${pm.isActive ? 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-900' : 'bg-muted text-muted-foreground'}`}>{pm.isActive ? t('statusActive') : t('statusDisabled')}</span>
                    <button
-                    className="px-3 py-1.5 border border-gray-300 dark:border-border rounded-lg text-sm hover:bg-muted text-foreground transition"
+                    className="px-3 py-1.5 border border-gray-300 dark:border-border rounded-lg text-base sm:text-xl hover:bg-muted text-foreground transition"
                      onClick={async () => {
                        await togglePaymentMethod(pm._id, !pm.isActive);
                        const refreshed = await getAllPaymentMethods();

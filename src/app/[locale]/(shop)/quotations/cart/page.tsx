@@ -54,7 +54,7 @@ export default function QuoteCartPage() {
                 <div className="p-6 rounded-full bg-muted">
                     <ShoppingBag size={48} className="text-muted-foreground" />
                 </div>
-                <h1 className="text-xl font-bold italic uppercase tracking-tighter">{t("empty")}</h1>
+                <h1 className="text-xl font-bold  uppercase tracking-tighter">{t("empty")}</h1>
                 <Button variant="outline" onClick={() => router.push('/')}>{t("backToStore") || "Continue Shopping"}</Button>
             </div>
         );
@@ -64,7 +64,7 @@ export default function QuoteCartPage() {
         <div className="container mx-auto py-6 md:py-10 px-4 pb-32 md:pb-10" dir={isAr ? "rtl" : "ltr"}>
             {/* Header Section */}
             <header className="mb-8 flex flex-col gap-2">
-                <h1 className="text-3xl md:text-5xl font-black italic uppercase tracking-tighter text-foreground">
+                <h1 className="text-3xl md:text-5xl font-black  uppercase tracking-tighter text-foreground">
                     {t("cartTitle")}
                 </h1>
                 <div className="h-1 w-20 bg-primary" />
@@ -96,7 +96,7 @@ export default function QuoteCartPage() {
                                 <div className="flex-1 flex flex-col justify-between h-full min-w-0">
                                     <div className="flex justify-between items-start gap-2">
                                         <div>
-                                            <h3 className="font-black uppercase italic tracking-tight text-sm md:text-lg truncate max-w-[150px] md:max-w-none">
+                                            <h3 className="font-black uppercase  tracking-tight text-sm md:text-lg truncate max-w-[150px] md:max-w-none">
                                                 {productName}
                                             </h3>
                                             <p className="text-primary font-bold text-sm md:text-base mt-1">
@@ -146,7 +146,7 @@ export default function QuoteCartPage() {
                     <div className="glass-panel p-6 rounded-[--radius] bg-card space-y-6">
                         <div className="flex items-center gap-2 mb-2">
                             <FileText size={18} className="text-primary" />
-                            <h2 className="text-lg font-black uppercase italic tracking-tighter">{t("notes")}</h2>
+                            <h2 className="text-lg font-black uppercase  tracking-tighter">{t("notes")}</h2>
                         </div>
                         <textarea 
                             className="w-full p-4 border rounded-xl min-h-[100px] bg-background text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"

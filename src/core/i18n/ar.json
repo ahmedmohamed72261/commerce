@@ -163,8 +163,36 @@
       "tax": "الضريبة",
       "total": "الإجمالي",
       "checkout": "إتمام الشراء",
-      "clearCart": "مسح السلة"
+    "clearCart": "مسح السلة",
+    "loginRequired": "يرجى تسجيل الدخول للمتابعة"
     }
+  },
+  "AdminCoupons": {
+    "title": "الكوبونات",
+    "subtitle": "إدارة كوبونات الخصم والعروض الترويجية",
+    "addNew": "إضافة كوبون",
+    "searchPlaceholder": "بحث عن كوبون...",
+    "code": "الكود",
+    "discount": "الخصم",
+    "usage": "الاستخدام",
+    "expiry": "تاريخ الانتهاء",
+    "status": "الحالة",
+    "actions": "إجراءات",
+    "empty": "لا توجد كوبونات",
+    "createTitle": "إنشاء كوبون جديد",
+    "editTitle": "تعديل الكوبون",
+    "cancel": "إلغاء",
+    "create": "إنشاء",
+    "update": "تحديث",
+    "couponCode": "كود الكوبون",
+    "discountValue": "قيمة الخصم (%)",
+    "usageLimit": "حد الاستخدام",
+    "minOrderAmount": "الحد الأدنى للطلب",
+    "maxDiscount": "الحد الأقصى للخصم",
+    "expiryDate": "تاريخ الانتهاء",
+    "active": "نشط",
+    "inactive": "غير نشط",
+    "deleteConfirm": "حذف الكوبون"
   },
   "Wishlist": {
     "title": "المفضلة",
@@ -221,7 +249,8 @@
       "totalRevenue": "إجمالي الإيرادات",
       "subscriptions": "الاشتراكات",
       "sales": "المبيعات",
-      "activeNow": "نشط الآن"
+      "activeNow": "نشط الآن",
+      "products": "المنتجات"
     },
     "latestOrdersTitle": "أحدث الطلبات",
     "latestOrdersEmpty": "لا توجد طلبات لعرضها.",
@@ -350,7 +379,8 @@
     "storefront": "واجهة المتجر",
     "banners": "البانرات",
     "settings": "الإعدادات",
-    "logout": "تسجيل الخروج"
+    "logout": "تسجيل الخروج",
+    "contacts": "رسائل الاتصال"
   },
   "Uploader": {
     "clickToUploadImage": "اضغط لرفع الصورة",
@@ -386,8 +416,7 @@
     "categoryInfo": "معلومات التصنيف",
     "brandInfo": "معلومات العلامة",
     "categoryImage": "صورة التصنيف",
-    "brandImage": "صورة العلامة"
-    ,
+    "brandImage": "صورة العلامة",
     "attributes": "الخصائص",
     "attributeKey": "مفتاح الخاصية",
     "attributeValue": "قيمة الخاصية",

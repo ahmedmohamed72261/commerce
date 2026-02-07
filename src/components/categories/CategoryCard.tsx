@@ -52,7 +52,7 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
       <div className="flex-1 flex flex-col px-1">
         <div className="flex justify-between items-start">
           <div className="space-y-2">
-            <h3 className="md:text-2xl text-sm font-black uppercase italic tracking-tighter group-hover:text-red-600 dark:group-hover:text-primary transition-colors duration-300">
+            <h3 className="md:text-2xl text-sm font-black uppercase  tracking-tighter group-hover:text-red-600 dark:group-hover:text-primary transition-colors duration-300">
               {category.name}
             </h3>
             {category.tag && (
@@ -64,7 +64,7 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
           {viewMode === 'list' && category.count && (
             <div className="text-right">
               <p className="text-[10px] font-black text-slate-300 dark:text-muted-foreground uppercase tracking-[0.3em] mb-1 leading-none">Products</p>
-              <p className="text-3xl font-black italic text-slate-900 dark:text-foreground leading-none tracking-tighter">{category.count}</p>
+              <p className="text-3xl font-black  text-slate-900 dark:text-foreground leading-none tracking-tighter">{category.count}</p>
             </div>
           )}
         </div>
@@ -82,14 +82,8 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
         {/* ACTION BUTTON */}
         <div className={`mt-auto py-2 flex items-center justify-between 
           ${viewMode === 'grid' ? 'border-t border-slate-100 dark:border-border' : 'hidden md:flex'}`}>
-          {viewMode === 'grid' && (
-            <div className="flex items-center gap-1 bg-slate-50 dark:bg-muted px-2 py-1 rounded-lg">
-              <Star size={10} fill="#facc15" className="text-yellow-400" />
-              <span className="text-[10px] font-black text-slate-600 dark:text-foreground">4.9</span>
-            </div>
-          )}
-          <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-950 dark:text-foreground group-hover:text-red-600 dark:group-hover:text-primary transition-all duration-300">
-            <div className="bg-slate-100 dark:bg-muted p-2 rounded-full group-hover:bg-red-600 dark:group-hover:bg-primary group-hover:text-white transition-all duration-300">
+          <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-950 text-white group-hover:text-red-600 dark:group-hover:text-primary transition-all duration-300">
+            <div className="bg-red-600  p-2 rounded-full group-hover:bg-red-400 dark:group-hover:bg-primary group-hover:text-white transition-all duration-300">
               <ArrowRight size={14} className="group-hover:translate-x-0.5" />
             </div>
           </div>

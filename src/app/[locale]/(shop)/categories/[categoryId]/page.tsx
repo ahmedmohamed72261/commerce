@@ -12,6 +12,7 @@ import { getFilters } from '@/services/products.service';
 import { useProductsStore } from '@/store/products';
 import { ProductCard } from '@/components/products/ProductCard';
 import { ProductCardSkeleton } from '@/components/products/ProductCardSkeleton';
+import { Pagination } from '@/components/shop/pagination';
 import { useCart } from '@/store/cart';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
@@ -204,15 +205,9 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
     fetch({ locale: locale as "en" | "ar", category: categoryId, filters: mapped, page: 1, pageSize });
   };
 
-  const handleLoadMore = async () => {
-    if (pagination.page < pagination.totalPages) {
-      await setPage(pagination.page + 1);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-[#F4F5F7] dark:bg-background text-slate-900 dark:text-foreground font-sans antialiased">
-      <div className="max-w-[1600px] mx-auto px-2 sm:pt-9">
+      <div className="px-2 sm:pt-9">
         
         {/* CATEGORY HEADER */}
         {categoryProductsLoading ? (
@@ -237,7 +232,7 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
                 </div>
               )}
               <div className="flex-1">
-                <h1 className="text-sm md:text-4xl font-black uppercase italic tracking-tighter text-slate-950 dark:text-foreground mb-2">
+                <h1 className="text-sm md:text-4xl font-black uppercase  tracking-tighter text-slate-950 dark:text-foreground mb-2">
                   {categoryProducts.category.name}
                 </h1>
                 <p className="text-slate-400 dark:text-muted-foreground font-bold flex gap-2 text-sm">
@@ -315,7 +310,7 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2 gap-y-4">
+                <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2 sm:gap-5 gap-y-4">
                   {items.map(product => (
                     <ProductCard 
                       key={product.id} 
@@ -327,31 +322,12 @@ const CategoryProductsClient = ({ locale, categoryId }: { locale: string; catego
                   ))}
                 </div>
 
-                {pagination.page < pagination.totalPages && (
-                  <div className="mt-12 p-1 bg-[#0F172A] dark:bg-card rounded-[2.5rem] overflow-hidden shadow-2xl">
-                    <div className="bg-white dark:bg-muted rounded-[2.4rem] p-12 text-center relative">
-                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-red-600 dark:bg-primary rounded-b-full shadow-[0_4px_10px_rgba(220,38,38,0.3)]" />
-                      
-                      <div className="flex flex-col items-center gap-6">
-                        <div className="space-y-1">
-                          <h4 className="text-[11px] font-black text-slate-400 dark:text-muted-foreground uppercase tracking-[0.3em]">
-                            Registry_Sync_Status
-                          </h4>
-                          <p className="text-sm font-bold text-[#0F172A] dark:text-foreground">
-                            Displayed: {items.length} <span className="text-slate-300">/</span> Total: {pagination.total}
-                          </p>
-                        </div>
-
-                        <Button 
-                          onClick={handleLoadMore}
-                          disabled={loading}
-                          className="h-16 px-16 rounded-2xl bg-[#0F172A] dark:bg-primary text-white font-black text-xs tracking-[0.2em] uppercase hover:bg-red-600 dark:hover:bg-red-700 hover:shadow-[0_20px_40px_-12px_rgba(220,38,38,0.4)] transition-all flex gap-4 active:scale-95 disabled:opacity-50"
-                        >
-                          {loading ? <RefreshCcw size={18} className="animate-spin" /> : "Load More"}
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
+                {pagination.totalPages > 1 && (
+                  <Pagination
+                    page={pagination.page}
+                    totalPages={pagination.totalPages}
+                    onPageChange={setPage}
+                  />
                 )}
               </>
             )}

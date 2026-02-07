@@ -45,7 +45,7 @@ export default function MyQuotationsPage() {
                         {isAr ? "سجل الطلبات" : "Order History"}
                     </span>
                 </div>
-                <h1 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-foreground leading-none">
+                <h1 className="text-4xl md:text-6xl font-black  uppercase tracking-tighter text-foreground leading-none">
                     {t("myQuotations")}
                 </h1>
             </header>
@@ -59,7 +59,7 @@ export default function MyQuotationsPage() {
                     >
                         {/* 1. Status & ID Section */}
                         <div className="flex flex-col items-center md:items-start gap-1 w-full md:w-48 shrink-0">
-                            <span className="text-primary font-black text-xl tracking-tighter italic">
+                            <span className="text-primary font-black text-xl tracking-tighter ">
                                 #{q.quotationCode || (q.id || q._id).slice(-6).toUpperCase()}
                             </span>
                             <div className="flex items-center gap-2 text-muted-foreground">
@@ -86,7 +86,7 @@ export default function MyQuotationsPage() {
                                 </div>
                             </div>
                             {q.notes && (
-                                <p className="text-xs text-muted-foreground bg-muted/50 p-3 rounded-lg italic border-l-2 border-primary/30 max-w-md mx-auto md:mx-0">
+                                <p className="text-xs text-muted-foreground bg-muted/50 p-3 rounded-lg  border-l-2 border-primary/30 max-w-md mx-auto md:mx-0">
                                     "{q.notes}"
                                 </p>
                             )}
@@ -116,7 +116,7 @@ export default function MyQuotationsPage() {
                         <FileText size={64} className="text-muted-foreground/20" />
                         <div className="text-center space-y-2">
                             <h3 className="text-xl font-black uppercase tracking-tighter">{t("empty")}</h3>
-                            <p className="text-muted-foreground text-sm tracking-widest uppercase italic">Start requesting items to see your history here.</p>
+                            <p className="text-muted-foreground text-sm tracking-widest uppercase ">Start requesting items to see your history here.</p>
                         </div>
                         <Link href="/">
                             <Button className="bg-primary text-white px-10 rounded-xl font-black uppercase tracking-widest text-[10px]">

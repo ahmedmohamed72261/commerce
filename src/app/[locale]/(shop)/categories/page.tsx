@@ -26,10 +26,10 @@ const CategoriesPageClient = ({ locale }: { locale: string }) => {
         ]}
       />
 
-      <main className="max-w-[1440px] mx-auto px-3 py-3">
+      <main className="px-3 py-3">
         <header className="mb-2 flex flex-row justify-between items-center px-3 gap-6">
           <div className="space-y-4">
-            <h1 className="md:text-2xl text-xl flex items-center gap-2 rtl:flex-row-reverse font-black uppercase italic tracking-tighter leading-none text-slate-950 dark:text-foreground">
+            <h1 className="md:text-2xl text-xl flex items-center gap-2 rtl:flex-row-reverse font-black uppercase  tracking-tighter leading-none text-slate-950 dark:text-foreground">
               {t('categories')} <span className="text-red-600 dark:text-primary drop-shadow-sm">{t('list')}</span>
             </h1>
           </div>

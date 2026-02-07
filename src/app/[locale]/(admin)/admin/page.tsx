@@ -3,30 +3,38 @@ import React, { useEffect, useState } from 'react';
 import { ShoppingCart, DollarSign, Box, Users, BarChart2, ArrowUpRight, Clock, User, Tag } from 'lucide-react';
 import { StatCard, WhiteCard } from '@/components/admin/ui/cards';
 import { getOrders } from '@/services/orders.service';
+import { getDashboardStatistics } from '@/services/admin.service';
  
 import { useTranslations, useLocale } from 'next-intl';
 import { formatCurrency } from '@/utils/utils';
 
 export default function AdminDashboard() {
   const [latestOrders, setLatestOrders] = useState<any[]>([]);
-  // Payment Methods section removed from dashboard
-
+  const [stats, setStats] = useState<{ totalOrders: number; totalProducts: number; totalUsers: number } | null>(null);
+  
   const t = useTranslations('AdminDashboard');
   const locale = useLocale() as "en" | "ar";
 
   useEffect(() => {
-    async function fetchLatest() {
+    async function fetchData() {
       try {
-        const response = await getOrders();
-        if (response.data && Array.isArray(response.data)) {
-           setLatestOrders(response.data.slice(0, 5));
+        const [ordersRes, statsRes] = await Promise.all([
+          getOrders(),
+          getDashboardStatistics()
+        ]);
+
+        if (ordersRes.data && Array.isArray(ordersRes.data)) {
+           setLatestOrders(ordersRes.data.slice(0, 5));
         }
-        // Payment Methods section removed from dashboard
+        
+        if (statsRes.success && statsRes.data) {
+          setStats(statsRes.data);
+        }
       } catch (e) {
         console.error(e);
       }
     }
-    fetchLatest();
+    fetchData();
   }, []);
 
   return (
@@ -37,10 +45,10 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard label={t('stats.totalRevenue')} value={formatCurrency(45231.89, locale)} icon={DollarSign} color="bg-gradient-to-br from-green-500 to-green-600" trend="+20.1% from last month" />
-        <StatCard label={t('stats.subscriptions')} value="+2350" icon={Users} color="bg-gradient-to-br from-blue-500 to-blue-600" trend="+180.1% from last month" />
-        <StatCard label={t('stats.sales')} value="+12,234" icon={ShoppingCart} color="bg-gradient-to-br from-orange-500 to-orange-600" trend="+19% from last month" />
-        <StatCard label={t('stats.activeNow')} value="+573" icon={BarChart2} color="bg-gradient-to-br from-purple-500 to-purple-600" trend="+201 since last hour" />
+        {/* <StatCard label={t('stats.totalRevenue')} value={formatCurrency(0, locale)} icon={DollarSign} color="bg-gradient-to-br from-green-500 to-green-600" trend="-" /> */}
+        <StatCard label={t('stats.subscriptions')} value={stats?.totalUsers?.toString() || "0"} icon={Users} color="bg-gradient-to-br from-blue-500 to-blue-600" trend="Total Users" />
+        <StatCard label={t('stats.sales')} value={stats?.totalOrders?.toString() || "0"} icon={ShoppingCart} color="bg-gradient-to-br from-orange-500 to-orange-600" trend="Total Orders" />
+        <StatCard label={t('stats.products')} value={stats?.totalProducts?.toString() || "0"} icon={Box} color="bg-gradient-to-br from-purple-500 to-purple-600" trend="Active Products" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

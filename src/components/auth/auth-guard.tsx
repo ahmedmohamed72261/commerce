@@ -8,6 +8,7 @@ import { useBrandsStore } from "@/store/brands";
 import { useCategoriesStore } from "@/store/categories";
 
 const PUBLIC_PATHS = ["/", "/login", "/signup", "/forgot-password", "/reset-password", "/verify-code"];
+const PUBLIC_PREFIXES = ["/products", "/categories", "/cart"];
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -29,7 +30,9 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}/, "") || "/";
     
     // Check if current path requires auth
-    const isPublic = PUBLIC_PATHS.some(p => pathWithoutLocale === p);
+    const isPublic = 
+      PUBLIC_PATHS.some(p => pathWithoutLocale === p) ||
+      PUBLIC_PREFIXES.some(p => pathWithoutLocale.startsWith(p));
 
     // Avoid redirect loop while token exists in storage but store isn't hydrated yet
     const hasClientToken = typeof window !== "undefined" && !!localStorage.getItem("auth_token");

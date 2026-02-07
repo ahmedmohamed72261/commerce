@@ -104,7 +104,7 @@ export const AddressesTab: React.FC<AddressesTabProps> = ({
                   </p>
 
                   {defaultAddress.additionalInfo && (
-                    <p className="mt-2 text-xs italic text-slate-500">
+                    <p className="mt-2 text-xs  text-slate-500">
                       “{defaultAddress.additionalInfo}”
                     </p>
                   )}

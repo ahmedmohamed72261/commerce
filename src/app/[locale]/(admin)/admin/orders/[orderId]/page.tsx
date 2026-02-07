@@ -128,7 +128,7 @@ export default function AdminOrderDetailsPage() {
           <img src="/images/logo-light.png" alt="Logo" className="h-10 w-auto object-contain" />
           <h1 className="text-2xl font-bold uppercase tracking-widest">DW4Computer</h1>
         </div>
-        <p className="text-sm text-gray-500">{t("orderDetails")}</p>
+        <p className="text-base sm:text-xl text-gray-500">{t("orderDetails")}</p>
       </div>
 
       {/* Order Content */}
@@ -146,15 +146,15 @@ export default function AdminOrderDetailsPage() {
           </div>
           <div className="flex flex-col items-end gap-2 print:flex-row print:items-center print:gap-4">
               <span className={`
-                px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wide print:border print:px-2 print:py-0 print:text-[10px] print:h-fit
+                px-4 py-1.5 rounded-full text-base sm:text-xl font-bold uppercase tracking-wide print:border print:px-2 print:py-0 print:text-[10px] print:h-fit
                 ${order.status === 'delivered' ? 'bg-green-100 text-green-700 border border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-900/30' : 
                   order.status === 'pending' ? 'bg-yellow-100 text-yellow-700 border border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-900/30' : 
                   order.status === 'cancelled' ? 'bg-red-100 text-red-700 border border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-900/30' : 'bg-slate-100 text-slate-700 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700'}
               `}>
                {statusLabel(order.status)}
              </span>
-             <p className="text-sm font-medium text-muted-foreground print:text-xs">
-               {t("totalLabel")}: <span className="text-xl font-bold text-foreground print:text-sm">{formatCurrency(Number(order.totalAmount) || 0, locale as "en" | "ar")}</span>
+             <p className="text-base sm:text-xl font-medium text-muted-foreground print:text-xs">
+               {t("totalLabel")}: <span className="text-xl font-bold text-foreground print:text-base sm:text-xl">{formatCurrency(Number(order.totalAmount) || 0, locale as "en" | "ar")}</span>
              </p>
           </div>
         </div>
@@ -168,16 +168,16 @@ export default function AdminOrderDetailsPage() {
             </h3>
             <div className="bg-muted/50 rounded-lg p-4 space-y-3 print:bg-transparent print:p-3 print:border print:border-gray-200 print:space-y-0 print:text-[10px]">
               <div className="grid grid-cols-[100px_1fr] gap-2 print:grid-cols-[60px_1fr]">
-                <span className="text-sm text-muted-foreground print:text-[10px]">{t("name")}:</span>
-                <span className="text-sm font-medium print:text-[10px]">{userData.firstName} {userData.lastName}</span>
+                <span className="text-base sm:text-xl text-muted-foreground print:text-[10px]">{t("name")}:</span>
+                <span className="text-base sm:text-xl font-medium print:text-[10px]">{userData.firstName} {userData.lastName}</span>
               </div>
               <div className="grid grid-cols-[100px_1fr] gap-2 print:grid-cols-[60px_1fr]">
-                <span className="text-sm text-muted-foreground print:text-[10px]">{t("email")}:</span>
-                <span className="text-sm font-medium print:text-[10px]">{userData.email}</span>
+                <span className="text-base sm:text-xl text-muted-foreground print:text-[10px]">{t("email")}:</span>
+                <span className="text-base sm:text-xl font-medium print:text-[10px]">{userData.email}</span>
               </div>
               <div className="grid grid-cols-[100px_1fr] gap-2 print:grid-cols-[60px_1fr]">
-                <span className="text-sm text-muted-foreground print:text-[10px]">{t("phone")}:</span>
-                <span className="text-sm font-medium print:text-[10px]">{userData.phone}</span>
+                <span className="text-base sm:text-xl text-muted-foreground print:text-[10px]">{t("phone")}:</span>
+                <span className="text-base sm:text-xl font-medium print:text-[10px]">{userData.phone}</span>
               </div>
             </div>
           </div>
@@ -190,27 +190,27 @@ export default function AdminOrderDetailsPage() {
             </h3>
             <div className="bg-muted/50 rounded-lg p-4 space-y-3 print:bg-transparent print:p-3 print:border print:border-gray-200 print:space-y-0 print:text-[10px]">
               <div className="grid grid-cols-[100px_1fr] gap-2 print:grid-cols-[60px_1fr]">
-                <span className="text-sm text-muted-foreground print:text-[10px]">{t("address")}:</span>
-                <span className="text-sm font-medium print:text-[10px]">
+                <span className="text-base sm:text-xl text-muted-foreground print:text-[10px]">{t("address")}:</span>
+                <span className="text-base sm:text-xl font-medium print:text-[10px]">
                   {shipping.building ? `${t("buildingShort")} ${shipping.building}, ` : ''}
                   {shipping.street}
                 </span>
               </div>
               <div className="grid grid-cols-[100px_1fr] gap-2 print:grid-cols-[60px_1fr]">
-                <span className="text-sm text-muted-foreground print:text-[10px]">{t("city")}:</span>
-                <span className="text-sm font-medium print:text-[10px]">{shipping.city}</span>
+                <span className="text-base sm:text-xl text-muted-foreground print:text-[10px]">{t("city")}:</span>
+                <span className="text-base sm:text-xl font-medium print:text-[10px]">{shipping.city}</span>
               </div>
               <div className="grid grid-cols-[100px_1fr] gap-2 print:grid-cols-[60px_1fr]">
-                <span className="text-sm text-muted-foreground print:text-[10px]">{t("details")}:</span>
-                <span className="text-sm font-medium print:text-[10px]">
+                <span className="text-base sm:text-xl text-muted-foreground print:text-[10px]">{t("details")}:</span>
+                <span className="text-base sm:text-xl font-medium print:text-[10px]">
                   {shipping.floor ? `${t("floor")} ${shipping.floor}, ` : ''}
                   {shipping.apartment ? `${t("apartmentShort")} ${shipping.apartment}` : ''}
                 </span>
               </div>
               {shipping.additionalInfo && (
                 <div className="grid grid-cols-[100px_1fr] gap-2 print:grid-cols-[60px_1fr]">
-                  <span className="text-sm text-muted-foreground print:text-[10px]">{t("note")}:</span>
-                  <span className="text-sm font-medium italic print:text-[10px]">{shipping.additionalInfo}</span>
+                  <span className="text-base sm:text-xl text-muted-foreground print:text-[10px]">{t("note")}:</span>
+                  <span className="text-base sm:text-xl font-medium print:text-[10px]">{shipping.additionalInfo}</span>
                 </div>
               )}
             </div>
@@ -224,7 +224,7 @@ export default function AdminOrderDetailsPage() {
             {t("orderItems")}
           </h3>
           <div className="border border-border rounded-lg overflow-hidden overflow-x-auto print:border-gray-300">
-            <table className="w-full text-left text-sm min-w-[600px]">
+            <table className="w-full text-left text-base sm:text-xl min-w-[600px]">
               <thead className="bg-muted text-muted-foreground font-medium uppercase text-xs print:bg-gray-100 print:text-black">
                 <tr>
                   <th className="px-6 py-4 print:px-2 print:py-1 print:text-[10px]">{t("product")}</th>

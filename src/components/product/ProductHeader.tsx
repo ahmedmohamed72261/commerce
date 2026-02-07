@@ -9,16 +9,16 @@ type Props = { product: Product };
 export const ProductHeader: React.FC<Props> = ({ product }) => {
   const tTable = useTranslations("AdminTable");
   return (
-    <div className="space-y-2 mb-4">
+    <div className="space-y-2 mb-2">
       {product.brand && (
-        <div className="flex items-center gap-2 text-red-600 dark:text-primary font-bold text-xs uppercase tracking-wide mb-1">
-          <Package size={14} /> {tTable("brand")}:
+        <div className="flex items-center gap-2 text-red-600 dark:text-primary font-bold text-sm sm:text-xl uppercase tracking-wide mb-1">
+          {/* <Package size={14} /> {tTable("brand")}: */}
           <span className="px-2 py-0.5 rounded-full bg-red-50 dark:bg-primary/15 text-red-700 dark:text-primary font-black tracking-widest">
             {product.brand}
           </span>
         </div>
       )}
-      <h1 className="text-xl sm:text-2xl md:text-3xl font-black uppercase italic leading-tight text-foreground">
+      <h1 className="text-xl sm:text-2xl md:text-3xl font-black uppercase leading-tight text-foreground">
         {product.title}
       </h1>
       <div className="flex items-center gap-2">

@@ -50,7 +50,7 @@ export function Footer() {
 
       {/* Main Dark Section */}
       <div className="bg-[#0b0d17] text-gray-400 py-16">
-        <div className="container mx-auto px-4 sm:px-8 md:px-12 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="container mx-auto px-4 sm:px-8 md:px-12 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8">
           
           {/* Column 1: About */}
           <div>
@@ -90,21 +90,6 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 4: Newsletter */}
-          <div>
-            <h3 className="text-white text-lg font-bold mb-6">{t("newsletter")}</h3>
-            <p className="mb-4 text-sm">{t("newsletterDesc")}</p>
-            <div className="flex gap-2">
-              <input type="email" placeholder="Enter your email" className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-sm focus:border-red-600 outline-none transition" />
-              <button className="bg-red-600 text-white px-4 rounded hover:bg-red-700 transition">Go</button>
-            </div>
-            
-            {/* Payment Icons */}
-            {/* <div className="flex items-center gap-2 mt-8">
-               <img src="/images/game-cards.svg" alt="Payment Methods" className="h-8 bg-white rounded p-1" />
-            </div> */}
-          </div>
-
         </div>
       </div>
 
@@ -119,10 +104,10 @@ export function Footer() {
           
           <div className="flex items-center gap-6">
              <div className="flex items-center gap-4">
-               <Link href="#" className="bg-blue-600 p-2 rounded-full text-white hover:bg-blue-700 transition"><Facebook className="w-4 h-4" /></Link>
+               {/* <Link href="#" className="bg-blue-600 p-2 rounded-full text-white hover:bg-blue-700 transition"><Facebook className="w-4 h-4" /></Link>
                <Link href="#" className="bg-sky-500 p-2 rounded-full text-white hover:bg-sky-600 transition"><Twitter className="w-4 h-4" /></Link>
-               <Link href="#" className="bg-red-600 p-2 rounded-full text-white hover:bg-red-700 transition"><Youtube className="w-4 h-4" /></Link>
-               <Link href="#" className="bg-pink-600 p-2 rounded-full text-white hover:bg-pink-700 transition"><Instagram className="w-4 h-4" /></Link>
+               <Link href="#" className="bg-red-600 p-2 rounded-full text-white hover:bg-red-700 transition"><Youtube className="w-4 h-4" /></Link> */}
+               <Link href="https://www.instagram.com/dw4computer/" target="_blank" className="bg-pink-600 p-2 rounded-full text-white hover:bg-red-700 transition"><Instagram className="w-8 h-8" /></Link>
              </div>
              
              <button 

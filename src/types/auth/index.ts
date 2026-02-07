@@ -20,11 +20,13 @@ export type RegisterArgs = {
   phone: string;
   email: string;
   password: string;
+  guestId?: string;
 };
 
 export type LoginArgs = {
   phone: string;
   password: string;
+  guestId?: string;
 };
 
 export type ForgotPasswordArgs = {
@@ -40,4 +42,3 @@ export type RegisterResponse = ApiResponse<AuthData>;
 export type LoginResponse = ApiResponse<AuthData>;
 export type ForgotPasswordResponse = ApiResponse<undefined>;
 export type ResetPasswordResponse = ApiResponse<undefined>;
-

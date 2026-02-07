@@ -7,6 +7,7 @@ export interface SuggestedProduct {
   name: string | { en: string; ar: string };
   image?: string;
   description?: string;
+  slug?: string;
 }
 
 export function useProductSearch() {

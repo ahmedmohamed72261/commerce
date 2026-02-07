@@ -35,7 +35,7 @@ export function Breadcrumb({
         className
       )}
     >
-      <div className="container mx-auto px-4 sm:px-8 md:px-12">
+      <div className="px-4 sm:px-8 md:px-12">
         <ol className="flex items-center flex-wrap gap-2 text-xs sm:text-sm">
           {/* Home Icon - Always First */}
           {showHome && (

@@ -40,7 +40,8 @@ interface OrdersState {
     items: OrderItem[],
     paymentMethod: "cash" | "card" | "online",
     shippingAddress: ShippingAddress,
-    notes?: string
+    notes?: string,
+    couponCode?: string
   ) => Promise<Order | null>;
   getOrders: () => Promise<Order[]>;
   getOrderById: (orderId: string) => Promise<Order | null>;
@@ -52,7 +53,7 @@ export const useOrdersStore = create<OrdersState>((set) => ({
   loading: false,
   error: null,
 
-  async createOrder(items, paymentMethod, shippingAddress, notes) {
+  async createOrder(items, paymentMethod, shippingAddress, notes, couponCode) {
     set({ loading: true, error: null });
     try {
       const res = await http.post("/orders", {
@@ -60,6 +61,7 @@ export const useOrdersStore = create<OrdersState>((set) => ({
         paymentMethod,
         shippingAddress,
         notes,
+        couponCode,
       });
       const data = res.data?.data || res.data;
       set({ currentOrder: data, loading: false });

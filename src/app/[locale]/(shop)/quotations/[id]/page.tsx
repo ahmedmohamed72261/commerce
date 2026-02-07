@@ -54,7 +54,7 @@ export default function QuotationDetailsPage() {
         {/* Header: Compact & Professional */}
         <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-4 md:mb-6 pb-4 md:pb-6 border-b-4 border-foreground gap-3">
           <div className="space-y-1">
-            <h2 className="text-xl md:text-2xl font-black tracking-tighter text-foreground italic">{siteConfig.name}</h2>
+            <h2 className="text-xl md:text-2xl font-black tracking-tighter text-foreground ">{siteConfig.name}</h2>
             <div className="flex flex-wrap items-center gap-2 md:gap-4 text-[9px] font-bold text-muted-foreground uppercase tracking-widest">
               <span className="flex items-center gap-1"><Globe size={10} className="text-primary" /> {new URL(siteConfig.url).host}</span>
               <span className="flex items-center gap-1"><Mail size={10} className="text-primary" /> info@{new URL(siteConfig.url).host}</span>
@@ -107,7 +107,7 @@ export default function QuotationDetailsPage() {
                         ? (item.productName || item.product?.name)
                         : ((item.productName || item.product?.name)?.[locale === "ar" ? "ar" : "en"] ?? "")}
                     </p>
-                    <p className="text-[9px] md:text-[10px] text-center text-muted-foreground mt-0.5 leading-tight italic">{item.productDescription || "Service implementation."}</p>
+                    <p className="text-[9px] md:text-[10px] text-center text-muted-foreground mt-0.5 leading-tight ">{item.productDescription || "Service implementation."}</p>
                   </td>
                   <td className="p-3 md:p-4 text-center font-mono text-xs md:text-sm border-r border-slate-200">{item.quantity}</td>
                   <td className="p-3 md:p-4 text-center font-mono text-xs md:text-sm text-muted-foreground border-r border-slate-200">{formatCurrency(item.unitPriceSnapshot || item.productPrice, locale)}</td>
@@ -125,7 +125,7 @@ export default function QuotationDetailsPage() {
         <div className="mt-4 md:mt-6 flex flex-col md:flex-row md:justify-between md:items-end gap-4 break-inside-avoid">
           <div className="md:max-w-[340px] border-l-2 border-primary pl-4 py-1">
              <p className="text-[11px] font-black text-foreground uppercase tracking-widest mb-0.5">{t("notes")}</p>
-             <p className="text-[10px] text-muted-foreground italic leading-tight">
+             <p className="text-[10px] text-muted-foreground  leading-tight">
                {locale === "ar" 
                  ? "نشكركم على اختياركم لنا. لأي استفسار، يرجى التواصل مع الدعم."
                  : "Thank you for your business. For any inquiries, please contact support."}

@@ -76,7 +76,7 @@ export function BannerCard({
       <div className="absolute inset-0 bg-black/40 group-hover:bg-red-600/60 transition-colors duration-500 flex items-center justify-center text-center p-12">
         <div>
           <h3 className="text-white text-3xl font-black uppercase leading-none mb-2">{title}</h3>
-          <p className="text-white/80 text-xs font-serif italic">{count} Exclusives</p>
+          <p className="text-white/80 text-xs font-serif ">{count} Exclusives</p>
         </div>
       </div>
     </Wrapper>
@@ -92,7 +92,7 @@ export function BannerCard({
         <span className="text-red-600 text-[10px] font-mono font-bold uppercase tracking-widest">{count} Units</span>
       </div>
       <div className="absolute bottom-8 left-8 rtl:left-auto rtl:right-8">
-        <h3 className="text-white text-5xl font-black uppercase italic tracking-tighter leading-none">{title}</h3>
+        <h3 className="text-white text-5xl font-black uppercase  tracking-tighter leading-none">{title}</h3>
         <Zap className="text-white mt-4 opacity-0 group-hover:opacity-100 transition-opacity" />
       </div>
     </Wrapper>
@@ -154,7 +154,7 @@ export function BannerCard({
               <div className="h-[2px] w-8 bg-red-600" />
               <span className="text-[10px] font-mono text-red-500 uppercase tracking-widest">Innovation</span>
             </div>
-            <h3 className="text-white text-3xl font-black italic uppercase leading-none">{title}</h3>
+            <h3 className="text-white text-3xl font-black  uppercase leading-none">{title}</h3>
             <p className="text-white/40 text-[9px] mt-4 font-mono uppercase">Inventory Status: {count} Units Locked</p>
           </div>
         </div>
@@ -188,7 +188,7 @@ export function BannerCard({
     <Wrapper href={href as string} className={cn(common, "bg-white border-4 border-black")}>
       <img src={image} className="absolute inset-0 w-full h-[450px] object-cover" alt={title} />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-24 bg-red-600 -rotate-12 flex items-center justify-center border-y-4 border-black group-hover:-rotate-0 transition-transform duration-500">
-        <h3 className="text-white text-3xl font-black uppercase tracking-tighter italic">{title}</h3>
+        <h3 className="text-white text-3xl font-black uppercase tracking-tighter ">{title}</h3>
       </div>
       <div className="absolute bottom-4 right-4 bg-black text-white p-2">
         <ArrowUpRight size={20} />
@@ -302,7 +302,7 @@ export function BannerCard({
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-yellow-900/40" />
         <div className="relative h-full w-full flex flex-col items-center justify-center text-center px-6">
           <div className="w-10 h-[1px] bg-yellow-500 mb-6" />
-          <h3 className="text-yellow-500 text-3xl font-serif italic mb-2">{title}</h3>
+          <h3 className="text-yellow-500 text-3xl font-serif  mb-2">{title}</h3>
           <span className="text-yellow-500/40 text-[9px] uppercase tracking-[0.4em] font-bold">The {count} Selection</span>
           <div className="w-10 h-[1px] bg-yellow-500 mt-6" />
         </div>
@@ -326,16 +326,16 @@ export function BannerCard({
            </div>
            <div className="text-white flex flex-col items-end opacity-40 group-hover:opacity-100 transition-opacity">
               <span className="text-[10px] font-mono leading-none">QTY.LMT</span>
-              <span className="text-xl font-black italic leading-none">{count}</span>
+              <span className="text-xl font-black  leading-none">{count}</span>
            </div>
         </div>
 
         <div className="relative">
           {/* Shadow Text Effect */}
-          <h3 className="absolute -top-8 left-0 text-white/10 text-7xl font-black uppercase italic leading-none select-none group-hover:-top-10 transition-all">
+          <h3 className="absolute -top-8 left-0 text-white/10 text-7xl font-black uppercase  leading-none select-none group-hover:-top-10 transition-all">
             {title.split(' ')[0]}
           </h3>
-          <h3 className="relative text-white text-5xl font-black uppercase italic leading-none tracking-tighter z-10">
+          <h3 className="relative text-white text-5xl font-black uppercase  leading-none tracking-tighter z-10">
             {title}
           </h3>
           <div className="mt-6 flex items-center gap-4">
@@ -375,7 +375,7 @@ export function BannerCard({
         <div className="flex items-end justify-between">
           <div>
              <h3 className="text-black text-2xl font-black uppercase tracking-tighter">{title}</h3>
-             <p className="text-neutral-400 text-xs font-medium uppercase mt-1 italic">Exclusive Series — {count}</p>
+             <p className="text-neutral-400 text-xs font-medium uppercase mt-1 ">Exclusive Series — {count}</p>
           </div>
           <div className="bg-red-600 p-3 rounded-xl text-white group-hover:translate-x-2 transition-transform">
              <ArrowUpRight size={20} />

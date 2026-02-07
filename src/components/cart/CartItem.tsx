@@ -54,7 +54,7 @@ export const CartItem: React.FC<CartItemProps> = ({
       </button>
 
       {/* MAIN GRID */}
-      <div className="grid grid-cols-[72px_1fr] sm:grid-cols-[96px_1fr_auto] gap-3 sm:gap-5 items-center">
+      <div className="grid grid-cols-[72px_1fr] sm:grid-cols-[100px_2fr_120px_140px_100px] gap-3 sm:gap-6 items-center">
         {/* IMAGE */}
         <div className="relative w-18 h-18 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-slate-100 dark:bg-muted">
           {image && (
@@ -69,87 +69,67 @@ export const CartItem: React.FC<CartItemProps> = ({
 
         {/* INFO */}
         <div className="min-w-0">
-          <h3 className="font-black text-sm sm:text-base uppercase truncate dark:text-foreground">
+          <h3 className="font-black text-sm sm:text-base uppercase truncate dark:text-foreground" title={name}>
             {name}
           </h3>
+          {/* Attributes could go here */}
+          
+          {/* MOBILE PRICE & TOTAL */}
+          <div className="sm:hidden mt-1 space-y-1">
+             <p className="text-xs text-slate-400 dark:text-muted-foreground font-bold">
+              {formatCurrency(item.price, locale)}
+            </p>
+            <p className="text-base font-black text-red-600 dark:text-primary">
+              {formatCurrency(total, locale)}
+            </p>
+          </div>
+        </div>
 
-          <p className="text-xs sm:text-sm text-slate-400 dark:text-muted-foreground font-bold mt-1">
-            {formatCurrency(item.price, locale)}
-          </p>
-
-          {/* MOBILE TOTAL */}
-          <p className="sm:hidden mt-2 text-base font-black text-red-600 dark:text-primary">
-            {formatCurrency(total, locale)}
+        {/* DESKTOP PRICE */}
+        <div className="hidden sm:block text-center">
+          <p className="text-sm font-bold text-slate-500 dark:text-muted-foreground">
+             {formatCurrency(item.price, locale)}
           </p>
         </div>
 
-        {/* DESKTOP ACTIONS */}
-        <div className="hidden sm:flex items-center gap-4">
-          {/* QTY */}
+        {/* DESKTOP ACTIONS (QTY) */}
+        <div className="hidden sm:flex justify-center">
           <div className="flex items-center bg-slate-50 dark:bg-muted border border-slate-200 dark:border-border rounded-xl px-1">
             <button
               onClick={() => setQty((q) => Math.max(1, q - 1))}
-              className="h-8 w-8 flex items-center justify-center hover:bg-white dark:hover:bg-card rounded-lg"
+              className="h-8 w-8 flex items-center justify-center hover:bg-white dark:hover:bg-card rounded-lg transition-colors"
             >
               <Minus size={14} />
             </button>
 
-            <span className="px-3 font-black text-sm">
+            <span className="w-10 text-center font-black text-sm">
               {qty}
             </span>
 
             <button
               onClick={() => setQty((q) => q + 1)}
-              className="h-8 w-8 flex items-center justify-center hover:bg-white dark:hover:bg-card rounded-lg"
+              className="h-8 w-8 flex items-center justify-center hover:bg-white dark:hover:bg-card rounded-lg transition-colors"
             >
               <Plus size={14} />
             </button>
           </div>
-
-          {/* PRICE */}
-          <div className="min-w-[80px] text-right font-black text-lg dark:text-foreground">
-            {formatCurrency(total, locale)}
-          </div>
-
-          {/* UPDATE BUTTON */}
-          <button
-            onClick={() => onUpdateQuantity(item._id, qty)}
-            className="h-8 px-3 rounded-lg bg-slate-900 dark:bg-primary text-white text-xs font-black uppercase tracking-widest hover:bg-red-600 dark:hover:bg-red-700 transition-colors"
-          >
-            {isRTL ? "تحديث" : "Update"}
-          </button>
+           {/* Update Button if needed, or auto-update on effect */}
+           {qty !== item.quantity && (
+              <button 
+                onClick={() => onUpdateQuantity(item._id, qty)}
+                className="ml-2 text-xs font-bold text-blue-600 hover:underline"
+              >
+                Update
+              </button>
+           )}
         </div>
-      </div>
 
-      {/* MOBILE QTY BAR */}
-      <div className="sm:hidden mt-4">
-        <div className="flex items-center justify-between bg-slate-50 dark:bg-muted border border-slate-200 dark:border-border rounded-xl px-3 py-2">
-          <button
-            onClick={() => setQty((q) => Math.max(1, q - 1))}
-            className="h-9 w-9 rounded-lg bg-white dark:bg-card flex items-center justify-center"
-          >
-            <Minus size={16} />
-          </button>
-
-          <span className="font-black text-base">
-            {qty}
-          </span>
-
-          <button
-            onClick={() => setQty((q) => q + 1)}
-            className="h-9 w-9 rounded-lg bg-white dark:bg-card flex items-center justify-center"
-          >
-            <Plus size={16} />
-          </button>
-        </div>
-        <div className="mt-2 flex justify-end">
-          <button
-            onClick={() => onUpdateQuantity(item._id, qty)}
-            className="h-9 px-4 rounded-lg bg-slate-900 dark:bg-primary text-white text-xs font-black uppercase tracking-widest hover:bg-red-600 dark:hover:bg-red-700 transition-colors"
-          >
-            {isRTL ? "تحديث" : "Update"}
-          </button>
-        </div>
+        {/* DESKTOP TOTAL */}
+         <div className="hidden sm:block text-right">
+            <p className="text-base font-black text-red-600 dark:text-primary">
+              {formatCurrency(total, locale)}
+            </p>
+         </div>
       </div>
     </div>
   );

@@ -32,21 +32,9 @@ export default function AdminUsersPage() {
 
       <WhiteCard
         noPadding
-        headerAction={
-          <div className="flex gap-2">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search users..."
-                className="pl-9 pr-4 py-1.5 text-sm bg-gray-50 dark:bg-muted/50 border border-gray-200 dark:border-border focus:bg-white dark:focus:bg-card focus:border-red-500 dark:focus:border-primary focus:ring-2 focus:ring-red-100 dark:focus:ring-primary/20 rounded-full transition-all w-64 outline-none text-gray-800 dark:text-foreground placeholder:text-gray-400 dark:placeholder:text-muted-foreground"
-              />
-              <Search size={16} className="absolute left-3 top-2 text-gray-400 dark:text-muted-foreground" />
-            </div>
-          </div>
-        }
       >
         <div className="overflow-x-auto">
-          <table className="w-full text-center text-sm text-gray-600 dark:text-muted-foreground">
+          <table className="w-full text-center text-base sm:text-xl text-gray-600 dark:text-muted-foreground">
             <thead className="bg-gray-50 dark:bg-muted/50 text-gray-500 dark:text-muted-foreground font-semibold uppercase text-xs">
               <tr>
                 <th className="px-5 py-3">{tTable("name")}</th>

@@ -49,6 +49,7 @@ export default async function RootLayout({
     <html lang={locale} dir={dir} suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning
       >
         <InitialLoadingWrapper>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
